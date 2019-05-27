@@ -1,19 +1,32 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View} from 'react-native';
-// import {createStackNavigator, createAppContainer} from 'react-navigation';
+import NewGroupModal from '../components/NewGroupModal';
 
 export default class GroupsScreen extends React.Component {
-// class HomeScreen extends Component<Props> {
+
+  constructor(props) {
+    super(props);
+    this._onAddGroupButton = this._onAddGroupButton.bind(this);
+  }
+
+
+  _onAddGroupButton() {
+    this.refs.newGroupModal.showAddModal();
+  }
+
   render() {
     return (
       <View style={styles.container}>
-
         <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.title}>My Groups</Text>
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
             <Text style={styles.title}>+</Text>
           </TouchableOpacity>
         </View>
+
+
+        <NewGroupModal ref={'newGroupModal'}>
+        </NewGroupModal>
 
         <FlatList
           data={[
