@@ -1,0 +1,3 @@
+rootProject.name = 'cinect'
+
+include ':app'
