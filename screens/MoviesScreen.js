@@ -26,7 +26,7 @@ export default class MoviesScreen extends React.Component {
         <ScrollView 
          scrollEventThrottle='16'>
          <View style={{flex:1, paddingTop:20}}>
-           <Text style={{fontSize:24, fontWeight:'700', paddingHorizontal:20}}>
+           <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', paddingHorizontal:20}}>
              My Watchlist
            </Text>
 
@@ -48,7 +48,7 @@ export default class MoviesScreen extends React.Component {
 
 
          <View style={{marginTop:40}}>
-           <Text style={{fontSize:24, fontWeight:'700', paddingHorizontal:20}}>
+           <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', paddingHorizontal:20}}>
              Movies I've watched
            </Text>
 
@@ -93,11 +93,8 @@ export default class MoviesScreen extends React.Component {
 //   UserProfile: UserProfileScreen
 // })
 
-// const styles = StyleSheet.create({
-//   button: {
-//     position: 'absolute',
-//     bottom: 0,
-//     left: 0,
-//     backgroundColor: 'skyblue'
-//   }
-// })
+const styles = StyleSheet.create({
+  Text: {
+    fontFamily:'PT Sans Caption'
+  }
+})
