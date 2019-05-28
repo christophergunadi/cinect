@@ -8,11 +8,13 @@
 
 import React, {Component} from 'react';
 import {Button, Platform, StyleSheet, Text, View} from 'react-native';
-import {createStackNavigator, createAppContainer} from 'react-navigation';
+import {createStackNavigator, createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './screens/HomeScreen'
 import GroupsScreen from './screens/GroupsScreen';
 import MoviesScreen from './screens/MoviesScreen';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -23,12 +25,57 @@ const styles = StyleSheet.create({
   },
 });
 
-const MainNavigator = createStackNavigator(
+const MainNavigator = createMaterialTopTabNavigator(
   {
-    Home: {screen: HomeScreen},
-    Groups: {screen: GroupsScreen},
-    Movies: {screen: MoviesScreen},
+    Groups: {
+      screen: GroupsScreen,
+      navigationOptions: () => ({
+        tabBarIcon: ({tintColor}) => (
+          <Icon 
+            name="md-people"
+            color='black'
+            size={24}
+          />
+        )
+      })
+    },
+    Home: {screen: HomeScreen,
+      navigationOptions: () => ({
+        tabBarIcon: ({tintColor}) => (
+          <Icon 
+            name="md-home"
+            color='black'
+            size={24}
+          />
+        )
+      })
+    },
+    Movies: {screen: MoviesScreen,
+      navigationOptions: () => ({
+        tabBarIcon: ({tintColor}) => (
+          <Icon 
+            name="md-film"
+            color='black'
+            size={24}
+          />
+        )
+      })
+    },
   },
+  {
+    initialRouteName: 'Home',
+    swipeEnabled: false,
+    tabBarOptions: {
+      showIcon:true,
+      showLabel:false,
+      indicatorStyle: {
+        backgroundColor:'gray'
+      },
+      style: {
+        backgroundColor:'white',
+      }
+    }
+  }
 );
 
 export default App = createAppContainer(MainNavigator);
