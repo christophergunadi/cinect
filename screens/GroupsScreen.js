@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View} from 'react-native';
+
 import NewGroupModal from '../components/NewGroupModal';
 
 export default class GroupsScreen extends React.Component {
@@ -7,11 +8,16 @@ export default class GroupsScreen extends React.Component {
   constructor(props) {
     super(props);
     this._onAddGroupButton = this._onAddGroupButton.bind(this);
+    this._onNavigateToGroup = this._onNavigateToGroup.bind(this);
   }
 
 
   _onAddGroupButton() {
     this.refs.newGroupModal.showAddModal();
+  }
+
+  _onNavigateToGroup(grpname) {
+    this.props.navigation.navigate('SpecificGroup', {groupname: grpname});
   }
 
   render() {
@@ -38,7 +44,9 @@ export default class GroupsScreen extends React.Component {
           renderItem={({item}) =>
             <View style={{ flexDirection: 'row' }}>
               <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-              <Text style={styles.groupName}>{item.key}</Text>
+              <TouchableOpacity onPress={() => this._onNavigateToGroup(item.key)}>
+                <Text style={styles.groupName}>{item.key}</Text>
+              </TouchableOpacity>
             </View>
           }
         />

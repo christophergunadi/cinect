@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './screens/HomeScreen'
 import GroupsScreen from './screens/GroupsScreen';
 import MoviesScreen from './screens/MoviesScreen';
-
+import SpecificGroupScreen from './screens/SpecificGroupScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,13 +25,24 @@ const styles = StyleSheet.create({
   },
 });
 
+const GroupsNavigator = createStackNavigator(
+  {
+    Groups: {screen: GroupsScreen},
+    SpecificGroup: {screen: SpecificGroupScreen},
+  },
+  {
+    defaultNavigationOptions: {
+      header: null
+    }
+  }
+);
+
 const MainNavigator = createMaterialTopTabNavigator(
   {
-    Groups: {
-      screen: GroupsScreen,
+    Groups: {screen: GroupsNavigator,
       navigationOptions: () => ({
         tabBarIcon: ({tintColor}) => (
-          <Icon 
+          <Icon
             name="md-people"
             color='black'
             size={24}
@@ -42,7 +53,7 @@ const MainNavigator = createMaterialTopTabNavigator(
     Home: {screen: HomeScreen,
       navigationOptions: () => ({
         tabBarIcon: ({tintColor}) => (
-          <Icon 
+          <Icon
             name="md-home"
             color='black'
             size={24}
@@ -53,7 +64,7 @@ const MainNavigator = createMaterialTopTabNavigator(
     Movies: {screen: MoviesScreen,
       navigationOptions: () => ({
         tabBarIcon: ({tintColor}) => (
-          <Icon 
+          <Icon
             name="md-film"
             color='black'
             size={24}
