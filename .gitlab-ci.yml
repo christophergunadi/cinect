@@ -5,6 +5,7 @@ stages:
 build_apk:
   stage: build
   before_script:
+    - sudo npm install
     - cp $HOME/my-release-key.keystore ./android/app/my-release-key.keystore 
   script:
     - cd android && ./gradlew assembleRelease
@@ -15,4 +16,4 @@ build_apk:
 deploy_apk:
   stage: deploy
   script:
-    - cp android/app/build/outputs/apk/release/app-release.apk /var/www/html/releases/cinect.apk
+    - sudo cp android/app/build/outputs/apk/release/app-release.apk /var/www/html/releases/cinect.apk
