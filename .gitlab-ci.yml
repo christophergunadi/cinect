@@ -10,6 +10,8 @@ build_apk:
     - cp $HOME/my-release-key.keystore ./android/app/my-release-key.keystore 
   script:
     - cd android && ./gradlew assembleRelease
+  after_script:
+    - sudo rm -rf node_modules
   artifacts:
     paths:
       - android/app/build/outputs/apk/release/app-release.apk
