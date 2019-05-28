@@ -41,6 +41,8 @@
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 		347709407D154CF69DD6421F /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF0F67809D914161B5314386 /* libRNGestureHandler.a */; };
 		52AF3570AF3F4E0DA2C2DFC2 /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC1524FCB9542CBAC9485D7 /* libRNGestureHandler-tvOS.a */; };
+		BD79071E268E4937A640DCFF /* PT_Sans-Caption-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 426354FDABBE43C78436A7BA /* PT_Sans-Caption-Bold.ttf */; };
+		F6754E4D483049438B5166D3 /* PT_Sans-Caption-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C59E2055C36545FEA2173E03 /* PT_Sans-Caption-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -351,6 +353,8 @@
 		1486FFF8DECA423FA860CC77 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		CF0F67809D914161B5314386 /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		7CC1524FCB9542CBAC9485D7 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; name = "libRNGestureHandler-tvOS.a"; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		426354FDABBE43C78436A7BA /* PT_Sans-Caption-Bold.ttf */ = {isa = PBXFileReference; name = "PT_Sans-Caption-Bold.ttf"; path = "../assets/fonts/PT_Sans-Caption-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C59E2055C36545FEA2173E03 /* PT_Sans-Caption-Regular.ttf */ = {isa = PBXFileReference; name = "PT_Sans-Caption-Regular.ttf"; path = "../assets/fonts/PT_Sans-Caption-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -592,6 +596,7 @@
 				00E356EF1AD99517003FC87E /* cinectTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				BCA128D9A51843999DD99822 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -617,6 +622,16 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		BCA128D9A51843999DD99822 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				426354FDABBE43C78436A7BA /* PT_Sans-Caption-Bold.ttf */,
+				C59E2055C36545FEA2173E03 /* PT_Sans-Caption-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -1064,6 +1079,8 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				BD79071E268E4937A640DCFF /* PT_Sans-Caption-Bold.ttf in Resources */,
+				F6754E4D483049438B5166D3 /* PT_Sans-Caption-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
