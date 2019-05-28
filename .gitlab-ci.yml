@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy
+
+build_apk:
+  stage: build
+  before-script:
+    - cp $HOME/my-release-key.keystore ./android/app/my-release-key.keystore 
+  script:
+    - cd android && ./gradlew assembleRelease
+  artifacts:
+    paths:
+      - android/app/build/outputs/apk/release/app-release.apk
+
+deploy_apk:
+  stage: deploy
+  script:
+    - cp android/app/build/outputs/apk/release/app-release.apk /var/www/html/releases/cinect.apk
