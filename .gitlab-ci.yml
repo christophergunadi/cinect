@@ -12,8 +12,6 @@ build_apk:
     - cd android && ./gradlew assembleRelease
   artifacts:
     paths:
-      - node_modules
-      - local.properties
       - android/app/build/outputs/apk/release/app-release.apk
 
 deploy_apk:
