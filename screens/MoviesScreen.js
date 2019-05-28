@@ -23,10 +23,10 @@ export default class MoviesScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('UserProfile')}
         /> */}
 
-        <ScrollView 
+        <ScrollView
          scrollEventThrottle='16'>
          <View style={{flex:1, paddingTop:20}}>
-           <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', paddingHorizontal:20}}>
+           <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>
              My Watchlist
            </Text>
 
@@ -36,7 +36,7 @@ export default class MoviesScreen extends React.Component {
               showsHorizontalScrollIndicator={false}
               style={{marginLeft:20}}>
               <Watchlist imageUri={require('../assets/pikachu.jpg')}
-                name="Detective Pikachu"/>  
+                name="Detective Pikachu"/>
               <Watchlist imageUri={require('../assets/pikachu.jpg')}
                 name="Detective Pikachu"/>
               <Watchlist imageUri={require('../assets/pikachu.jpg')}
@@ -48,7 +48,7 @@ export default class MoviesScreen extends React.Component {
 
 
          <View style={{marginTop:40}}>
-           <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', paddingHorizontal:20}}>
+           <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>
              Movies I've watched
            </Text>
 
@@ -58,7 +58,7 @@ export default class MoviesScreen extends React.Component {
               showsHorizontalScrollIndicator={false}
               style={{marginLeft:20}}>
               <WatchedMovies imageUri={require('../assets/captainmarvel.jpg')}
-                name="Captain Marvel"/> 
+                name="Captain Marvel"/>
               <WatchedMovies imageUri={require('../assets/captainmarvel.jpg')}
                 name="Captain Marvel"/>
               <WatchedMovies imageUri={require('../assets/captainmarvel.jpg')}
@@ -67,7 +67,7 @@ export default class MoviesScreen extends React.Component {
            </View>
 
          </View>
-        
+
         </ScrollView>
       </View>
     );
