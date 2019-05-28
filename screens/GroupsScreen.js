@@ -1,26 +1,33 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View} from 'react-native';
+
 import NewGroupModal from '../components/NewGroupModal';
+import MainStylesheet from '../styles/MainStylesheet';
+
 
 export default class GroupsScreen extends React.Component {
 
   constructor(props) {
     super(props);
     this._onAddGroupButton = this._onAddGroupButton.bind(this);
+    this._onNavigateToGroup = this._onNavigateToGroup.bind(this);
   }
-
 
   _onAddGroupButton() {
     this.refs.newGroupModal.showAddModal();
   }
 
+  _onNavigateToGroup(grpname) {
+    this.props.navigation.navigate('SpecificGroup', {groupname: grpname});
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={MainStylesheet.container}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.title}>My Groups</Text>
+          <Text style={MainStylesheet.title}>My Groups</Text>
           <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
-            <Text style={styles.title}>+</Text>
+            <Text style={MainStylesheet.title}>+</Text>
           </TouchableOpacity>
         </View>
 
@@ -38,7 +45,9 @@ export default class GroupsScreen extends React.Component {
           renderItem={({item}) =>
             <View style={{ flexDirection: 'row' }}>
               <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-              <Text style={styles.groupName}>{item.key}</Text>
+              <TouchableOpacity onPress={() => this._onNavigateToGroup(item.key)}>
+                <Text style={styles.groupName}>{item.key}</Text>
+              </TouchableOpacity>
             </View>
           }
         />
@@ -48,19 +57,6 @@ export default class GroupsScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 30,
-    paddingLeft: 30,
-    backgroundColor: '#F5FCFF',
-  },
-  title: {
-    fontFamily: 'PT_Sans-Caption-Bold',
-    fontSize: 30,
-    color: '#463D3D',
-    marginVertical: 5,
-    marginBottom: 10,
-  },
   profileicon: {
     width: 50,
     height: 50,
@@ -85,7 +81,6 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#fff',
     borderRadius: 100,
-    marginRight: 30,
     marginTop: 5,
   },
 });
