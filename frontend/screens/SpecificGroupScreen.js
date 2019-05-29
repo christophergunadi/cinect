@@ -2,19 +2,29 @@ import React, {Component} from 'react';
 import {Dimensions, TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View} from 'react-native';
 
 import MainStylesheet from '../styles/MainStylesheet';
+import SuggestedMovieModal from '../components/SuggestedMovieModal';
 
 export default class SpecificGroupScreen extends Component {
 
   constructor(props) {
     super(props);
     this.selectMovieForGroup = this.selectMovieForGroup.bind(this);
+    this.state = {
+      movieTitle: "2342",
+      posterPath: "123",
+    }
   }
 
   selectMovieForGroup = (grpname) => {
     fetch("http://146.169.45.140:8000/cinect_api/user")
     .then(response => response.json())
     .then((responseJson) => {
-      alert(responseJson.title);
+      this.setState ({
+        movieTitle: responseJson.title,
+        posterPath: responseJson.poster_path
+      })
+      
+      this.refs.suggestedMovieModal.openMovieModal();
     }).catch((error) => {
       console.error(error);
     });
@@ -26,12 +36,17 @@ export default class SpecificGroupScreen extends Component {
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
         <Text>Now we need to go to database the fetch users lol</Text>
 
+
         <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
           <TouchableOpacity style={styles.suggestButton} 
                  onPress={() => this.selectMovieForGroup(this.props.navigation.getParam('groupname'))}>
             <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Suggest a movie</Text>
           </TouchableOpacity>
         </View>
+
+        <Text>{this.state.title}</Text>
+        <SuggestedMovieModal ref="suggestedMovieModal" movieTitle={this.state.movieTitle} posterPath={this.state.posterPath} ></SuggestedMovieModal>
+
       </View>
     )
   }
