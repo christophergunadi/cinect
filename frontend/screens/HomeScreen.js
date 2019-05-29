@@ -5,9 +5,12 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const Movies = [
-  { uri: require('../assets/movieposters/movie1.jpg') },
-  { uri: require('../assets/movieposters/movie2.jpg') },
-  { uri: require('../assets/movieposters/movie3.jpg') },
+  { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg'},
+  { uri : 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg'},
+  { uri : 'https://image.tmdb.org/t/p/w500/wgQ7APnFpf1TuviKHXeEe3KnsTV.jpg'},
+  // { uri: require('../assets/movieposters/movie1.jpg') },
+  // { uri: require('../assets/movieposters/movie2.jpg') },
+  // { uri: require('../assets/movieposters/movie3.jpg') },
 ]
 
 export default class HomeScreen extends React.Component {
@@ -17,7 +20,9 @@ export default class HomeScreen extends React.Component {
 
     this.position = new Animated.ValueXY();
     this.state = {
-      currentIndex: 0
+      currentIndex: 0,
+      currentMovie: {},
+      nextMovie: {}
     }
     this.rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
@@ -58,6 +63,22 @@ export default class HomeScreen extends React.Component {
     })
   }
 
+  fetchMovieFromApi = () => {
+    fetch("http://146.169.45.140:8000/cinect_api/user")
+    .then(response => response.json())
+    .then((responseJson) => {
+      Movies.push({ uri: ('https://image.tmdb.org/t/p/w500' + responseJson.poster_path) })
+    })
+  }
+
+  // replaceMovieInList = (i) => {
+  //   fetch("http://146.169.45.140:8000/cinect_api/user")
+  //   .then(response => response.json())
+  //   .then((responseJson) => {
+  //     Movies.push({ uri: 'https://image.tmdb.org/t/p/w500' + responseJson.poster_path })
+  //   })
+  // }
+
   componentWillMount() {
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder:(evt, gestureState) => true,
@@ -87,9 +108,12 @@ export default class HomeScreen extends React.Component {
             friction: 4
           }).start()
         }
-
       }
     })
+
+    for (var i = 0; i < 3; i++) {
+      this.fetchMovieFromApi();
+    }
   }
 
   renderMovies = () => {
@@ -102,21 +126,18 @@ export default class HomeScreen extends React.Component {
           <Animated.View 
             {...this.PanResponder.panHandlers}
             key={i} 
-            style={[this.rotateAndTranslate, 
-            { height: SCREEN_HEIGHT - 120, width: SCREEN_WIDTH, padding: 10, position: 'absolute'}]}>
+            style={[this.rotateAndTranslate, styles.currentCard]}>
 
-            <Animated.View style={{ opacity: this.likeOpacity, transform: [{rotate: '-30deg'}], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
+            <Animated.View style={[{ opacity: this.likeOpacity }, styles.likeSign]}>
               <Text
-                style={{borderWidth: 1, borderColor: 'white', color: 'white', 
-                fontSize: 32, fontWeight: '800', padding: 10}}>
+                style={styles.signText}>
                 LIKE
               </Text>
             </Animated.View>
 
-            <Animated.View style={{ opacity: this.hateOpacity, transform: [{rotate: '30deg'}], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
+            <Animated.View style={[{ opacity: this.hateOpacity }, styles.hateSign]}>
               <Text
-                style={{borderWidth: 1, borderColor: 'white', color: 'white', 
-                fontSize: 32, fontWeight: '800', padding: 10}}>
+                style={styles.signText}>
                 HATE
               </Text>
             </Animated.View>
@@ -124,20 +145,19 @@ export default class HomeScreen extends React.Component {
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', 
               borderRadius: 20 }}
-              source={item.uri} />
+              source={item} />
           </Animated.View>
         )
       } else {
         return (
           <Animated.View 
             key={i} 
-            style={[{ opacity: this.nextCardOpacity, transform: [{scale: this.nextCardScale}],
-              height: SCREEN_HEIGHT - 120, width: SCREEN_WIDTH, padding: 10, 
-              position: 'absolute'}]}>
+            style={[{ opacity: this.nextCardOpacity, transform: [{scale: this.nextCardScale}] }, 
+                      styles.nextCard]}>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover', 
               borderRadius: 20 }}
-              source={item.uri} />
+              source={item} />
           </Animated.View>
         )
       }
@@ -163,3 +183,40 @@ export default class HomeScreen extends React.Component {
     );
   }
 };
+
+const styles = StyleSheet.create({
+  currentCard: {
+    height: SCREEN_HEIGHT - 120, 
+    width: SCREEN_WIDTH, 
+    padding: 10, 
+    position: 'absolute'
+  },
+  nextCard: { 
+    height: SCREEN_HEIGHT - 120, 
+    width: SCREEN_WIDTH, 
+    padding: 10, 
+    position: 'absolute'
+  },
+  likeSign: {
+    transform: [{rotate: '-30deg'}], 
+    position: 'absolute', 
+    top: 50, 
+    left: 40, 
+    zIndex: 1000
+  },
+  hateSign: {
+    transform: [{rotate: '30deg'}], 
+    position: 'absolute', 
+    top: 50, 
+    right: 40, 
+    zIndex: 1000
+  },
+  signText: {
+    borderWidth: 1, 
+    borderColor: 'white', 
+    color: 'white', 
+    fontSize: 32, 
+    fontWeight: '800', 
+    padding: 10
+  },
+});
