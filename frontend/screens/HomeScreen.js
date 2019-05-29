@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder } from 'react-native';
+import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, Alert } from 'react-native';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const Movies = [
   { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg'},
-  { uri : 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg'},
-  { uri : 'https://image.tmdb.org/t/p/w500/wgQ7APnFpf1TuviKHXeEe3KnsTV.jpg'},
+  // { uri : 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg'},
+  // { uri : 'https://image.tmdb.org/t/p/w500/wgQ7APnFpf1TuviKHXeEe3KnsTV.jpg'},
   // { uri: require('../assets/movieposters/movie1.jpg') },
   // { uri: require('../assets/movieposters/movie2.jpg') },
   // { uri: require('../assets/movieposters/movie3.jpg') },
@@ -80,6 +80,10 @@ export default class HomeScreen extends React.Component {
   // }
 
   componentWillMount() {
+    for (var i = 0; i < 3; i++) {
+      this.fetchMovieFromApi();
+    }
+
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder:(evt, gestureState) => true,
       onPanResponderMove:(evt, gestureState) => {
@@ -94,6 +98,7 @@ export default class HomeScreen extends React.Component {
               this.position.setValue({x: 0, y: 0})
             })
           })
+          this.fetchMovieFromApi();
         } else if (gestureState.dx < -120) {
           Animated.spring(this.position, {
             toValue: {x: -(SCREEN_WIDTH + 100), y: gestureState.dy}
@@ -102,6 +107,7 @@ export default class HomeScreen extends React.Component {
               this.position.setValue({x: 0, y: 0})
             })
           })
+          this.fetchMovieFromApi();
         } else {
           Animated.spring(this.position, {
             toValue: {x: 0, y: 0},
@@ -111,9 +117,7 @@ export default class HomeScreen extends React.Component {
       }
     })
 
-    for (var i = 0; i < 3; i++) {
-      this.fetchMovieFromApi();
-    }
+    
   }
 
   renderMovies = () => {
