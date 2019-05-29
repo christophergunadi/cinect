@@ -12,7 +12,7 @@ build_apk:
     - cp $HOME/my-release-key.keystore ./app/my-release-key.keystore
   script:
     - ./gradlew assembleRelease
-    after_script:
+  after_script:
     - sudo rm -rf ./frontend/node_modules
   artifacts:
     paths:
