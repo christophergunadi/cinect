@@ -4,23 +4,28 @@
 
 # Android/IntelliJ
 #
-build/
+frontend/android/app/build/
+frontend/android/.gradle
+frontend/android/local.properties
 .idea
-.gradle
-local.properties
 *.iml
 
 # node.js
 #
-node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
+frontend/node_modules/
+frontend/npm-debug.log
+frontend/yarn-error.log
+frontend/package-lock.json
 
 # BUCK
-buck-out/
-\.buckd/
-*.keystore
+frontend/buck-out/
+frontend/\.buckd/
+frontend/*.keystore
 
 # Bundle artifact
 *.jsbundle
+
+# Python
+backend/backend/__pycache__/
+backend/cinect_api/__pycache__/
+backend/cinect_api/migrations/__pycache__/

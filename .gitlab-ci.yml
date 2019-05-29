@@ -5,18 +5,20 @@ stages:
 build_apk:
   stage: build
   before_script:
-    - echo "sdk.dir = $HOME/android-sdk" >> android/local.properties
+    - cd frontend
+    - echo "sdk.dir = $HOME/android-sdk" >> ./android/local.properties
     - sudo npm install
-    - cp $HOME/my-release-key.keystore ./android/app/my-release-key.keystore 
+    - cd android
+    - cp $HOME/my-release-key.keystore ./app/my-release-key.keystore
   script:
-    - cd android && ./gradlew assembleRelease
-  after_script:
-    - sudo rm -rf node_modules
+    - ./gradlew assembleRelease
+    after_script:
+    - sudo rm -rf ./frontend/node_modules
   artifacts:
     paths:
-      - android/app/build/outputs/apk/release/app-release.apk
+      - frontend/android/app/build/outputs/apk/release/app-release.apk
 
 deploy_apk:
   stage: deploy
   script:
-    - sudo cp android/app/build/outputs/apk/release/app-release.apk /var/www/html/releases/cinect.apk
+    - sudo cp frontend/android/app/build/outputs/apk/release/app-release.apk /var/www/html/releases/cinect.apk
