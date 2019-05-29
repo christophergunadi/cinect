@@ -1,6 +1,12 @@
 stages:
+  - reload_backend
   - build
   - deploy
+
+update_server:
+  stage: reload_backend
+  script:
+    - scp -r -v ./backend jlq17@146.169.45.140:/home/jlq17/cinect/
 
 build_apk:
   stage: build
