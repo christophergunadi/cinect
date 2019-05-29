@@ -7,6 +7,11 @@ export default class SpecificGroupScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.selectMovieForGroup = this.selectMovieForGroup.bind(this);
+  }
+
+  selectMovieForGroup = (grpname) => {
+    alert("HI");
   }
 
   render() {
@@ -16,7 +21,8 @@ export default class SpecificGroupScreen extends Component {
         <Text>Now we need to go to database the fetch users lol</Text>
 
         <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
-          <TouchableOpacity style={styles.suggestButton}>
+          <TouchableOpacity style={styles.suggestButton} 
+                 onPress={() => this.selectMovieForGroup(this.props.navigation.getParam('groupname'))}>
             <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Suggest a movie</Text>
           </TouchableOpacity>
         </View>

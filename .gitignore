@@ -29,3 +29,4 @@ frontend/*.keystore
 backend/backend/__pycache__/
 backend/cinect_api/__pycache__/
 backend/cinect_api/migrations/__pycache__/
+node_modules

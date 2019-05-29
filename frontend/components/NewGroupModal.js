@@ -10,8 +10,13 @@ export default class NewGroupModal extends Component {
     this.refs.newGroupModal.open();
   }
 
+  createGroup = () => {
+    this.refs.newGroupModal.close();
+  }
+
   constructor(props) {
     super(props);
+    this.createGroup = this.createGroup.bind(this);
   }
 
   _onAddMemberButton = () => {}
@@ -65,7 +70,7 @@ export default class NewGroupModal extends Component {
           </TouchableOpacity>
 
           <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
-            <TouchableOpacity style={styles.createButton}>
+            <TouchableOpacity style={styles.createButton} onPress={this.createGroup}>
               <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Create</Text>
             </TouchableOpacity>
           </View>
