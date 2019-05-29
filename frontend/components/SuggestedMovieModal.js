@@ -12,32 +12,27 @@ export default class SuggestedMovieModal extends Component {
 
     openMovieModal = () => {
         this.refs.suggestedMovieModal.open();
-        // alert(this.props.posterPath);
     }
 
     render() {
         return (
-            <Modal ref={'suggestedMovieModal'}
-        style={{
-          justifyContent: 'center',
-          borderRadius: 20,
-          shadowRadius: 10,
-          width: windowSize.width - 70,
-          height: windowSize.height - 200
-        }}
+        <Modal ref={'suggestedMovieModal'}
+        style={styles.modalContainer}
         position='center'
-        backdrop={true}
-      >
-        <View style={styles.container}>
-          <Text style={styles.title}>{this.props.movieTitle}</Text>
+        backdrop={true}>
 
-          <View style={{height:500, width:300}}>
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.title}>{this.props.movieTitle}</Text>
+          </View>
+
+          <View style={{flex: 1}}>
              <Image 
-                style={{flex:1, width:null, height:null, resizeMode:'cover'}}
-                source={{uri: ("http://image.tmdb.org/t/p/w780/" + this.props.posterPath)}} />
+                style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius: 10 }}
+                source={{uri: ("http://image.tmdb.org/t/p/w500/" + this.props.posterPath)}} />
           </View>
           
-          <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
+          <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, paddingTop: 20 }}>
             <TouchableOpacity style={styles.createButton} onPress={() => this.refs.suggestedMovieModal.close()}>
               <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Dismiss</Text>
             </TouchableOpacity>
@@ -51,10 +46,16 @@ export default class SuggestedMovieModal extends Component {
 }
 
 const styles = StyleSheet.create({
+    modalContainer: {
+      justifyContent: 'center',
+      borderRadius: 20,
+      shadowRadius: 10,
+      width: windowSize.width - 70,
+      height: windowSize.height - 200
+    },
     container: {
       flex: 1,
       margin: 30,
-      justifyContent: 'center',
     },
     title: {
       fontFamily: 'PT_Sans-Caption-Bold',
