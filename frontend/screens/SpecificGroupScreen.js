@@ -11,7 +11,13 @@ export default class SpecificGroupScreen extends Component {
   }
 
   selectMovieForGroup = (grpname) => {
-    alert("HI");
+    fetch("http://146.169.45.140:8000/cinect_api/user")
+    .then(response => response.json())
+    .then((responseJson) => {
+      alert(responseJson.title);
+    }).catch((error) => {
+      console.error(error);
+    });
   }
 
   render() {
