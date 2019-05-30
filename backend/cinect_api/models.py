@@ -12,7 +12,7 @@ class SwipedRight(models.Model):
   class Meta:
     db_table = 'swipedright'
   def __str__(self):
-    return f'{self.imdbid}'
+    return f'{self.imdbid, self.swiperightid, self.username}'
 
 class Group(models.Model):
   groupid = models.IntegerField(default=-1, primary_key=True)
