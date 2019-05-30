@@ -10,11 +10,11 @@ class User(models.Model):
 class SwipedRight(models.Model):
   swiperightid = models.IntegerField(default=-1, primary_key=True)
   username = models.ForeignKey(User, on_delete=models.CASCADE)
-  imdbid = models.CharField(max_length=10)
+  movieid = models.CharField(max_length=10)
   class Meta:
     db_table = 'swipedright'
   def __str__(self):
-    return f'{self.username}, {self.imdbid}'
+    return f'{self.movieid, self.swiperightid, self.username}'
 
 class Group(models.Model):
   groupid = models.IntegerField(default=-1, primary_key=True)

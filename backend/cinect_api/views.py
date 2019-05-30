@@ -22,22 +22,12 @@ def groupSuggestion(request):
 
     #  Get lists of users in groupid
     users = GroupUser.objects.filter(groupid__groupid=groupid)
-
-    # commonMovies = []
-    # firstMovies = SwipedRight.objects.filter(username__username=str(users[0])) 
-    # for i in range(0, len(firstMovies)):
-    #      commonMovies.append(firstMovies[i])
-
-    movies = SwipedRight.objects.filter(username__username=str(users[0])) 
-    debug = list(movies)
+    movies = SwipedRight.objects.filter(username__username=str(users[0])).values('imdbid')
 
     for i in range(1, len(users)):
-        debug.append("//")
-        newMovies = SwipedRight.objects.filter(username__username=str(users[i])) 
-        temp = movies & newMovies
-        movies = temp
-        debug.append(temp)
-        # debug = debug + list(newMovies)
-        # debug.append(newMovies)
+        otherMovies = SwipedRight.objects.filter(username__username=str(users[i])).values('imdbid')
+        movies = movies.intersection(otherMovies)
         
-    return HttpResponse(debug)
+    # Else use AI model
+
+    return HttpResponse(movies)
