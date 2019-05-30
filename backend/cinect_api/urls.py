@@ -7,4 +7,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('user', views.user, name='user'),
+    path('suggest', views.groupSuggestion, name='suggest'),
 ]
