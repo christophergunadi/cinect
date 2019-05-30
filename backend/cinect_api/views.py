@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from .models import GroupUser
 from .models import SwipedRight
+from .models import User
 
 import requests
 import json
@@ -36,12 +37,13 @@ def addSwipedRight(request):
     if request.method == 'POST':
         if request.POST.get('username') and request.POST.get('movieid'):
             swipedRight = SwipedRight()
-            swipedRight.username = request.POST.get('username')
+            user = User.objects.get(username=request.POST.get('username'))
+            swipedRight.username = user
             swipedRight.movieid = request.POST.get('movieid')
             swipedRight.save()
 
             return HttpResponse("successful")
         else:
-            return HttpResponse("fail")
+            return HttpResponse("fail2")
     else:
         return HttpResponse("fail")
