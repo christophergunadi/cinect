@@ -72,19 +72,13 @@ export default class HomeScreen extends React.Component {
   }
 
   addSwipedRightMovie = (id) => { //send swiped right movie id to cinect_api to add to populate database
+    let formData = new FormData();
+    formData.append('username', 'Kate');
+    formData.append('movieid', id);
     fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
       method: 'POST',
-      headers: {
-        'Accept' : 'application/json',
-        'Content-Type' : 'application/json',
-      },
-      body: JSON.stringify({
-        username: 'Alexander',
-        movieid: id,
-      })},
-    )
-    .then(response => response.json())
-    .then((responseJson) => alert(responseJson))
+      body: formData
+    })
   }
 
   // replaceMovieInList = (i) => {
