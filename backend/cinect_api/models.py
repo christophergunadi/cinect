@@ -8,13 +8,13 @@ class User(models.Model):
     return self.username
 
 class SwipedRight(models.Model):
-  swiperightid = models.IntegerField(default=-1, primary_key=True)
+  swiperightid = models.AutoField(default=-1, primary_key=True)
   username = models.ForeignKey(User, on_delete=models.CASCADE)
   movieid = models.CharField(max_length=10)
   class Meta:
     db_table = 'swipedright'
-  def __str__(self):
-    return f'{self.movieid, self.swiperightid, self.username}'
+  def _str_(self):
+    return '{}: {} swiped {}'.format(self.swiperightid, self.username, self.movieid)
 
 class Group(models.Model):
   groupid = models.IntegerField(default=-1, primary_key=True)
@@ -28,5 +28,5 @@ class GroupUser(models.Model):
   username = models.CharField(max_length=20)
   class Meta:
     db_table = 'groupusers'
-  def __str__(self):
-    return f'{self.username}'
+  def _str_(self):
+    return '{}: {} in group {}'.format(self.groupuserid, self.username, self.groupid)
