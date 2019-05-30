@@ -44,6 +44,7 @@ def getMovieByID(id):
     return HttpResponse(json.dumps(response))
 
 def addSwipedRight(request):
+    data = {}
     if request.method == 'POST':
         if request.POST.get('username') and request.POST.get('movieid'):
             swipedRight = SwipedRight()
@@ -51,9 +52,12 @@ def addSwipedRight(request):
             swipedRight.username = user
             swipedRight.movieid = request.POST.get('movieid')
             swipedRight.save()
+            
+            
+            data['username'] = swipedRight.username.username
+            data['movieid'] = swipedRight.movieid
 
-            return HttpResponse("successful")
-        else:
-            return HttpResponse("fail2")
-    else:
-        return HttpResponse("fail")
+            return HttpResponse(json.dumps(data))
+            # return HttpResponse("successful")
+    return HttpResponse(json.dumps(data))
+    

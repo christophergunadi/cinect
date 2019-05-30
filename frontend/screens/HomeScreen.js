@@ -75,14 +75,16 @@ export default class HomeScreen extends React.Component {
     fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Accept' : 'application/json',
         'Content-Type' : 'application/json',
       },
       body: JSON.stringify({
-        username: 'Alex',
+        username: 'Alexander',
         movieid: id,
       })},
     )
+    .then(response => response.json())
+    .then((responseJson) => alert(responseJson))
   }
 
   // replaceMovieInList = (i) => {
@@ -110,7 +112,7 @@ export default class HomeScreen extends React.Component {
           Animated.spring(this.position, {
             toValue: {x: SCREEN_WIDTH + 100, y: gestureState.dy}
           }).start(() => {
-            // alert('swipedright');
+            // alert(Movies[this.state.currentIndex].id.toString());
             this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
 
             this.setState({currentIndex: this.state.currentIndex + 1}, () => {
