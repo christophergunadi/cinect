@@ -13,14 +13,16 @@ class SwipedRight(models.Model):
   movieid = models.CharField(max_length=10)
   class Meta:
     db_table = 'swipedright'
-  def _str_(self):
-    return '{}: {} swiped {}'.format(self.swiperightid, self.username, self.movieid)
+  def __str__(self):
+    return '{}: {} swiped {}'.format(self.swiperightid, self.username, self.movieid)  
 
 class Group(models.Model):
   groupid = models.AutoField(primary_key=True)
   groupname = models.CharField(max_length=17)
   class Meta:
     db_table = 'groups'
+  def __str__(self):
+    return '{}: {}'.format(self.groupid, self.groupname) 
 
 class GroupUser(models.Model):
   groupuserid = models.AutoField(primary_key=True)

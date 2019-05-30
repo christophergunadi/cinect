@@ -16,7 +16,7 @@ export default class SpecificGroupScreen extends Component {
   }
 
   selectMovieForGroup = (grpname) => {
-    fetch("http://146.169.45.140:8000/cinect_api/user")
+    fetch("http://146.169.45.140:8000/cinect_api/suggest?groupid=1")
     .then(response => response.json())
     .then((responseJson) => {
       this.setState ({

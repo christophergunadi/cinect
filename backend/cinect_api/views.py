@@ -22,16 +22,26 @@ def groupSuggestion(request):
     groupid = request.GET.get('groupid')
 
     #  Get lists of users in groupid
-    users = GroupUser.objects.filter(groupid__groupid=groupid)
-    movies = SwipedRight.objects.filter(username__username=str(users[0])).values('imdbid')
+    users = GroupUser.objects.filter(groupid__groupid=groupid).values('username')
+
+
+    movies = SwipedRight.objects.filter(username__username=users[0]['username']).values('movieid')
 
     for i in range(1, len(users)):
-        otherMovies = SwipedRight.objects.filter(username__username=str(users[i])).values('imdbid')
+        otherMovies = SwipedRight.objects.filter(username__username=users[i]['username']).values('movieid')
         movies = movies.intersection(otherMovies)
         
     # Else use AI model
-    return HttpResponse(movies)
+    if not movies:
+        return HttpResponse("No suitable movie for y'all")
+    else:
+        # return HttpResponse(movies[0]['movieid'])
+        return HttpResponse(getMovieByID(movies[0]['movieid']))
 
+def getMovieByID(id):
+    response = requests.get("https://api.themoviedb.org/3/movie/299534?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+    response = {'movieTitle': response['belongs_to_collection']['name'], 'posterPath': response['belongs_to_collection']['poster_path']}
+    return HttpResponse(json.dumps(response))
 
 def addSwipedRight(request):
     if request.method == 'POST':
