@@ -8,4 +8,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('user', views.user, name='user'),
     path('suggest', views.groupSuggestion, name='suggest'),
+    path('addswipedright', views.addSwipedRight, name='addswipedright')
 ]

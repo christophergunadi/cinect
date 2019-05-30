@@ -5,7 +5,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const Movies = [
-  { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg'},
+  { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg', id: '299537'},
   // { uri : 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg'},
   // { uri : 'https://image.tmdb.org/t/p/w500/wgQ7APnFpf1TuviKHXeEe3KnsTV.jpg'},
   // { uri: require('../assets/movieposters/movie1.jpg') },
@@ -67,8 +67,22 @@ export default class HomeScreen extends React.Component {
     fetch("http://146.169.45.140:8000/cinect_api/user")
     .then(response => response.json())
     .then((responseJson) => {
-      Movies.push({ uri: ('https://image.tmdb.org/t/p/w500' + responseJson.poster_path) })
+      Movies.push({ uri: ('https://image.tmdb.org/t/p/w500' + responseJson.poster_path), id: responseJson.id })
     })
+  }
+
+  addSwipedRightMovie = (id) => { //send swiped right movie id to cinect_api to add to populate database
+    fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify({
+        username: 'Alex',
+        movieid: id,
+      })},
+    )
   }
 
   // replaceMovieInList = (i) => {
@@ -90,16 +104,23 @@ export default class HomeScreen extends React.Component {
         this.position.setValue({x: gestureState.dx, y: gestureState.dy})
       },
       onPanResponderRelease:(evt, gestureState) => {
+        //swipe right
+
         if (gestureState.dx > 120) {
           Animated.spring(this.position, {
             toValue: {x: SCREEN_WIDTH + 100, y: gestureState.dy}
           }).start(() => {
+            // alert('swipedright');
+            this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
+
             this.setState({currentIndex: this.state.currentIndex + 1}, () => {
               this.position.setValue({x: 0, y: 0})
             })
           })
           this.fetchMovieFromApi();
+
         } else if (gestureState.dx < -120) {
+          //swipe left
           Animated.spring(this.position, {
             toValue: {x: -(SCREEN_WIDTH + 100), y: gestureState.dy}
           }).start(() => {
@@ -108,6 +129,7 @@ export default class HomeScreen extends React.Component {
             })
           })
           this.fetchMovieFromApi();
+
         } else {
           Animated.spring(this.position, {
             toValue: {x: 0, y: 0},
@@ -121,7 +143,6 @@ export default class HomeScreen extends React.Component {
   }
 
   renderMovies = () => {
-
     return Movies.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null;

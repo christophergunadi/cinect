@@ -29,5 +29,19 @@ def groupSuggestion(request):
         movies = movies.intersection(otherMovies)
         
     # Else use AI model
-
     return HttpResponse(movies)
+
+
+def addSwipedRight(request):
+    if request.method == 'POST':
+        if request.POST.get('username') and request.POST.get('movieid'):
+            swipedRight = SwipedRight()
+            swipedRight.username = request.POST.get('username')
+            swipedRight.movieid = request.POST.get('movieid')
+            swipedRight.save()
+
+            return HttpResponse("successful")
+        else:
+            return HttpResponse("fail")
+    else:
+        return HttpResponse("fail")
