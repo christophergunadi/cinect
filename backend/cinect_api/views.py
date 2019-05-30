@@ -23,8 +23,6 @@ def groupSuggestion(request):
 
     #  Get lists of users in groupid
     users = GroupUser.objects.filter(groupid__groupid=groupid).values('username')
-
-
     movies = SwipedRight.objects.filter(username__username=users[0]['username']).values('movieid')
 
     for i in range(1, len(users)):
