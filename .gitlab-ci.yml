@@ -1,7 +1,13 @@
 stages:
+  - test
   - reload_backend
   - build
   - deploy
+
+test_backend:
+  stage: test
+  script:
+    - python3 ./backend/manage.py test
 
 update_server:
   stage: reload_backend
