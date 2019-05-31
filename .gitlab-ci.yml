@@ -7,7 +7,7 @@ stages:
 test_backend:
   stage: test
   script:
-    - python3 ./backend/manage.py test
+    - cd backend && python3 manage.py test
 
 update_server:
   stage: reload_backend
