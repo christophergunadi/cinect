@@ -27,11 +27,11 @@ export default class SuggestedMovieModal extends Component {
           </View>
 
           <View style={{flex: 1}}>
-             <Image 
+             <Image
                 style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius: 10 }}
                 source={{uri: ("http://image.tmdb.org/t/p/w500/" + this.props.posterPath)}} />
           </View>
-          
+
           <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, paddingTop: 20 }}>
             <TouchableOpacity style={styles.createButton} onPress={() => this.refs.suggestedMovieModal.close()}>
               <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Dismiss</Text>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
       borderRadius: 15,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#5ac4e8',
+      backgroundColor: 'green',
       height: 30,
       width: windowSize.width / 3,
     },
