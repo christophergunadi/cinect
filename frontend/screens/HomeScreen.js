@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, Alert } from 'react-native';
+import {AsyncStorage, Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, Alert } from 'react-native';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -63,16 +63,15 @@ export default class HomeScreen extends React.Component {
     })
   }
 
-  // getUserEmail = async() => {
-  //   userEmail = '';
-  //   try {
-  //     userEmail = await AsyncStorage.getItem('userEmail');
-  //   } catch (error) {
-  //     alert(error.message);
-  //   }
-  //   alert(userEmail);
-  //   return userEmail;
-  // }
+  getUserEmail = async() => {
+    userEmail = '';
+    try {
+      userEmail = await AsyncStorage.getItem('userEmail');
+    } catch (error) {
+      alert(error.message);
+    }
+    return userEmail;
+  }
 
   fetchMovieFromApi = () => {
     fetch("http://146.169.45.140:8000/cinect_api/user")
@@ -84,21 +83,17 @@ export default class HomeScreen extends React.Component {
 
   addSwipedRightMovie = (id) => { //send swiped right movie id to cinect_api to add to populate database
     let formData = new FormData();
-
-    formData.append('email', 'kate@example.com');
-    // formData.append('email', this.getUserEmail());
-    formData.append('movieid', id);
-    fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
-      method: 'POST',
-      body: formData
-    })
-    // .then(this.fetchMovieById(id))
-    // .then(alert(id))
-    .then(response => response.json())
-    .then((responseJson) => {
-      // alert(responseJson.movieTitle)
-    })
-    //get movie title and poster image, put into watchlist in moviesscreen
+    this.getUserEmail().then(value => {
+      formData.append('email', value)
+      formData.append('movieid', id);
+      fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then((responseJson) => {
+      })
+    });
   }
 
   fetchMovieById = (id) => {
@@ -260,11 +255,11 @@ const styles = StyleSheet.create({
     zIndex: 1000
   },
   signText: {
-    borderWidth: 2, 
-    borderColor: 'white', 
-    color: 'white', 
-    fontSize: 32, 
-    fontWeight: '800', 
+    borderWidth: 2,
+    borderColor: 'white',
+    color: 'white',
+    fontSize: 32,
+    fontWeight: '800',
     padding: 10
   },
 });

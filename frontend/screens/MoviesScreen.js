@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-// import {AsyncStorage, Button, Text, View, StyleSheet, ScrollView, Image} from 'react-native';
-import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList} from 'react-native';
+import {AsyncStorage, Button, Text, View, StyleSheet, ScrollView, Image, FlatList} from 'react-native';
 import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar} from 'react-navigation'
 
 import SettingsScreen from './SettingsScreen'
@@ -54,15 +53,12 @@ export default class MoviesScreen extends React.Component {
   }
 
   onUserLogin = async(email, name, facebookid) => {
-    // userEmail = '';
-    // try {
-      // await AsyncStorage.setItem('userEmail', email);
-      // await AsyncStorage.setItem('userName', name);
-      // userEmail = await AsyncStorage.getItem('userEmail');
-    // } catch (error) {
-      // alert(error.message);
-    // }
-    // alert(userEmail);
+    try {
+      await AsyncStorage.setItem('userEmail', email);
+      await AsyncStorage.setItem('userName', name);
+    } catch (error) {
+      alert(error.message);
+    }
     this.addUser(email, facebookid);
     this.setState({'email': email, 'name': name});
   }
