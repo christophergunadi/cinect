@@ -21,7 +21,7 @@ export default class SpecificGroupScreen extends Component {
     .then((responseJson) => {
       this.setState ({
         movieTitle: responseJson.movieTitle,
-        posterPath: responseJson.posterPath
+        posterPath: responseJson.posterPath,
       })
       this.refs.suggestedMovieModal.openMovieModal();
     }).catch((error) => {

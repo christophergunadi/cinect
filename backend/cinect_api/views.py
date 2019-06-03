@@ -41,21 +41,24 @@ def getMovieByID(id):
     response = {'movieTitle': response['belongs_to_collection']['name'], 'posterPath': response['belongs_to_collection']['poster_path']}
     return HttpResponse(json.dumps(response))
 
-def addSwipedRight(request):
-    # return HttpResponse("hello")
+def addSwipedRight(request): #adds movie into user's watchlist database
     data = {}
     if request.method == 'POST':
         if request.POST.get('email') and request.POST.get('movieid'):
             swipedRight = SwipedRight()
             user = User.objects.get(email=request.POST.get('email'))
             swipedRight.email = user
-            swipedRight.movieid = request.POST.get('movieid')
+            movieid = request.POST.get('movieid')
+            swipedRight.movieid = movieid
             swipedRight.save()
 
+            # data['email'] = swipedRight.email.email
+            # data['movieid'] = swipedRight.movieid
 
-            data['email'] = swipedRight.email.email
-            data['movieid'] = swipedRight.movieid
-
+            # return getMovieByID(movieid)
             return HttpResponse(json.dumps(data))
             # return HttpResponse("successful")
+        return HttpResponse(json.dumps(data))
+    elif request.method == 'GET':
+        return getMovieByID(request.GET.get('id'))
     return HttpResponse(json.dumps(data))

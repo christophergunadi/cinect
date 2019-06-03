@@ -79,6 +79,20 @@ export default class HomeScreen extends React.Component {
       method: 'POST',
       body: formData
     })
+    .then(this.fetchMovieById(id))
+    // .then(response => response.json())
+    // .then((responseJson) => {
+    //   alert(responseJson.email)
+    // })
+    //get movie title and poster image, put into watchlist in moviesscreen
+  }
+
+  fetchMovieById = (id) => {
+    fetch(("http://146.169.45.140:8000/cinect_api/addswipedright?id=" + id))
+    .then(response => response.json())
+    .then(responseJson => {
+      alert(responseJson.movitTitle)
+    })
   }
 
   // replaceMovieInList = (i) => {
@@ -101,12 +115,10 @@ export default class HomeScreen extends React.Component {
       },
       onPanResponderRelease:(evt, gestureState) => {
         //swipe right
-
         if (gestureState.dx > 120) {
           Animated.spring(this.position, {
             toValue: {x: SCREEN_WIDTH + 100, y: gestureState.dy}
           }).start(() => {
-            // alert(Movies[this.state.currentIndex].id.toString());
             this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
 
             this.setState({currentIndex: this.state.currentIndex + 1}, () => {
@@ -159,7 +171,7 @@ export default class HomeScreen extends React.Component {
             <Animated.View style={[{ opacity: this.hateOpacity }, styles.hateSign]}>
               <Text
                 style={styles.signText}>
-                HATE
+                NOPE
               </Text>
             </Animated.View>
 
@@ -233,11 +245,11 @@ const styles = StyleSheet.create({
     zIndex: 1000
   },
   signText: {
-    borderWidth: 1,
-    borderColor: 'white',
-    color: 'white',
-    fontSize: 32,
-    fontWeight: '800',
+    borderWidth: 2, 
+    borderColor: 'white', 
+    color: 'white', 
+    fontSize: 32, 
+    fontWeight: '800', 
     padding: 10
   },
 });

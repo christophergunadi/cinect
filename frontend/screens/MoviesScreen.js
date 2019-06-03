@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Text, View, StyleSheet, ScrollView, Image} from 'react-native';
+import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList} from 'react-native';
 
 import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar} from 'react-navigation'
 
@@ -7,6 +7,8 @@ import SettingsScreen from './SettingsScreen'
 import UserProfileScreen from './UserProfileScreen'
 import Watchlist from './MoviesScreen/Watchlist'
 import WatchedMovies from './MoviesScreen/WatchedMovies'
+// import { FlatList } from 'react-native-gesture-handler';
+import WatchList from './MoviesScreen/Watchlist';
 
 var FBLoginButton = require('../components/FBLoginButton');
 
@@ -14,16 +16,6 @@ export default class MoviesScreen extends React.Component {
   render() {
     return (
       <View style={{flex:1}}>
-        {/* <Button
-          style={styles.button}
-          title="Settings"
-          onPress={() => this.props.navigation.navigate('Settings')}
-        />
-        <Button
-          style={styles.button}
-          title="My Profile"
-          onPress={() => this.props.navigation.navigate('UserProfile')}
-        /> */}
 
         <ScrollView
          scrollEventThrottle='16'>
@@ -39,12 +31,42 @@ export default class MoviesScreen extends React.Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               style={{marginLeft:20}}>
-              <Watchlist imageUri={require('../assets/pikachu.jpg')}
+
+              <FlatList
+                data={[
+                  {key: '299537',
+                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                   name: 'Detective Pikachu'},
+                   {key: '99537',
+                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                   name: 'Detective Pikachu'},
+                   {key: '29937',
+                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                   name: 'Detective Pikachu'},
+                   {key: '2937',
+                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                   name: 'Detective Pikachu'},
+                  // {key: 'secondmovie',
+                  //  imageUri: require('../assets/pikachu.jpg'),
+                  //  name: 'Detective Pikachu'},
+                  // {key: 'thirdmovie',
+                  //  imageUri: require('../assets/pikachu.jpg'),
+                  //  name: 'Detective Pikachu'},
+                ]}
+                extraData={this.state}
+                horizontal={true}
+                renderItem={({item}) => 
+                // <Image source={{uri:item.imageUri}}/>}
+                <WatchList imageUri={item.imageUri}
+                           name={item.name}/>}
+              />
+
+              {/* <Watchlist imageUri={require('../assets/pikachu.jpg')}
                 name="Detective Pikachu"/>
               <Watchlist imageUri={require('../assets/pikachu.jpg')}
                 name="Detective Pikachu"/>
               <Watchlist imageUri={require('../assets/pikachu.jpg')}
-                name="Detective Pikachu"/>
+                name="Detective Pikachu"/> */}
             </ScrollView>
            </View>
 
@@ -77,25 +99,6 @@ export default class MoviesScreen extends React.Component {
     );
   }
 }
-
-// const MoviesScreenNavigator = createStackNavigator(
-//   {
-//     Movies: MoviesScreen,
-//     Settings: SettingsScreen,
-//     UserProfile: UserProfileScreen
-//   },
-//   {
-//     initialRouteName: 'Movies'
-//   }
-
-// );
-
-// export default createAppContainer(MoviesScreenNavigator);
-
-// export default createBottomTabNavigator({
-//   Settings: SettingsScreen,
-//   UserProfile: UserProfileScreen
-// })
 
 const styles = StyleSheet.create({
   Text: {

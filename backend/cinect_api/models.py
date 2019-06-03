@@ -32,3 +32,12 @@ class GroupUser(models.Model):
     db_table = 'groupusers'
   def _str_(self):
     return '{}: {} in group {}'.format(self.groupuserid, self.email, self.groupid)
+
+# class MovieInfo(models.Model):
+  # movieid = models.CharField(max_length=10, primary_key=True)
+  # movietitle = models.CharField(max_length=100)
+  # posterpath = models.CharField(max_length=200)
+  # class Meta:
+  #   db_table = 'movies'
+  # def _str_(self):
+  #   return '{}: {}'.format(self.movieid, self.movietitle, self.posterpath) 
