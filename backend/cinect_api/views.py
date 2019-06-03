@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from .models import GroupUser
 from .models import SwipedRight
 from .models import User
+from .models import Group
 
 import requests
 import json
@@ -33,8 +34,39 @@ def groupSuggestion(request):
     if not movies:
         return HttpResponse("No suitable movie for y'all")
     else:
-        # return HttpResponse(movies[0]['movieid'])
+        # Returns BEST movie (only one movie returned), todo return a list of movies
         return HttpResponse(getMovieByID(movies[0]['movieid']))
+
+# POST request handler for creating groups
+def createGroup(request):
+    if request.method == 'POST':
+        groupname = request.POST.get('groupname')
+        members = request.POST.get('members')
+        newGroup = Group()
+        newGroup.groupname = groupname
+        newGroupid = newGroup.save()
+
+        for i in range(0, len(members)):
+            groupUserEntry = GroupUser()
+            groupUserEntry.groupuserid = User.objects.filter(facebookid__facebookid=members[i]['id']).values('email')[0]['email']
+            groupUserEntry.groupid = newGroupid
+            groupUserEntry.save()
+
+
+# Gets a users list of groups - groupid, groupname
+def getGroups(request):
+    myemail = request.GET.get('email')
+    groupids = GroupUser.objects.filter(email__email=myemail).values('groupid')
+
+    groupinfo = []
+    for i in range(0, len(groupids)):
+        groupEntry = Group.objects.filter(groupid__groupid=groupids[i]['groupid'])
+        groupinfo.append({'groupname': groupEntry[0]['groupname'], 'groupid': groupEntry[0]['groupid'])
+
+    return HttpResponse(json.dumps({data: groupinfo}))
+
+    
+        
 
 def getMovieByID(id):
     # response = requests.get("https://api.themoviedb.org/3/movie/299534?api_key=edf754f30aad617f73e80dc66b5337d0").json()

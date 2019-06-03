@@ -16,9 +16,24 @@ export default class NewGroupModal extends Component {
   }
 
   createGroup = () => {
-    this.refs.newGroupModal.close();
+    let formData = new FormData();
+    formData.append('groupname', this.state.groupName);
 
-    // Clearing state
+    var i;
+    for (i = 0; i < this.state.groupMembers; i++) {
+      formData.append('members', this.state.groupMembers[i]);
+      // formData.append('members', MYSELF)
+    }
+
+    fetch("http://146.169.45.140:8000/cinect_api/createGroup", {
+      method: 'POST',
+      body: formData
+    }).then(response => response.json()).then((responseJson) => {
+      alert(responseJson.movieTitle)
+    });
+
+    // Close model and reset form 
+    this.refs.newGroupModal.close();
     this.setState({
       groupMembers: [],
     });
@@ -31,8 +46,6 @@ export default class NewGroupModal extends Component {
     this._onFinishAddingFriends = this._onFinishAddingFriends.bind(this);
     this._getFriendsCallback = this._getFriendsCallback.bind(this);
     this.renderFriends = this.renderFriends.bind(this);
-
-
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
     this.state = {
@@ -159,12 +172,8 @@ export default class NewGroupModal extends Component {
             <TouchableOpacity onPress={() => alert("I want to set a DP")}>
               <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
             </TouchableOpacity>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter group name"
-              maxLength={15}
-              onBlur={Keyboard.dismiss}
-            />
+            <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15}
+              onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({groupName: text})}/>
           </View>
           <Text style={styles.subtitle}>Current members</Text>
           {this.renderCurrentMembers()}
@@ -178,7 +187,6 @@ export default class NewGroupModal extends Component {
               <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Create</Text>
             </TouchableOpacity>
           </View>
-
         </View>
       </Modal>
     )
