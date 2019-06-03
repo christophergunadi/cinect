@@ -12,6 +12,14 @@ import WatchList from './MoviesScreen/Watchlist';
 
 var FBLoginButton = require('../components/FBLoginButton');
 
+getUserMovies = (useremail) => {
+  fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+useremail))
+  .then(response => response.json())
+  .then((responseJson) => {
+    return responseJson.data
+  })
+};
+
 export default class MoviesScreen extends React.Component {
 
   constructor(props) {
@@ -66,32 +74,34 @@ export default class MoviesScreen extends React.Component {
               style={{marginLeft:20}}>
 
               <FlatList
-                data={[
-                  {key: '299537',
-                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                   name: 'Detective Pikachu'},
-                   {key: '99537',
-                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                   name: 'Detective Pikachu'},
-                   {key: '29937',
-                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                   name: 'Detective Pikachu'},
-                   {key: '2937',
-                   imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                   name: 'Detective Pikachu'},
+                data={getUserMovies('kate@example.com')}
+                // data={[
+                //   {key: '299537',
+                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                //    name: 'Detective Pikachu'},
+                //    {key: '99537',
+                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                //    name: 'Detective Pikachu'},
+                //    {key: '29937',
+                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                //    name: 'Detective Pikachu'},
+                //    {key: '2937',
+                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
+                //    name: 'Detective Pikachu'},
+
                   // {key: 'secondmovie',
                   //  imageUri: require('../assets/pikachu.jpg'),
                   //  name: 'Detective Pikachu'},
                   // {key: 'thirdmovie',
                   //  imageUri: require('../assets/pikachu.jpg'),
                   //  name: 'Detective Pikachu'},
-                ]}
-                extraData={this.state}
+                // ]}
+                // extraData={this.state}
                 horizontal={true}
                 renderItem={({item}) =>
                 // <Image source={{uri:item.imageUri}}/>}
-                <WatchList imageUri={item.imageUri}
-                           name={item.name}/>}
+                <WatchList imageUri={item.posterpath}
+                           name={item.title}/>}
               />
 
               {/* <Watchlist imageUri={require('../assets/pikachu.jpg')}

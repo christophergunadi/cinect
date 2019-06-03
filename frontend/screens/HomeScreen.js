@@ -96,7 +96,7 @@ export default class HomeScreen extends React.Component {
     // .then(alert(id))
     .then(response => response.json())
     .then((responseJson) => {
-      alert(responseJson.movieTitle)
+      // alert(responseJson.movieTitle)
     })
     //get movie title and poster image, put into watchlist in moviesscreen
   }
@@ -105,8 +105,8 @@ export default class HomeScreen extends React.Component {
     fetch(("http://146.169.45.140:8000/cinect_api/addswipedright?id=" + id))
     .then(response => response.json())
     .then((responseJson) => {
-      // alert(id)
       alert(responseJson.movieTitle)
+      // this.props.navigator.navigate()
     })
   }
 

@@ -69,3 +69,16 @@ def addSwipedRight(request): #adds movie into user's watchlist database
     # elif request.method == 'GET':
     #     return getMovieByID(request.GET.get('id'))
     return HttpResponse(json.dumps(data))
+
+def getUserMovies(request):
+    useremail = request.GET.get('useremail')
+    #get list of movie ids that user swiped right on
+    movieids = SwipedRight.objects.filter(email__email=useremail).values('movieid')
+    response = []
+    for id in movieids:
+        apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        response.append({'key': apiResponse['id'], 
+                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']), 
+                         'title': apiResponse['title']})
+    httpResponse = {'data': response}
+    return HttpResponse(json.dumps(httpResponse))
