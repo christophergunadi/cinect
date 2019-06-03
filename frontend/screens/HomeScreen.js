@@ -34,7 +34,7 @@ export default class HomeScreen extends React.Component {
       transform: [{
         rotate: this.rotate
       },
-      ...this.position.getTranslateTransform() 
+      ...this.position.getTranslateTransform()
     ]
     }
 
@@ -73,7 +73,7 @@ export default class HomeScreen extends React.Component {
 
   addSwipedRightMovie = (id) => { //send swiped right movie id to cinect_api to add to populate database
     let formData = new FormData();
-    formData.append('username', 'Kate');
+    formData.append('email', 'kate@example.com');
     formData.append('movieid', id);
     fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
       method: 'POST',
@@ -135,7 +135,7 @@ export default class HomeScreen extends React.Component {
       }
     })
 
-    
+
   }
 
   renderMovies = () => {
@@ -144,9 +144,9 @@ export default class HomeScreen extends React.Component {
         return null;
       } else if (i == this.state.currentIndex) {
         return (
-          <Animated.View 
+          <Animated.View
             {...this.PanResponder.panHandlers}
-            key={i} 
+            key={i}
             style={[this.rotateAndTranslate, styles.currentCard]}>
 
             <Animated.View style={[{ opacity: this.likeOpacity }, styles.likeSign]}>
@@ -164,29 +164,29 @@ export default class HomeScreen extends React.Component {
             </Animated.View>
 
             <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', 
+              style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
               borderRadius: 20 }}
               source={item} />
           </Animated.View>
         )
       } else {
         return (
-          <Animated.View 
-            key={i} 
-            style={[{ opacity: this.nextCardOpacity, transform: [{scale: this.nextCardScale}] }, 
+          <Animated.View
+            key={i}
+            style={[{ opacity: this.nextCardOpacity, transform: [{scale: this.nextCardScale}] },
                       styles.nextCard]}>
             <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', 
+              style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
               borderRadius: 20 }}
               source={item} />
           </Animated.View>
         )
       }
 
-      
+
     }).reverse()
 
-    
+
   }
 
   render() {
@@ -207,37 +207,37 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   currentCard: {
-    height: SCREEN_HEIGHT - 120, 
-    width: SCREEN_WIDTH, 
-    padding: 10, 
+    height: SCREEN_HEIGHT - 120,
+    width: SCREEN_WIDTH,
+    padding: 10,
     position: 'absolute'
   },
-  nextCard: { 
-    height: SCREEN_HEIGHT - 120, 
-    width: SCREEN_WIDTH, 
-    padding: 10, 
+  nextCard: {
+    height: SCREEN_HEIGHT - 120,
+    width: SCREEN_WIDTH,
+    padding: 10,
     position: 'absolute'
   },
   likeSign: {
-    transform: [{rotate: '-30deg'}], 
-    position: 'absolute', 
-    top: 50, 
-    left: 40, 
+    transform: [{rotate: '-30deg'}],
+    position: 'absolute',
+    top: 50,
+    left: 40,
     zIndex: 1000
   },
   hateSign: {
-    transform: [{rotate: '30deg'}], 
-    position: 'absolute', 
-    top: 50, 
-    right: 40, 
+    transform: [{rotate: '30deg'}],
+    position: 'absolute',
+    top: 50,
+    right: 40,
     zIndex: 1000
   },
   signText: {
-    borderWidth: 1, 
-    borderColor: 'white', 
-    color: 'white', 
-    fontSize: 32, 
-    fontWeight: '800', 
+    borderWidth: 1,
+    borderColor: 'white',
+    color: 'white',
+    fontSize: 32,
+    fontWeight: '800',
     padding: 10
   },
 });

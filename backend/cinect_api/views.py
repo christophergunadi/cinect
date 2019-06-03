@@ -12,7 +12,7 @@ def index(request):
 
 # Gets a random movie and returns it
 def user(request):
-    username = request.GET.get('username')
+    email = request.GET.get('email')
     response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
     movies = response.json()['results']
     x = random.randint(0, 8)
@@ -22,13 +22,13 @@ def groupSuggestion(request):
     groupid = request.GET.get('groupid')
 
     #  Get lists of users in groupid
-    users = GroupUser.objects.filter(groupid__groupid=groupid).values('username')
-    movies = SwipedRight.objects.filter(username__username=users[0]['username']).values('movieid')
+    users = GroupUser.objects.filter(groupid__groupid=groupid).values('email')
+    movies = SwipedRight.objects.filter(email__email=users[0]['email']).values('movieid')
 
     for i in range(1, len(users)):
-        otherMovies = SwipedRight.objects.filter(username__username=users[i]['username']).values('movieid')
+        otherMovies = SwipedRight.objects.filter(email__email=users[i]['email']).values('movieid')
         movies = movies.intersection(otherMovies)
-        
+
     # Else use AI model
     if not movies:
         return HttpResponse("No suitable movie for y'all")
@@ -42,20 +42,20 @@ def getMovieByID(id):
     return HttpResponse(json.dumps(response))
 
 def addSwipedRight(request):
+    # return HttpResponse("hello")
     data = {}
     if request.method == 'POST':
-        if request.POST.get('username') and request.POST.get('movieid'):
+        if request.POST.get('email') and request.POST.get('movieid'):
             swipedRight = SwipedRight()
-            user = User.objects.get(username=request.POST.get('username'))
-            swipedRight.username = user
+            user = User.objects.get(email=request.POST.get('email'))
+            swipedRight.email = user
             swipedRight.movieid = request.POST.get('movieid')
             swipedRight.save()
-            
-            
-            data['username'] = swipedRight.username.username
+
+
+            data['email'] = swipedRight.email.email
             data['movieid'] = swipedRight.movieid
 
             return HttpResponse(json.dumps(data))
             # return HttpResponse("successful")
     return HttpResponse(json.dumps(data))
-    
