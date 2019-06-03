@@ -12,24 +12,36 @@ import WatchList from './MoviesScreen/Watchlist';
 
 var FBLoginButton = require('../components/FBLoginButton');
 
-getUserMovies = (useremail) => {
-  fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+useremail))
-  .then(response => response.json())
-  .then((responseJson) => {
-    return responseJson.data
-  })
-};
+
 
 export default class MoviesScreen extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      watchlist: [],
       email: '',
       name: '',
     }
+    // alert(this.state.wastchlist);
     this.onUserLogin = this.onUserLogin.bind(this);
   }
+
+  componentDidMount() {
+    fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+"kate@example.com"))
+    .then(response => response.json())
+    .then((responseJson) => {
+      this.setState({watchlist: responseJson.data});
+    });
+  }
+
+  getUserMovies = (useremail) => {
+    fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+useremail))
+    .then(response => response.json())
+    .then((responseJson) => {
+      return responseJson.data;
+    })
+  };
 
   addUser = (email) => { //send swiped right movie id to cinect_api to add to populate database
     let formData = new FormData();
@@ -73,46 +85,14 @@ export default class MoviesScreen extends React.Component {
               showsHorizontalScrollIndicator={false}
               style={{marginLeft:20}}>
 
-              <FlatList
-                data={getUserMovies('kate@example.com')}
-                // data={[
-                //   {key: '299537',
-                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                //    name: 'Detective Pikachu'},
-                //    {key: '99537',
-                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                //    name: 'Detective Pikachu'},
-                //    {key: '29937',
-                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                //    name: 'Detective Pikachu'},
-                //    {key: '2937',
-                //    imageUri: 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg',
-                //    name: 'Detective Pikachu'},
-
-                  // {key: 'secondmovie',
-                  //  imageUri: require('../assets/pikachu.jpg'),
-                  //  name: 'Detective Pikachu'},
-                  // {key: 'thirdmovie',
-                  //  imageUri: require('../assets/pikachu.jpg'),
-                  //  name: 'Detective Pikachu'},
-                // ]}
-                // extraData={this.state}
-                horizontal={true}
-                renderItem={({item}) =>
-                // <Image source={{uri:item.imageUri}}/>}
-                <WatchList imageUri={item.posterpath}
-                           name={item.title}/>}
-              />
-
-              {/* <Watchlist imageUri={require('../assets/pikachu.jpg')}
-                name="Detective Pikachu"/>
-              <Watchlist imageUri={require('../assets/pikachu.jpg')}
-                name="Detective Pikachu"/>
-              <Watchlist imageUri={require('../assets/pikachu.jpg')}
-                name="Detective Pikachu"/> */}
-            </ScrollView>
+              {this.state.watchlist.map(movie => {
+                return (
+                  <WatchList imageUri={movie.posterpath}
+                             name={movie.title} />
+                )
+              })}
+              </ScrollView>
            </View>
-
          </View>
 
          <View style={{marginTop:40}}>
