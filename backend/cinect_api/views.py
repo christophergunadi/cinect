@@ -49,17 +49,16 @@ def groupSuggestion(request):
 def createGroup(request):
     if request.method == 'POST':
         groupname = request.POST.get('groupname')
-        members = request.POST.get('members')
         newGroup = Group()
         newGroup.groupname = groupname
-        newGroupid = newGroup.save()
+        newGroup.save()
 
-        for i in range(0, len(members)):
+        users = request.POST.getlist('members')
+        for i in range(len(users)):
             groupUserEntry = GroupUser()
-            groupUserEntry.groupuserid = User.objects.filter(facebookid__facebookid=members[i]['id']).values('email')[0]['email']
-            groupUserEntry.groupid = newGroupid
+            groupUserEntry.email = User.objects.get(facebookid=users[i])
+            groupUserEntry.groupid = newGroup
             groupUserEntry.save()
-
 
 # Gets a users list of groups - groupid, groupname
 def getGroups(request):
@@ -68,13 +67,11 @@ def getGroups(request):
 
     groupinfo = []
     for i in range(0, len(groupids)):
-        groupEntry = Group.objects.filter(groupid__groupid=groupids[i]['groupid'])
-        groupinfo.append({'groupname': groupEntry[0]['groupname'], 'groupid': groupEntry[0]['groupid']})
+        groupEntry = Group.objects.get(pk=groupids[i]['groupid'])
+        groupinfo.append({'groupname': groupEntry.groupname, 'groupid': groupids[i]['groupid']})
 
-    return HttpResponse(json.dumps({data: groupinfo}))
-
-
-
+    response = {'data': groupinfo}
+    return HttpResponse(json.dumps(response))
 
 def getMovieByID(id):
     # response = requests.get("https://api.themoviedb.org/3/movie/299534?api_key=edf754f30aad617f73e80dc66b5337d0").json()

@@ -15,6 +15,16 @@ var FBLoginButton = require('../components/FBLoginButton');
 
 export default class MoviesScreen extends React.Component {
 
+  getUserEmail = async() => {
+    userEmail = '';
+    try {
+      userEmail = await AsyncStorage.getItem('userEmail');
+    } catch (error) {
+      alert(error.message);
+    }
+    return userEmail;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,11 +37,13 @@ export default class MoviesScreen extends React.Component {
   }
 
   componentDidMount() {
-    fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+"kate@example.com"))
-    .then(response => response.json())
-    .then((responseJson) => {
-      this.setState({watchlist: responseJson.data});
-    });
+    this.getUserEmail().then(value => {
+      fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+value))
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({watchlist: responseJson.data});
+      });
+    })
   }
 
   getUserMovies = (useremail) => {

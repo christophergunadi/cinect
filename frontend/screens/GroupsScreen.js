@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View} from 'react-native';
 
 import NewGroupModal from '../components/NewGroupModal';
 import MainStylesheet from '../styles/MainStylesheet';
@@ -11,14 +11,43 @@ export default class GroupsScreen extends React.Component {
     super(props);
     this._onAddGroupButton = this._onAddGroupButton.bind(this);
     this._onNavigateToGroup = this._onNavigateToGroup.bind(this);
+    this.state = {
+      myGroups: [],
+    };
+  }
+
+  getUserEmail = async() => {
+    userEmail = '';
+    try {
+      userEmail = await AsyncStorage.getItem('userEmail');
+    } catch (error) {
+      alert(error.message);
+    }
+    return userEmail;
+  }
+
+  componentDidMount() {
+    // Get group info for rendering
+    this.getUserEmail().then(value => {
+      fetch("http://146.169.45.140:8000/cinect_api/getgroups?email=" + value)
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState ({
+          myGroups: responseJson.data
+        });
+      }).catch((error) => {
+        console.error(error);
+      });
+    })
+
   }
 
   _onAddGroupButton() {
     this.refs.newGroupModal.showAddModal();
   }
 
-  _onNavigateToGroup(grpname) {
-    this.props.navigation.navigate('SpecificGroup', {groupname: grpname});
+  _onNavigateToGroup(grpname, grpid) {
+    this.props.navigation.navigate('SpecificGroup', {groupname: grpname, groupid: grpid});
   }
 
   render() {
@@ -35,22 +64,16 @@ export default class GroupsScreen extends React.Component {
         <NewGroupModal ref={'newGroupModal'}>
         </NewGroupModal>
 
-        <FlatList
-          data={[
-            {key: 'group19'},
-            {key: 'flatmates'},
-            {key: 'family'},
-            {key: 'fambam'},
-          ]}
-          renderItem={({item}) =>
+        {this.state.myGroups.map((group) => {
+          return (
             <View style={{ flexDirection: 'row' }}>
               <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-              <TouchableOpacity onPress={() => this._onNavigateToGroup(item.key)}>
-                <Text style={styles.groupName}>{item.key}</Text>
+              <TouchableOpacity onPress={() => this._onNavigateToGroup(group.groupname, group.groupid)}>
+                <Text style={styles.groupName}>{group.groupname}</Text>
               </TouchableOpacity>
             </View>
-          }
-        />
+          );
+        })}
       </View>
     );
   }

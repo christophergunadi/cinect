@@ -10,7 +10,6 @@ var windowSize = Dimensions.get('window');
 
 export default class NewGroupModal extends Component {
 
-
   showAddModal = () => {
     this.refs.newGroupModal.open();
   }
@@ -18,14 +17,14 @@ export default class NewGroupModal extends Component {
   createGroup = () => {
     let formData = new FormData();
     formData.append('groupname', this.state.groupName);
+    formData.append('groupsize', this.state.groupMembers.length);
 
     var i;
-    for (i = 0; i < this.state.groupMembers; i++) {
-      formData.append('members', this.state.groupMembers[i]);
-      // formData.append('members', MYSELF)
+    for (i = 0; i < this.state.groupMembers.length; i++) {
+      formData.append('members', this.state.groupMembers[i].id);
     }
 
-    fetch("http://146.169.45.140:8000/cinect_api/createGroup", {
+    fetch("http://146.169.45.140:8000/cinect_api/creategroup", {
       method: 'POST',
       body: formData
     }).then(response => response.json()).then((responseJson) => {
