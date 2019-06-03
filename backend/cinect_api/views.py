@@ -14,10 +14,12 @@ def index(request):
 # Gets a random movie and returns it
 def user(request):
     if request.method == 'POST':
-        if request.POST.get('email'):
+        if request.POST.get('email') and request.POST.get('facebookid'):
             user = User()
             user.email = request.POST.get('email')
-            swipedRight.save()
+            user.facebookid = request.POST.get('facebookid')
+            user.save()
+        return HttpResponse({'email': request.POST.get('email'), 'facebookid': request.POST.get('facebookid')})
     else:
         email = request.GET.get('email')
         response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
@@ -67,12 +69,12 @@ def getGroups(request):
     groupinfo = []
     for i in range(0, len(groupids)):
         groupEntry = Group.objects.filter(groupid__groupid=groupids[i]['groupid'])
-        groupinfo.append({'groupname': groupEntry[0]['groupname'], 'groupid': groupEntry[0]['groupid'])
+        groupinfo.append({'groupname': groupEntry[0]['groupname'], 'groupid': groupEntry[0]['groupid']})
 
     return HttpResponse(json.dumps({data: groupinfo}))
 
-    
-        
+
+
 
 def getMovieByID(id):
     # response = requests.get("https://api.themoviedb.org/3/movie/299534?api_key=edf754f30aad617f73e80dc66b5337d0").json()
@@ -113,8 +115,8 @@ def getUserMovies(request):
             break
         i += 1
         apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
-        response.append({'key': id['movieid'], 
-                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']), 
+        response.append({'key': id['movieid'],
+                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
                          'title': apiResponse['title']})
     httpResponse = {'data': response}
     return HttpResponse(json.dumps(httpResponse))

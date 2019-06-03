@@ -14,7 +14,7 @@ export default class FBLoginButton extends Component {
     if (error) {
       alert('Error fetching data: ' + error.toString());
     } else {
-      this.props.onChange(result.email, result.name);
+      this.props.onChange(result.email, result.name, result.id);
     }
   }
 
@@ -30,7 +30,7 @@ export default class FBLoginButton extends Component {
               } else if (result.isCancelled) {
                 alert("Login was cancelled");
               } else {
-                const userInfoReq = new GraphRequest('/me?fields=name,email', null, this._userInfoCallback,);
+                const userInfoReq = new GraphRequest('/me?fields=name,email,id', null, this._userInfoCallback,);
                 new GraphRequestManager().addRequest(userInfoReq).start();
               }
             }

@@ -43,16 +43,17 @@ export default class MoviesScreen extends React.Component {
     })
   };
 
-  addUser = (email) => { //send swiped right movie id to cinect_api to add to populate database
+  addUser = (email, facebookid) => { //send swiped right movie id to cinect_api to add to populate database
     let formData = new FormData();
     formData.append('email', email);
+    formData.append('facebookid', facebookid);
     fetch("http://146.169.45.140:8000/cinect_api/user", {
       method: 'POST',
       body: formData
     })
   }
 
-  onUserLogin = async(email, name) => {
+  onUserLogin = async(email, name, facebookid) => {
     // userEmail = '';
     // try {
       // await AsyncStorage.setItem('userEmail', email);
@@ -62,7 +63,7 @@ export default class MoviesScreen extends React.Component {
       // alert(error.message);
     // }
     // alert(userEmail);
-    this.addUser(email);
+    this.addUser(email, facebookid);
     this.setState({'email': email, 'name': name});
   }
 
