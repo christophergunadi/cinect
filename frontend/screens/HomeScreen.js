@@ -79,19 +79,19 @@ export default class HomeScreen extends React.Component {
       method: 'POST',
       body: formData
     })
-    .then(this.fetchMovieById(id))
+    // .then(this.fetchMovieById(id))
     // .then(alert(id))
-    // .then(response => response.json())
-    // .then((responseJson) => {
-    //   alert(responseJson.email)
-    // })
+    .then(response => response.json())
+    .then((responseJson) => {
+      alert(responseJson.movieTitle)
+    })
     //get movie title and poster image, put into watchlist in moviesscreen
   }
 
   fetchMovieById = (id) => {
     fetch(("http://146.169.45.140:8000/cinect_api/addswipedright?id=" + id))
     .then(response => response.json())
-    .then(responseJson => {
+    .then((responseJson) => {
       // alert(id)
       alert(responseJson.movieTitle)
     })
