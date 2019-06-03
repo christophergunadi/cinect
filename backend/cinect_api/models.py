@@ -2,10 +2,11 @@ from django.db import models
 
 class User(models.Model):
   email = models.EmailField(max_length=254, primary_key=True)
+  facebookid  = models.CharField(max_length=255, unique=True, default='null')
   class Meta:
     db_table = 'users'
   def __str__(self):
-    return self.email
+    return '{}: {}'.format(self.facebookid, self.email)
 
 class SwipedRight(models.Model):
   swiperightid = models.AutoField(primary_key=True)
@@ -40,4 +41,4 @@ class GroupUser(models.Model):
   # class Meta:
   #   db_table = 'movies'
   # def _str_(self):
-  #   return '{}: {}'.format(self.movieid, self.movietitle, self.posterpath) 
+  #   return '{}: {}'.format(self.movieid, self.movietitle, self.posterpath)
