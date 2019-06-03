@@ -37,7 +37,8 @@ def groupSuggestion(request):
         return HttpResponse(getMovieByID(movies[0]['movieid']))
 
 def getMovieByID(id):
-    response = requests.get("https://api.themoviedb.org/3/movie/299534?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+    # response = requests.get("https://api.themoviedb.org/3/movie/299534?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+    response = requests.get(("https://api.themoviedb.org/3/movie/"+id+"?api_key=edf754f30aad617f73e80dc66b5337d0")).json()
     response = {'movieTitle': response['belongs_to_collection']['name'], 'posterPath': response['belongs_to_collection']['poster_path']}
     return HttpResponse(json.dumps(response))
 
