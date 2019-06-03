@@ -2,17 +2,22 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { LoginButton, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
-_userInfoCallback = (error, result) => {
-  if (error) {
-    alert('Error fetching data: ' + error.toString());
-  } else {
-    alert('Success fetching data. Logged in as: ' + result.email);
-  }
-}
-
-const userInfoReq = new GraphRequest('/me?fields=name,email', null, this._userInfoCallback,);
 
 export default class FBLoginButton extends Component {
+
+   constructor(props) {
+     super(props);
+     this._userInfoCallback = this._userInfoCallback.bind(this);
+   }
+
+  _userInfoCallback = (error, result) => {
+    if (error) {
+      alert('Error fetching data: ' + error.toString());
+    } else {
+      this.props.onChange(result.email, result.name);
+    }
+  }
+
   render() {
     return (
       <View>
@@ -25,7 +30,7 @@ export default class FBLoginButton extends Component {
               } else if (result.isCancelled) {
                 alert("Login was cancelled");
               } else {
-                alert("Login was successful with permissions: " + result.grantedPermissions)
+                const userInfoReq = new GraphRequest('/me?fields=name,email', null, this._userInfoCallback,);
                 new GraphRequestManager().addRequest(userInfoReq).start();
               }
             }

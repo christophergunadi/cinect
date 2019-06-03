@@ -13,11 +13,17 @@ def index(request):
 
 # Gets a random movie and returns it
 def user(request):
-    email = request.GET.get('email')
-    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
-    movies = response.json()['results']
-    x = random.randint(0, 8)
-    return HttpResponse(json.dumps(movies[x]))
+    if request.method == 'POST':
+        if request.POST.get('email'):
+            user = User()
+            user.email = request.POST.get('email')
+            swipedRight.save()
+    else:
+        email = request.GET.get('email')
+        response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
+        movies = response.json()['results']
+        x = random.randint(0, 8)
+        return HttpResponse(json.dumps(movies[x]))
 
 def groupSuggestion(request):
     groupid = request.GET.get('groupid')
@@ -95,3 +101,20 @@ def addSwipedRight(request): #adds movie into user's watchlist database
     # elif request.method == 'GET':
     #     return getMovieByID(request.GET.get('id'))
     return HttpResponse(json.dumps(data))
+
+def getUserMovies(request):
+    useremail = request.GET.get('useremail')
+    #get list of movie ids that user swiped right on
+    movieids = SwipedRight.objects.filter(email__email='kate@example.com').values('movieid')
+    response = []
+    i = 0
+    for id in movieids:
+        if i > 7:
+            break
+        i += 1
+        apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        response.append({'key': id['movieid'], 
+                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']), 
+                         'title': apiResponse['title']})
+    httpResponse = {'data': response}
+    return HttpResponse(json.dumps(httpResponse))
