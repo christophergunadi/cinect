@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
+// import {AsyncStorage, Button, Text, View, StyleSheet, ScrollView, Image} from 'react-native';
 import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList} from 'react-native';
-
 import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar} from 'react-navigation'
 
 import SettingsScreen from './SettingsScreen'
@@ -13,6 +13,39 @@ import WatchList from './MoviesScreen/Watchlist';
 var FBLoginButton = require('../components/FBLoginButton');
 
 export default class MoviesScreen extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      name: '',
+    }
+    this.onUserLogin = this.onUserLogin.bind(this);
+  }
+
+  addUser = (email) => { //send swiped right movie id to cinect_api to add to populate database
+    let formData = new FormData();
+    formData.append('email', email);
+    fetch("http://146.169.45.140:8000/cinect_api/user", {
+      method: 'POST',
+      body: formData
+    })
+  }
+
+  onUserLogin = async(email, name) => {
+    // userEmail = '';
+    // try {
+      // await AsyncStorage.setItem('userEmail', email);
+      // await AsyncStorage.setItem('userName', name);
+      // userEmail = await AsyncStorage.getItem('userEmail');
+    // } catch (error) {
+      // alert(error.message);
+    // }
+    // alert(userEmail);
+    this.addUser(email);
+    this.setState({'email': email, 'name': name});
+  }
+
   render() {
     return (
       <View style={{flex:1}}>
@@ -23,7 +56,7 @@ export default class MoviesScreen extends React.Component {
            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
              My Watchlist
            </Text>
-           <FBLoginButton />
+           <FBLoginButton onChange = { this.onUserLogin }/>
         </View>
         <View style={{flex: 1, paddingTop: 20}}>
            <View style={{height:220, marginTop:10}}>
@@ -55,7 +88,7 @@ export default class MoviesScreen extends React.Component {
                 ]}
                 extraData={this.state}
                 horizontal={true}
-                renderItem={({item}) => 
+                renderItem={({item}) =>
                 // <Image source={{uri:item.imageUri}}/>}
                 <WatchList imageUri={item.imageUri}
                            name={item.name}/>}
@@ -71,7 +104,6 @@ export default class MoviesScreen extends React.Component {
            </View>
 
          </View>
-
 
          <View style={{marginTop:40}}>
            <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>

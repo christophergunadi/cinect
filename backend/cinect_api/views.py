@@ -12,11 +12,17 @@ def index(request):
 
 # Gets a random movie and returns it
 def user(request):
-    email = request.GET.get('email')
-    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
-    movies = response.json()['results']
-    x = random.randint(0, 8)
-    return HttpResponse(json.dumps(movies[x]))
+    if request.method == 'POST':
+        if request.POST.get('email'):
+            user = User()
+            user.email = request.POST.get('email')
+            swipedRight.save()
+    else:
+        email = request.GET.get('email')
+        response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
+        movies = response.json()['results']
+        x = random.randint(0, 8)
+        return HttpResponse(json.dumps(movies[x]))
 
 def groupSuggestion(request):
     groupid = request.GET.get('groupid')

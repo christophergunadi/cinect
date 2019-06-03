@@ -63,6 +63,17 @@ export default class HomeScreen extends React.Component {
     })
   }
 
+  // getUserEmail = async() => {
+  //   userEmail = '';
+  //   try {
+  //     userEmail = await AsyncStorage.getItem('userEmail');
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  //   alert(userEmail);
+  //   return userEmail;
+  // }
+
   fetchMovieFromApi = () => {
     fetch("http://146.169.45.140:8000/cinect_api/user")
     .then(response => response.json())
@@ -73,7 +84,9 @@ export default class HomeScreen extends React.Component {
 
   addSwipedRightMovie = (id) => { //send swiped right movie id to cinect_api to add to populate database
     let formData = new FormData();
+
     formData.append('email', 'kate@example.com');
+    // formData.append('email', this.getUserEmail());
     formData.append('movieid', id);
     fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
       method: 'POST',
