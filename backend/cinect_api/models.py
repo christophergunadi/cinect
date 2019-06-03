@@ -34,6 +34,16 @@ class GroupUser(models.Model):
   def _str_(self):
     return '{}: {} in group {}'.format(self.groupuserid, self.email, self.groupid)
 
+class UserWatched(models.Model):
+  userwatchedid = models.AutoField(primary_key=True)
+  email = models.ForeignKey(User, on_delete=models.CASCADE)
+  movieid = models.CharField(max_length=10)
+  class Meta:
+    db_table = 'userwatched'
+  def __str__(self):
+    return '{}: {} watched {}'.format(self.userwatchedid, self.email, self.movieid)
+
+
 # class MovieInfo(models.Model):
   # movieid = models.CharField(max_length=10, primary_key=True)
   # movietitle = models.CharField(max_length=100)

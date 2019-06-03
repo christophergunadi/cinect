@@ -6,7 +6,6 @@ import SettingsScreen from './SettingsScreen'
 import UserProfileScreen from './UserProfileScreen'
 import Watchlist from './MoviesScreen/Watchlist'
 import WatchedMovies from './MoviesScreen/WatchedMovies'
-// import { FlatList } from 'react-native-gesture-handler';
 import WatchList from './MoviesScreen/Watchlist';
 
 var FBLoginButton = require('../components/FBLoginButton');
@@ -32,7 +31,6 @@ export default class MoviesScreen extends React.Component {
       email: '',
       name: '',
     }
-    // alert(this.state.wastchlist);
     this.onUserLogin = this.onUserLogin.bind(this);
   }
 
@@ -45,14 +43,6 @@ export default class MoviesScreen extends React.Component {
       });
     })
   }
-
-  getUserMovies = (useremail) => {
-    fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+useremail))
-    .then(response => response.json())
-    .then((responseJson) => {
-      return responseJson.data;
-    })
-  };
 
   addUser = (email, facebookid) => { //send swiped right movie id to cinect_api to add to populate database
     let formData = new FormData();
@@ -81,14 +71,17 @@ export default class MoviesScreen extends React.Component {
 
         <ScrollView
          scrollEventThrottle='16'>
-         <View style={{flex: 1, paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+         <View style={{flex: 1, paddingTop: 30, flexDirection: 'row', justifyContent: 'space-between'}}>
            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
              My Watchlist
            </Text>
-           <FBLoginButton onChange = { this.onUserLogin }/>
-        </View>
-        <View style={{flex: 1, paddingTop: 20}}>
-           <View style={{height:220, marginTop:10}}>
+           <View style={{marginRight:10, marginTop: 3}}>
+             <FBLoginButton onChange = { this.onUserLogin }/>
+           </View>
+           
+          </View>
+          
+          <View style={{height:250, marginTop:20}}>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
@@ -99,17 +92,17 @@ export default class MoviesScreen extends React.Component {
                   <WatchList imageUri={movie.posterpath}
                              name={movie.title} />
                 )
-              })}
-              </ScrollView>
-           </View>
-         </View>
+              })
+              }
+            </ScrollView>
+          </View>
 
-         <View style={{marginTop:40}}>
+         <View style={{marginTop:10}}>
            <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>
              Movies I've watched
            </Text>
 
-           <View style={{height:220, marginTop:10}}>
+           <View style={{height:220, marginTop:20}}>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
