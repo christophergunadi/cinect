@@ -1,10 +1,15 @@
 import React , {Component} from 'react';
-import {Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,TouchableOpacity, Keyboard} from 'react-native';
+import {Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,TouchableOpacity, 
+  Keyboard, LayoutAnimation, UIManager} from 'react-native';
 import Modal from 'react-native-modalbox';
+
+
+import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 var windowSize = Dimensions.get('window');
 
 export default class NewGroupModal extends Component {
+
 
   showAddModal = () => {
     this.refs.newGroupModal.open();
@@ -12,16 +17,129 @@ export default class NewGroupModal extends Component {
 
   createGroup = () => {
     this.refs.newGroupModal.close();
+
+    // Clearing state
+    this.setState({
+      groupMembers: [],
+    });
   }
 
   constructor(props) {
     super(props);
     this.createGroup = this.createGroup.bind(this);
+    this._onAddMemberButton = this._onAddMemberButton.bind(this);
+    this._onFinishAddingFriends = this._onFinishAddingFriends.bind(this);
+    this._getFriendsCallback = this._getFriendsCallback.bind(this);
+    this.renderFriends = this.renderFriends.bind(this);
+
+
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+
+    this.state = {
+      addingFriends: false,
+      groupName: "Group",
+      myFriends: [], // Maps friend_id to friend name
+      groupMembers: [], // Currently added group members
+    };
+
   }
 
-  _onAddMemberButton = () => {}
+  _getFriendsCallback = (error, result) => {
+    if (error) {
+      alert("Failed to retrieve your friends.")
+    } else {
+      var i;
+      friends = [];
+      for (i = 0; i < result.data.length; i++) {
+        friends.push({id: result.data[i].id, name: result.data[i].name});
+      }
+      this.setState({
+        myFriends: friends,
+      });
+    }
+  }
+
+  _onAddMemberButton = () => {
+    // Fetch my friends and store it in state.
+    new GraphRequestManager().addRequest(new GraphRequest("/me/friends", null, this._getFriendsCallback,)).start();
+    const animation = LayoutAnimation.create(300, 'linear', 'opacity');
+    LayoutAnimation.configureNext(animation, () => {});
+    this.setState({
+      addingFriends: true,
+    });
+  }
+
+  _onFinishAddingFriends = () => {
+    const animation = LayoutAnimation.create(300, 'linear', 'opacity');
+    LayoutAnimation.configureNext(animation, () => {});
+    this.setState({
+      addingFriends: false,
+    });
+  }
+
+  _onAddSpecificFriend = (friend) => {
+    //TODO : Adding someone to the group twice?
+    var i;
+    for (i = 0; i < this.state.groupMembers.length; i++) {
+      if (this.state.groupMembers[i].id == friend.id) {
+        return;
+      }
+    }
+    this.state.groupMembers.push(friend);
+  }
+
+  renderFriends = () => {
+    var friends = this.state.myFriends;
+    return (friends.map((f) => {
+      return (
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <TouchableOpacity onPress={() => this._onAddSpecificFriend(f)}>
+            <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>{f.name}</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }))
+  }
+
+  renderCurrentMembers = () => {
+    return (this.state.groupMembers.map((f) => {
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
+          <Text style={styles.groupName}>{f.name}</Text>
+        </View>
+      );
+    }))      
+  }
 
   render() {
+    if (this.state.addingFriends) {
+      return (
+        <Modal ref={'newGroupModal'}
+        style={{
+          padding: 30,
+          borderRadius: 20,
+          shadowRadius: 10,
+          width: windowSize.width - 70,
+          height: windowSize.height - 200
+        }}
+        position='center'
+        backdrop={true}
+      >
+        <View style={styles.container}>
+          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
+            <Text style={styles.title}>Add friends</Text>
+              {this.renderFriends()}
+            <TouchableOpacity style={styles.createButton} onPress={this._onFinishAddingFriends}>
+            <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Back</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+
+      </Modal>
+      )
+    } else {
+
     return (
       <Modal ref={'newGroupModal'}
         style={{
@@ -48,22 +166,8 @@ export default class NewGroupModal extends Component {
               onBlur={Keyboard.dismiss}
             />
           </View>
-
           <Text style={styles.subtitle}>Current members</Text>
-          <View>
-            <FlatList
-              data={[
-                {key: 'David'},
-                {key: 'Kate'},
-              ]}
-              renderItem={({item}) =>
-                <View style={{ flexDirection: 'row' }}>
-                  <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-                  <Text style={styles.groupName}>{item.key}</Text>
-                </View>
-              }
-            />
-          </View>
+          {this.renderCurrentMembers()}
 
           <TouchableOpacity style={styles.addButton} onPress={this._onAddMemberButton}>
             <Text style={styles.title}>+</Text>
@@ -79,6 +183,7 @@ export default class NewGroupModal extends Component {
       </Modal>
     )
   }
+}
 }
 
 const styles = StyleSheet.create({
