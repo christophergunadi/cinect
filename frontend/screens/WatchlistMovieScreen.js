@@ -4,6 +4,7 @@ import {Text, View, Image, Button, Dimensions, TouchableOpacity, StyleSheet} fro
 import {GetUserProperty} from '../Helpers';
 
 import MainStylesheet from '../styles/MainStylesheet';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class WatchlistMovieScreen extends React.Component {
     constructor(props) {
@@ -47,11 +48,15 @@ export default class WatchlistMovieScreen extends React.Component {
         return (
         //   <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <View style={MainStylesheet.container}>
+            <ScrollView style={{width: '103%', height: '100%'}}>
             {/* <View> */}
                 <Image source={{uri: this.props.navigation.getParam('posterpath')}}
-                    style={{width: this.state.width, height: this.state.height, borderRadius: 10}}/>
+                    style={{width: 330, height: 500, borderRadius: 10}}/>
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
+                </Text>
+                <Text>
+                    {this.props.navigation.getParam('synopsis')}
                 </Text>
             {/* </View> */}
             
@@ -67,8 +72,7 @@ export default class WatchlistMovieScreen extends React.Component {
                     </TouchableOpacity>
                 </View>
             {/* </View> */}
-            
-
+            </ScrollView>
         </View>
         );
     }

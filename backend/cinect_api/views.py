@@ -138,7 +138,8 @@ def getUserMovies(request):
         apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
         response.append({'key': id['movieid'],
                          'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
-                         'title': apiResponse['title']})
+                         'title': apiResponse['title'],
+                         'synopsis': apiResponse['overview']})
     httpResponse = {'data': response}
     return HttpResponse(json.dumps(httpResponse))
 

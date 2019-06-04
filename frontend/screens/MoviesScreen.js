@@ -31,8 +31,8 @@ class MoviesScreen extends React.Component {
     })
   }
 
-  watchlistOnPress = (posterpath, title, id) => {
-    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id});
+  watchlistOnPress = (posterpath, title, id, synopsis) => {
+    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis});
   }
 
   render() {
@@ -60,7 +60,7 @@ class MoviesScreen extends React.Component {
 
               {this.state.watchlist.map(movie => {
                 return (
-                  <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, this.refreshWatchlist)}>
+                  <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
                     <WatchList imageUri={movie.posterpath}
                                name={movie.title} />
                   </TouchableOpacity>
