@@ -9,15 +9,16 @@ export default class SpecificGroupScreen extends Component {
   constructor(props) {
     super(props);
     this.selectMovieForGroup = this.selectMovieForGroup.bind(this);
+    this.getMembers = this.getMembers.bind(this);
     this.state = {
       suggestedMovies: [],
-      movieTitle: "2342",
-      posterPath: "123",
+      members: [],
     }
   }
 
   componentDidMount() {
     this.selectMovieForGroup()
+    this.getMembers()
   }
 
   selectMovieForGroup = () => {
@@ -26,8 +27,18 @@ export default class SpecificGroupScreen extends Component {
     .then((responseJson) => {
         this.setState ({
           suggestedMovies: responseJson.data,
-          movieTitle: responseJson.movieTitle,
-          posterPath: responseJson.posterPath,
+      })
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+
+  getMembers = () => {
+    fetch("http://146.169.45.140:8000/cinect_api/getmembers?groupid=" + this.props.navigation.getParam('groupid'))
+    .then(response => response.json())
+    .then((responseJson) => {
+        this.setState ({
+          members: responseJson.data,
       })
     }).catch((error) => {
       console.error(error);
@@ -40,6 +51,15 @@ export default class SpecificGroupScreen extends Component {
       <View style={MainStylesheet.container}>
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
         <Text>Members</Text>
+          {/* {
+            this.state.members.map(member => {
+              return (
+                <View style={{ flexDirection: 'row' }}>
+                  <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
+                  <Text style={styles.groupName}>{member.groupname}</Text>
+                </View>
+              )
+          })} */}
         <View style={{paddingTop: 20}}>
            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>
              What to watch
@@ -69,7 +89,6 @@ export default class SpecificGroupScreen extends Component {
       </View>
     )
   }
-
 }
 
 const styles = StyleSheet.create({

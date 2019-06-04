@@ -130,7 +130,7 @@ export default class NewGroupModal extends Component {
       return (
         <Modal ref={'newGroupModal'}
         style={{
-          padding: 30,
+          padding: 40,
           borderRadius: 20,
           shadowRadius: 10,
           width: windowSize.width - 70,

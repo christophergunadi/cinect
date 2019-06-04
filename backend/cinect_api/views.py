@@ -32,6 +32,10 @@ def user(request):
 def takeSecond(elem):
     return elem[1]
 
+# Returns true if more than one person likes a movie
+def filterLikedByMoreThanOne(elem):
+    return int(elem[1]) > 1
+
 def groupSuggestion(request):
     groupid = request.GET.get('groupid')
 
@@ -43,21 +47,34 @@ def groupSuggestion(request):
     for i in range(0, len(users)):
         movies = SwipedRight.objects.filter(email__email=users[i]['email']).values('movieid')
         for j in range(0, len(movies)):
-            if movies[i]['movieid'] in result:
-                result[movies[i]['movieid']] = result[movies[i]['movieid']] + 1
+            if movies[j]['movieid'] in result:
+                result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
             else:
-                result[movies[i]['movieid']] = 1
+                result[movies[j]['movieid']] = 1
 
-    sortedResults = sorted(result, key=takeSecond, reverse=True)
+    sortedResults = sorted(result.items(), key=takeSecond, reverse=True)
+    filteredResults = list(filter(filterLikedByMoreThanOne, sortedResults))
     jsonResults = []
-    
-    for i in range(0, len(sortedResults)):
-        response = requests.get("https://api.themoviedb.org/3/movie/"+sortedResults[i][0]+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
-        jsonResults.append({'movieTitle': response['title'], 'posterPath': response['poster_path'], 'count': sortedResults[i][1]})
+
+    print(json.dumps(filteredResults))
+    print(len(filteredResults))
+    for i in range(0, len(filteredResults)):
+        response = requests.get("https://api.themoviedb.org/3/movie/"+filteredResults[i][0]+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        jsonResults.append({'movieTitle': response['title'], 'posterPath': response['poster_path'], 'count': filteredResults[i][1]})
 
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
 
+
+def getMembers(request):
+    groupid = request.GET.get('groupid')
+    members = GroupUser.objects.filter(groupid__groupid=groupid).values('email')
+    response = []
+    for i in range(0, len(members)):
+        email = User.objects.get(pk=members[i]['email'])
+        response.append({'name': email.email })
+
+    return HttpResponse(json.dumps({'data': response}))
 
 
 # POST request handler for creating groups
@@ -89,7 +106,6 @@ def getGroups(request):
     return HttpResponse(json.dumps(response))
 
 def getMovieByID(id):
-    # response = requests.get("https://api.themoviedb.org/3/movie/299534?api_key=edf754f30aad617f73e80dc66b5337d0").json()
     response = requests.get("https://api.themoviedb.org/3/movie/"+id+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
     response = {'movieTitle': response['title'], 'posterPath': response['poster_path']}
     return HttpResponse(json.dumps(response))
