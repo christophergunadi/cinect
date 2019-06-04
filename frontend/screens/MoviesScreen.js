@@ -27,10 +27,7 @@ class MoviesScreen extends React.Component {
     super(props);
     this.state = {
       watchlist: [],
-      email: '',
-      name: '',
     }
-    this.onUserLogin = this.onUserLogin.bind(this);
   }
 
   componentDidMount() {
@@ -79,11 +76,11 @@ class MoviesScreen extends React.Component {
              My Watchlist
            </Text>
            <View style={{marginRight:10, marginTop: 3}}>
-             <FBLoginButton onChange = { this.onUserLogin }/>
+             <FBLoginButton onLogin = { this.onUserLogin }/>
            </View>
-           
+
           </View>
-          
+
           <View style={{height:250, marginTop:20}}>
             <ScrollView
               horizontal={true}

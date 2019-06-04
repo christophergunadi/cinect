@@ -70,6 +70,10 @@ export default class HomeScreen extends React.Component {
     } catch (error) {
       alert(error.message);
     }
+    if (!userEmail) {
+      // TODO: Improve what happens when you swipe without being logged in
+      alert("Please log in or sign up to start swiping!")
+    }
     return userEmail;
   }
 

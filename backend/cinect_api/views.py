@@ -27,23 +27,38 @@ def user(request):
         x = random.randint(0, 8)
         return HttpResponse(json.dumps(movies[x]))
 
+
+# Helper function to take value in pair to sort suggestions
+def takeSecond(elem):
+    return elem[1]
+
 def groupSuggestion(request):
     groupid = request.GET.get('groupid')
 
-    #  Get lists of users in groupid
+    result = {}
+
+     #  Get lists of users in groupid
     users = GroupUser.objects.filter(groupid__groupid=groupid).values('email')
-    movies = SwipedRight.objects.filter(email__email=users[0]['email']).values('movieid')
 
-    for i in range(1, len(users)):
-        otherMovies = SwipedRight.objects.filter(email__email=users[i]['email']).values('movieid')
-        movies = movies.intersection(otherMovies)
+    for i in range(0, len(users)):
+        movies = SwipedRight.objects.filter(email__email=users[0]['email']).values('movieid')
+        for j in range(0, len(movies)):
+            if movies[i]['movieid'] in result:
+                result[movies[i]['movieid']] = result[movies[i]['movieid']] + 1
+            else:
+                result[movies[i]['movieid']] = 1
 
-    # Else use AI model
-    if not movies:
-        return HttpResponse("No suitable movie for y'all")
-    else:
-        # Returns BEST movie (only one movie returned), todo return a list of movies
-        return HttpResponse(getMovieByID(movies[0]['movieid']))
+    sortedResults = sorted(result, key=takeSecond, reverse=True)
+    jsonResults = []
+    
+    for i in range(0, len(sortedResults)):
+        response = requests.get("https://api.themoviedb.org/3/movie/"+sortedResults[i][0]+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        jsonResults.append({'movieTitle': response['title'], 'posterPath': response['poster_path'], 'count': sortedResults[i][1]})
+
+    jsonResponse = {'data': jsonResults}
+    return HttpResponse(json.dumps(jsonResponse))
+
+
 
 # POST request handler for creating groups
 def createGroup(request):
