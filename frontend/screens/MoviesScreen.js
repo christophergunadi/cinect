@@ -17,8 +17,13 @@ class MoviesScreen extends React.Component {
     super(props);
     this.state = {
       watchlist: [],
+      watchedlist: [],
     }
-    this.getUserMovies = this.getUserMovies.bind(this)
+    this.getUserMovies = this.getUserMovies.bind(this);
+    this.getWatchedMovies = this.getWatchedMovies.bind(this);
+    // this.getUserMovies();
+    this.getWatchedMovies()
+    // alert(this.state.watchedlist.length)
   }
 
   getUserMovies() {
@@ -31,12 +36,22 @@ class MoviesScreen extends React.Component {
     })
   }
 
+  getWatchedMovies() {
+    GetUserProperty('email').then(value => {
+      fetch(("http://146.169.45.140:8000/cinect_api/getuserwatched?useremail="+value))
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({watchedlist: responseJson.data.reverse()});
+      });
+    })
+  }
+
   watchlistOnPress = (posterpath, title, id, synopsis) => {
     this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis});
   }
 
   render() {
-    this.getUserMovies()
+    this.getUserMovies();
     return (
       <View style={{flex:1}}>
 
@@ -70,8 +85,35 @@ class MoviesScreen extends React.Component {
               }
             </ScrollView>
           </View>
+          
+          
+          <View style={{flex: 1, paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
+              Movies I've watched
+            </Text>
+          </View>
 
-          <View style={{marginTop:10}}>
+          <View style={{height:250, marginTop:20}}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={{marginLeft:20}}>
+
+              {this.state.watchedlist.map(movie => {
+                return (
+                  // alert('here'),
+                  // <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
+                    <WatchList imageUri={movie.posterpath}
+                               name={movie.title} />
+                  // </TouchableOpacity>
+
+                )
+              })
+              }
+            </ScrollView>
+          </View>
+
+          {/* <View style={{marginTop:10}}>
             <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>
               Movies I've watched
             </Text>
@@ -90,7 +132,7 @@ class MoviesScreen extends React.Component {
               </ScrollView>
             </View>
 
-          </View>
+          </View> */}
 
         </ScrollView>
       </View>

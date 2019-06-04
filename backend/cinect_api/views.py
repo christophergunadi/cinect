@@ -3,6 +3,7 @@ from .models import GroupUser
 from .models import SwipedRight
 from .models import User
 from .models import Group
+from .models import UserWatched
 
 import requests
 import json
@@ -157,3 +158,17 @@ def deleteSwipedRight(request):
             return HttpResponse(getMovieByID(movieid))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
+
+def getUserWatched(request):
+    useremail = request.GET.get('useremail')
+    #get list of movie ids that user swiped right on
+    movieids = UserWatched.objects.filter(email__email=useremail).values('movieid')
+    response = []
+    for id in movieids:
+        apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        response.append({'key': id['movieid'],
+                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
+                         'title': apiResponse['title'],
+                         'synopsis': apiResponse['overview']})
+    httpResponse = {'data': response}
+    return HttpResponse(json.dumps(httpResponse))

@@ -12,5 +12,6 @@ urlpatterns = [
     path('getgroups',views.getGroups, name='getgroups'),
     path('getswipedright', views.getUserMovies, name='getswipedright'),
     path('deleteswipedright', csrf_exempt(views.deleteSwipedRight), name='deleteswipedright'),
-    path('getmembers', views.getMembers, name='getmembers')
+    path('getmembers', views.getMembers, name='getmembers'),
+    path('getuserwatched', views.getUserWatched, name='getuserwatched'),
 ]

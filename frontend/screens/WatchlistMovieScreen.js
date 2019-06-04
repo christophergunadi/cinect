@@ -46,33 +46,28 @@ export default class WatchlistMovieScreen extends React.Component {
 
     render() {
         return (
-        //   <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <View style={MainStylesheet.container}>
             <ScrollView style={{width: '103%', height: '100%'}}>
-            {/* <View> */}
                 <Image source={{uri: this.props.navigation.getParam('posterpath')}}
                     style={{width: 330, height: 500, borderRadius: 10}}/>
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
                 </Text>
-                <Text>
+                <Text style={styles.infoText}>
                     {this.props.navigation.getParam('synopsis')}
                 </Text>
-            {/* </View> */}
-            
-            {/* <View style={{flex:2, justifyContent: "flex-end"}}> */}
-                <View style={{flex:1, flexDirection:'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity onPress={() => this.pressDeleteButton(this.props.navigation.getParam('id'))}
-                                    style={styles.deleteButton}>
-                        <Text style={styles.infoText}>Delete movie</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.watchedButton}>
-                        <Text style={styles.infoText}>I've watched this</Text>
-                    </TouchableOpacity>
-                </View>
-            {/* </View> */}
             </ScrollView>
+            
+            <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity onPress={() => this.pressDeleteButton(this.props.navigation.getParam('id'))}
+                                  style={styles.deleteButton}>
+                    <Text style={styles.buttonText}>Delete movie</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.watchedButton}>
+                    <Text style={styles.buttonText}>I've watched this</Text>
+                </TouchableOpacity>
+            </View>
         </View>
         );
     }
@@ -96,7 +91,10 @@ const styles = StyleSheet.create({
         height: 35,
         width: Dimensions.get('window').width / 2.5,
     },
-    infoText: {
+    buttonText: {
         fontFamily: 'PT_Sans-Caption-Bold',
+    },
+    infoText: {
+        marginBottom:10
     }
 });
