@@ -115,13 +115,13 @@ def addSwipedRight(request): #adds movie into user's watchlist database
 def getUserMovies(request):
     useremail = request.GET.get('useremail')
     #get list of movie ids that user swiped right on
-    movieids = SwipedRight.objects.filter(email__email='kate@example.com').values('movieid')
+    movieids = SwipedRight.objects.filter(email__email=useremail).values('movieid')
     response = []
-    i = 0
+    # i = 0
     for id in movieids:
-        if i > 7:
-            break
-        i += 1
+        # if i > 7:
+        #     break
+        # i += 1
         apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
         response.append({'key': id['movieid'],
                          'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
@@ -134,19 +134,11 @@ def deleteSwipedRight(request):
     if request.method == 'POST':
         #print(request.POST.get
         if request.POST.get('email') and request.POST.get('movieid'):
-            # swipedRight = SwipedRight()
-            # user = User.objects.get(email=request.POST.get('email'))
             email = request.POST.get('email')
-            # swipedRight.email = user
             movieid = request.POST.get('movieid')
-            # swipedRight.movieid = movieid
-            # swipedRight.save()
 
-            print(email + movieid)
             SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
 
-            # data['email'] = swipedRight.email.email
-            # data['movieid'] = swipedRight.movieid
             print('deleting '+email+',movieid'+movieid)
             return HttpResponse(getMovieByID(movieid))
         return HttpResponse(json.dumps(data))
