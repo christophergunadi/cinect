@@ -98,7 +98,7 @@ class MoviesScreen extends React.Component {
 
 const MoviesScreenNavigator = createStackNavigator(
 {
-  Home: {
+  Movies: {
     screen: MoviesScreen
   },
   WatchlistMovieScreen: {
@@ -106,6 +106,7 @@ const MoviesScreenNavigator = createStackNavigator(
   }
 },
 {
+  initialRouteName: 'Movies',
   headerMode: 'none',
   navigationOptions: {
     headerVisible: false
