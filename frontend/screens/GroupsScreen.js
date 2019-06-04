@@ -59,30 +59,29 @@ export default class GroupsScreen extends React.Component {
   render() {
     return (
       // TODO: ScrollView lines are buggy
-      <ScrollView contentContainerStyle={{flexGrow: 1}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
       <View style={MainStylesheet.container}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={MainStylesheet.title}>My Groups</Text>
-          <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
-            <Text style={MainStylesheet.title}>+</Text>
-          </TouchableOpacity>
-        </View>
+      <NewGroupModal ref={'newGroupModal'}>
+   </NewGroupModal>
+   <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+     <Text style={MainStylesheet.title}>My Groups</Text>
+     <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
+       <Text style={MainStylesheet.title}>+</Text>
+     </TouchableOpacity>
+   </View>
+   <ScrollView contentContainerStyle={{flexGrow: 1}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
 
-        <NewGroupModal ref={'newGroupModal'}>
-        </NewGroupModal>
-
-        {this.state.myGroups.map((group) => {
-          return (
-            <View style={{ flexDirection: 'row' }}>
-              <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-              <TouchableOpacity onPress={() => this._onNavigateToGroup(group.groupname, group.groupid)}>
-                <Text style={styles.groupName}>{group.groupname}</Text>
-              </TouchableOpacity>
-            </View>
-          );
-        })}
-      </View>
-    </ScrollView>
+   {this.state.myGroups.map((group) => {
+     return (
+       <View style={{ flexDirection: 'row' }}>
+         <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
+         <TouchableOpacity onPress={() => this._onNavigateToGroup(group.groupname, group.groupid)}>
+           <Text style={styles.groupName}>{group.groupname}</Text>
+         </TouchableOpacity>
+       </View>
+     );
+   })}
+   </ScrollView>
+ </View>
     );
   }
 }
