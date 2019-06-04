@@ -8,7 +8,6 @@ import MainStylesheet from '../styles/MainStylesheet';
 export default class WatchlistMovieScreen extends React.Component {
     constructor(props) {
         super(props)
-        let {width, height} = Dimensions.get('window')
         this.state = {
             width: '100%',
             height: '80%'
@@ -39,10 +38,12 @@ export default class WatchlistMovieScreen extends React.Component {
             method: 'POST',
             body: formData
         })
-        .then(response = response.json())
-        .then((responseJson) => {
-            alert(responseJson.title)
-        })
+        .then(this.props.navigation.getParam('refresh'))
+        .then(this.props.navigation.goBack())
+        // .then(response = response.json())
+        // .then((responseJson) => {
+        //     alert(responseJson.title)
+        // })
         })
       }
 

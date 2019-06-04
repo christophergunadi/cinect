@@ -7,7 +7,7 @@ export default class WatchList extends React.Component {
         <View style={{flex:1, height:240, width:130, marginRight:20}}>
             <View style={{ height:200}}>
                 <Image source={{uri: this.props.imageUri}}
-                style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius:5}}/>
+                       style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius:5}}/>
             </View>
             {/* <View style={{flex:1, paddingLeft:10, paddingTop:10}}> */}
             <Text 
