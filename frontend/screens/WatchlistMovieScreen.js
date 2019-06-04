@@ -31,19 +31,14 @@ export default class WatchlistMovieScreen extends React.Component {
     pressDeleteButton = (id) => {
         let formData = new FormData();
         GetUserProperty('email').then(value => {
-            // alert(value + id);
         formData.append('email', value)
         formData.append('movieid', id);
         fetch("http://146.169.45.140:8000/cinect_api/deleteswipedright", {
             method: 'POST',
             body: formData
         })
-        .then(this.props.navigation.getParam('refresh'))
+        // .then(alert('deleted'))
         .then(this.props.navigation.goBack())
-        // .then(response = response.json())
-        // .then((responseJson) => {
-        //     alert(responseJson.title)
-        // })
         })
       }
 
@@ -61,7 +56,7 @@ export default class WatchlistMovieScreen extends React.Component {
             {/* </View> */}
             
             {/* <View style={{flex:2, justifyContent: "flex-end"}}> */}
-                <View style={{flex:1, flexDirection:'row', justifyContent: 'space-evenly'}}>
+                <View style={{flex:1, flexDirection:'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.pressDeleteButton(this.props.navigation.getParam('id'))}
                                     style={styles.deleteButton}>
                         <Text style={styles.infoText}>Delete movie</Text>

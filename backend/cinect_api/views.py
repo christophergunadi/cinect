@@ -58,7 +58,10 @@ def groupSuggestion(request):
 
     for i in range(0, len(filteredResults)):
         response = requests.get("https://api.themoviedb.org/3/movie/"+filteredResults[i][0]+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
-        jsonResults.append({'movieTitle': response['title'], 'posterPath': response['poster_path'], 'count': filteredResults[i][1]})
+        jsonResults.append({'movieTitle': response['title'],
+                            'posterPath': response['poster_path'],
+                            'synopsis': response['overview'],
+                            'count': filteredResults[i][1]})
 
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
@@ -131,11 +134,7 @@ def getUserMovies(request):
     #get list of movie ids that user swiped right on
     movieids = SwipedRight.objects.filter(email__email=useremail).values('movieid')
     response = []
-    # i = 0
     for id in movieids:
-        # if i > 7:
-        #     break
-        # i += 1
         apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
         response.append({'key': id['movieid'],
                          'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),

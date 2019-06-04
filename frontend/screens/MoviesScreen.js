@@ -18,28 +18,25 @@ class MoviesScreen extends React.Component {
     this.state = {
       watchlist: [],
     }
-    this.refreshWatchlist = this.refreshWatchlist.bind(this)
+    this.getUserMovies = this.getUserMovies.bind(this)
   }
 
-  componentDidMount() {
+  getUserMovies() {
     GetUserProperty('email').then(value => {
       fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+value))
       .then(response => response.json())
       .then((responseJson) => {
-        this.setState({watchlist: responseJson.data});
+        this.setState({watchlist: responseJson.data.reverse()});
       });
     })
   }
 
-  refreshWatchlist() {
-    this.componentDidMount()
-  }
-
-  watchlistOnPress = (posterpath, title, id, refreshWatchlist) => {
-    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, refresh: refreshWatchlist});
+  watchlistOnPress = (posterpath, title, id) => {
+    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id});
   }
 
   render() {
+    this.getUserMovies()
     return (
       <View style={{flex:1}}>
 
@@ -118,6 +115,7 @@ const MoviesScreenNavigator = createStackNavigator(
   }
 }
 )
+
 
 const styles = StyleSheet.create({
   Text: {
