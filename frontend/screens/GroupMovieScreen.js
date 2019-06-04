@@ -44,9 +44,9 @@ export default class GroupMovieScreen extends React.Component {
                 </Text>
                 <Text style={{fontWeight: 'bold'}}>Available on:</Text>
                 <View>
-                  // {this.state.showingOn.map(site => {
+                  {/* // {this.state.showingOn.map(site => {
                   //   if site.url !== NULL
-                  // })}
+                  // })} */}
                   <Image source={{uri: "https://utellyassets7.imgix.net/locations_icons/utelly/black_new/Netflix.png?auto=compress&app_version=2977d84b-593d-4167-a904-57b1e6e814f1_2019-06-04&w=92"}}
                     style={{width: 100, height: 30, padding: 20}}/>
                 </View>
