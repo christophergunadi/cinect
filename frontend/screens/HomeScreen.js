@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {AsyncStorage, Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, Alert } from 'react-native';
+import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, Alert } from 'react-native';
+
+import {GetUserProperty} from '../Helpers';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -17,6 +19,8 @@ export default class HomeScreen extends React.Component {
 
   constructor() {
     super();
+
+    this.addSwipedRightMovie = this.addSwipedRightMovie.bind(this);
 
     this.position = new Animated.ValueXY();
     this.state = {
@@ -63,20 +67,6 @@ export default class HomeScreen extends React.Component {
     })
   }
 
-  getUserEmail = async() => {
-    userEmail = '';
-    try {
-      userEmail = await AsyncStorage.getItem('userEmail');
-    } catch (error) {
-      alert(error.message);
-    }
-    if (!userEmail) {
-      // TODO: Improve what happens when you swipe without being logged in
-      alert("Please log in or sign up to start swiping!")
-    }
-    return userEmail;
-  }
-
   fetchMovieFromApi = () => {
     fetch("http://146.169.45.140:8000/cinect_api/user")
     .then(response => response.json())
@@ -87,16 +77,18 @@ export default class HomeScreen extends React.Component {
 
   addSwipedRightMovie = (id) => { //send swiped right movie id to cinect_api to add to populate database
     let formData = new FormData();
-    this.getUserEmail().then(value => {
-      formData.append('email', value)
-      formData.append('movieid', id);
-      fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then((responseJson) => {
-      })
+    GetUserProperty('email').then(value => {
+      if (!value) {
+        alert("Please log in or sign up to start swiping!")
+      } else {
+        formData.append('email', value)
+        formData.append('movieid', id);
+        fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+      }
     });
   }
 

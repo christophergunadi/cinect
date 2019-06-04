@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
-import {AsyncStorage, TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View, RefreshControl, ScrollView} from 'react-native';
+import {TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View, RefreshControl, ScrollView} from 'react-native';
 
 import NewGroupModal from '../components/NewGroupModal';
 import MainStylesheet from '../styles/MainStylesheet';
-
+import {GetUserProperty} from '../Helpers';
 
 export default class GroupsScreen extends React.Component {
-
   constructor(props) {
     super(props);
-    this._onAddGroupButton = this._onAddGroupButton.bind(this);
+    this._onAddGroupButton  = this._onAddGroupButton.bind(this);
     this._onNavigateToGroup = this._onNavigateToGroup.bind(this);
     this.state = {
       myGroups: [],
@@ -17,21 +16,9 @@ export default class GroupsScreen extends React.Component {
     };
   }
 
-  getUserEmail = async() => {
-    userEmail = '';
-    try {
-      userEmail = await AsyncStorage.getItem('userEmail');
-    } catch (error) {
-      alert(error.message);
-    }
-    return userEmail;
-  }
-
-  
-
   componentDidMount() {
     // Get group info for rendering
-    this.getUserEmail().then(value => {
+    GetUserProperty('email').then(value => {
       fetch("http://146.169.45.140:8000/cinect_api/getgroups?email=" + value)
       .then(response => response.json())
       .then((responseJson) => {
@@ -46,7 +33,7 @@ export default class GroupsScreen extends React.Component {
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    this.getUserEmail().then(value => {
+    GetUserProperty('email').then(value => {
       fetch("http://146.169.45.140:8000/cinect_api/getgroups?email=" + value)
       .then(response => response.json())
       .then((responseJson) => {
@@ -54,12 +41,12 @@ export default class GroupsScreen extends React.Component {
           myGroups: responseJson.data,
           refreshing: false,
         });
-      
+
       }).catch((error) => {
         console.error(error);
       });
-  })
-}
+    })
+  }
 
   _onAddGroupButton() {
     this.refs.newGroupModal.showAddModal();
@@ -71,7 +58,8 @@ export default class GroupsScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
+      // TODO: ScrollView lines are buggy
+      // <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
       <View style={MainStylesheet.container}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={MainStylesheet.title}>My Groups</Text>
@@ -79,7 +67,6 @@ export default class GroupsScreen extends React.Component {
             <Text style={MainStylesheet.title}>+</Text>
           </TouchableOpacity>
         </View>
-
 
         <NewGroupModal ref={'newGroupModal'}>
         </NewGroupModal>
@@ -95,7 +82,7 @@ export default class GroupsScreen extends React.Component {
           );
         })}
       </View>
-      </ScrollView>
+      // </ScrollView>
     );
   }
 }

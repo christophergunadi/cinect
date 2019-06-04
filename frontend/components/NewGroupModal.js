@@ -2,22 +2,28 @@ import React , {Component} from 'react';
 import {AsyncStorage, Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,TouchableOpacity,
   Keyboard, LayoutAnimation, UIManager} from 'react-native';
 import Modal from 'react-native-modalbox';
-
-
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+
+import {GetUserProperty} from '../Helpers';
 
 var windowSize = Dimensions.get('window');
 
 export default class NewGroupModal extends Component {
+  constructor(props) {
+    super(props);
+    this.createGroup = this.createGroup.bind(this);
+    this._onAddMemberButton = this._onAddMemberButton.bind(this);
+    this._onFinishAddingFriends = this._onFinishAddingFriends.bind(this);
+    this._getFriendsCallback = this._getFriendsCallback.bind(this);
+    this.renderFriends = this.renderFriends.bind(this);
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
-  getUserId = async() => {
-    userId = '';
-    try {
-      userId = await AsyncStorage.getItem('userId');
-    } catch (error) {
-      alert(error.message);
-    }
-    return userId;
+    this.state = {
+      addingFriends: false,
+      groupName: "Group",
+      myFriends: [], // Maps friend_id to friend name
+      groupMembers: [], // Currently added group members
+    };
   }
 
   showAddModal = () => {
@@ -34,7 +40,7 @@ export default class NewGroupModal extends Component {
     }
 
     // Add own ID to formData in request, then post to backend API
-    this.getUserId().then(value => {
+    GetUserProperty('id').then(value => {
       formData.append('members', value);
       fetch("http://146.169.45.140:8000/cinect_api/creategroup", {
         method: 'POST',
@@ -49,24 +55,6 @@ export default class NewGroupModal extends Component {
     this.setState({
       groupMembers: [],
     });
-  }
-
-  constructor(props) {
-    super(props);
-    this.createGroup = this.createGroup.bind(this);
-    this._onAddMemberButton = this._onAddMemberButton.bind(this);
-    this._onFinishAddingFriends = this._onFinishAddingFriends.bind(this);
-    this._getFriendsCallback = this._getFriendsCallback.bind(this);
-    this.renderFriends = this.renderFriends.bind(this);
-    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-
-    this.state = {
-      addingFriends: false,
-      groupName: "Group",
-      myFriends: [], // Maps friend_id to friend name
-      groupMembers: [], // Currently added group members
-    };
-
   }
 
   _getFriendsCallback = (error, result) => {
@@ -164,46 +152,46 @@ export default class NewGroupModal extends Component {
       </Modal>
       )
     } else {
+      return (
+        <Modal ref={'newGroupModal'}
+          style={{
+            justifyContent: 'center',
+            borderRadius: 20,
+            shadowRadius: 10,
+            width: windowSize.width - 70,
+            height: windowSize.height - 200
+          }}
+          position='center'
+          backdrop={true}
+        >
+          <View style={styles.container}>
+            <Text style={styles.title}>Create a new group</Text>
 
-    return (
-      <Modal ref={'newGroupModal'}
-        style={{
-          justifyContent: 'center',
-          borderRadius: 20,
-          shadowRadius: 10,
-          width: windowSize.width - 70,
-          height: windowSize.height - 200
-        }}
-        position='center'
-        backdrop={true}
-      >
-        <View style={styles.container}>
-          <Text style={styles.title}>Create a new group</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+              <TouchableOpacity onPress={() => alert("I want to set a DP")}>
+                <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
+              </TouchableOpacity>
+              <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15}
+                onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({groupName: text})}/>
+            </View>
+            <Text style={styles.subtitle}>Current members</Text>
 
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity onPress={() => alert("I want to set a DP")}>
-              <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
+            {this.renderCurrentMembers()}
+
+            <TouchableOpacity style={styles.addButton} onPress={this._onAddMemberButton}>
+              <Text style={styles.title}>+</Text>
             </TouchableOpacity>
-            <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15}
-              onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({groupName: text})}/>
-          </View>
-          <Text style={styles.subtitle}>Current members</Text>
-          {this.renderCurrentMembers()}
 
-          <TouchableOpacity style={styles.addButton} onPress={this._onAddMemberButton}>
-            <Text style={styles.title}>+</Text>
-          </TouchableOpacity>
-
-          <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
-            <TouchableOpacity style={styles.createButton} onPress={this.createGroup}>
-              <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Create</Text>
-            </TouchableOpacity>
+            <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
+              <TouchableOpacity style={styles.createButton} onPress={this.createGroup}>
+                <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Create</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Modal>
-    )
+        </Modal>
+      )
+    }
   }
-}
 }
 
 const styles = StyleSheet.create({

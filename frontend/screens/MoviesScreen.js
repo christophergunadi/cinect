@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AsyncStorage, Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity} from 'react-native';
+import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar} from 'react-navigation'
 
 import SettingsScreen from './SettingsScreen'
@@ -8,21 +8,11 @@ import Watchlist from './MoviesScreen/Watchlist'
 import WatchlistMovieScreen from './WatchlistMovieScreen'
 import WatchedMovies from './MoviesScreen/WatchedMovies'
 import WatchList from './MoviesScreen/Watchlist';
+import {GetUserProperty} from '../Helpers';
 
 var FBLoginButton = require('../components/FBLoginButton');
 
 class MoviesScreen extends React.Component {
-
-  getUserEmail = async() => {
-    userEmail = '';
-    try {
-      userEmail = await AsyncStorage.getItem('userEmail');
-    } catch (error) {
-      alert(error.message);
-    }
-    return userEmail;
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -31,34 +21,13 @@ class MoviesScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.getUserEmail().then(value => {
+    GetUserProperty('email').then(value => {
       fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+value))
       .then(response => response.json())
       .then((responseJson) => {
         this.setState({watchlist: responseJson.data});
       });
     })
-  }
-
-  addUser = (email, facebookid) => { //send swiped right movie id to cinect_api to add to populate database
-    let formData = new FormData();
-    formData.append('email', email);
-    formData.append('facebookid', facebookid);
-    fetch("http://146.169.45.140:8000/cinect_api/user", {
-      method: 'POST',
-      body: formData
-    })
-  }
-
-  onUserLogin = async(email, name, facebookid) => {
-    try {
-      await AsyncStorage.setItem('userEmail', email);
-      await AsyncStorage.setItem('userName', name);
-    } catch (error) {
-      alert(error.message);
-    }
-    this.addUser(email, facebookid);
-    this.setState({'email': email, 'name': name});
   }
 
   watchlistOnPress = (posterpath, title) => {
@@ -93,7 +62,7 @@ class MoviesScreen extends React.Component {
                     <WatchList imageUri={movie.posterpath}
                                name={movie.title} />
                   </TouchableOpacity>
-                  
+
                 )
               })
               }

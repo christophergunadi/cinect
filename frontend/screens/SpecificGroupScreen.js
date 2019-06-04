@@ -6,7 +6,6 @@ import SuggestedMovieModal from '../components/SuggestedMovieModal';
 import WatchList from './MoviesScreen/Watchlist';
 
 export default class SpecificGroupScreen extends Component {
-
   constructor(props) {
     super(props);
     this.selectMovieForGroup = this.selectMovieForGroup.bind(this);
@@ -62,10 +61,10 @@ export default class SpecificGroupScreen extends Component {
 
             </ScrollView>
           </View>
-        </View> 
+        </View>
 
         <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
-          <TouchableOpacity style={styles.suggestButton} 
+          <TouchableOpacity style={styles.suggestButton}
                  onPress={() => this.selectMovieForGroup(this.props.navigation.getParam('groupname'))}>
             <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Suggest a movie</Text>
           </TouchableOpacity>
