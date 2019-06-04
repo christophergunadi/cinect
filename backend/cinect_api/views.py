@@ -41,7 +41,7 @@ def groupSuggestion(request):
     users = GroupUser.objects.filter(groupid__groupid=groupid).values('email')
 
     for i in range(0, len(users)):
-        movies = SwipedRight.objects.filter(email__email=users[0]['email']).values('movieid')
+        movies = SwipedRight.objects.filter(email__email=users[i]['email']).values('movieid')
         for j in range(0, len(movies)):
             if movies[i]['movieid'] in result:
                 result[movies[i]['movieid']] = result[movies[i]['movieid']] + 1
