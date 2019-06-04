@@ -29,7 +29,6 @@ export default class MoviesScreen extends React.Component {
     this.state = {
       watchlist: [],
     }
-    this.onUserLogin = this.onUserLogin.bind(this);
   }
 
   componentDidMount() {
@@ -40,27 +39,6 @@ export default class MoviesScreen extends React.Component {
         this.setState({watchlist: responseJson.data});
       });
     })
-  }
-
-  addUser = (email, facebookid) => { //send swiped right movie id to cinect_api to add to populate database
-    let formData = new FormData();
-    formData.append('email', email);
-    formData.append('facebookid', facebookid);
-    fetch("http://146.169.45.140:8000/cinect_api/user", {
-      method: 'POST',
-      body: formData
-    })
-  }
-
-  onUserLogin = async(email, name, facebookid) => {
-    try {
-      await AsyncStorage.setItem('userEmail', email);
-      await AsyncStorage.setItem('userName', name);
-      await AsyncStorage.setItem('userId', facebookid);
-    } catch (error) {
-      alert(error.message);
-    }
-    this.addUser(email, facebookid);
   }
 
   render() {
@@ -74,11 +52,11 @@ export default class MoviesScreen extends React.Component {
              My Watchlist
            </Text>
            <View style={{marginRight:10, marginTop: 3}}>
-             <FBLoginButton onChange = { this.onUserLogin }/>
+             <FBLoginButton onLogin = { this.onUserLogin }/>
            </View>
-           
+
           </View>
-          
+
           <View style={{height:250, marginTop:20}}>
             <ScrollView
               horizontal={true}

@@ -71,7 +71,7 @@ export default class NewGroupModal extends Component {
 
   _getFriendsCallback = (error, result) => {
     if (error) {
-      alert("Failed to retrieve your friends.")
+      alert("Failed to retrieve your friends. Please log in or sign up to create a group.")
     } else {
       var i;
       friends = [];

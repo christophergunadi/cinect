@@ -39,7 +39,6 @@ export default class GroupsScreen extends React.Component {
         console.error(error);
       });
     })
-
   }
 
   _onAddGroupButton() {
