@@ -16,7 +16,11 @@ export default class SpecificGroupScreen extends Component {
     }
   }
 
-  selectMovieForGroup = (grpname) => {
+  componentDidMount() {
+    this.selectMovieForGroup()
+  }
+
+  selectMovieForGroup = () => {
     fetch("http://146.169.45.140:8000/cinect_api/suggest?groupid=" + this.props.navigation.getParam('groupid'))
     .then(response => response.json())
     .then((responseJson) => {
@@ -25,7 +29,6 @@ export default class SpecificGroupScreen extends Component {
           movieTitle: responseJson.movieTitle,
           posterPath: responseJson.posterPath,
       })
-      this.refs.suggestedMovieModal.openMovieModal();
     }).catch((error) => {
       console.error(error);
     });
@@ -37,22 +40,19 @@ export default class SpecificGroupScreen extends Component {
       <View style={MainStylesheet.container}>
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
         <Text>Members</Text>
-        <View style={{flex: 1, paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{paddingTop: 20}}>
            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>
              What to watch
            </Text>
-        </View>
-        <View style={{flex: 1, paddingTop: 20}}>
            <View style={{height:220, marginTop:10}}>
             <ScrollView
               horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={{marginLeft:20}}>
+              showsHorizontalScrollIndicator={false}>
 
               {this.state.suggestedMovies.map(movie => {
                 return (
                   <View>
-                    <WatchList imageUri={movie.posterPath}
+                    <WatchList imageUri={"https://image.tmdb.org/t/p/w500/"+ movie.posterPath}
                               name={movie.movieTitle} />
                     <Text>{movie.count}</Text>
                   </View>
@@ -61,13 +61,6 @@ export default class SpecificGroupScreen extends Component {
 
             </ScrollView>
           </View>
-        </View>
-
-        <View style={{ justifyContent: 'flex-end', alignItems: 'center', bottom: 0, flex: 1 }}>
-          <TouchableOpacity style={styles.suggestButton}
-                 onPress={() => this.selectMovieForGroup(this.props.navigation.getParam('groupname'))}>
-            <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Suggest a movie</Text>
-          </TouchableOpacity>
         </View>
 
         <Text>{this.state.title}</Text>
