@@ -56,8 +56,6 @@ def groupSuggestion(request):
     filteredResults = list(filter(filterLikedByMoreThanOne, sortedResults))
     jsonResults = []
 
-    print(json.dumps(filteredResults))
-    print(len(filteredResults))
     for i in range(0, len(filteredResults)):
         response = requests.get("https://api.themoviedb.org/3/movie/"+filteredResults[i][0]+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
         jsonResults.append({'movieTitle': response['title'], 'posterPath': response['poster_path'], 'count': filteredResults[i][1]})
