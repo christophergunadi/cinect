@@ -59,7 +59,7 @@ export default class GroupsScreen extends React.Component {
   render() {
     return (
       // TODO: ScrollView lines are buggy
-      // <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
       <View style={MainStylesheet.container}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={MainStylesheet.title}>My Groups</Text>
@@ -82,7 +82,7 @@ export default class GroupsScreen extends React.Component {
           );
         })}
       </View>
-      // </ScrollView>
+    </ScrollView>
     );
   }
 }

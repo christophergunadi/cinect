@@ -14,6 +14,7 @@ class SwipedRight(models.Model):
   movieid = models.CharField(max_length=10)
   class Meta:
     db_table = 'swipedright'
+    unique_together = ('email', 'movieid',)
   def __str__(self):
     return '{}: {} swiped {}'.format(self.swiperightid, self.email, self.movieid)
 
