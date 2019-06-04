@@ -92,13 +92,9 @@ def addSwipedRight(request): #adds movie into user's watchlist database
 
             # data['email'] = swipedRight.email.email
             # data['movieid'] = swipedRight.movieid
-
             return HttpResponse(getMovieByID(movieid))
             # return HttpResponse(json.dumps(data))
-            # return HttpResponse("successful")
         return HttpResponse(json.dumps(data))
-    # elif request.method == 'GET':
-    #     return getMovieByID(request.GET.get('id'))
     return HttpResponse(json.dumps(data))
 
 def getUserMovies(request):

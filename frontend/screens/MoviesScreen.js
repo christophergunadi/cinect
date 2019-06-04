@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
-import {AsyncStorage, Button, Text, View, StyleSheet, ScrollView, Image, FlatList} from 'react-native';
+import {AsyncStorage, Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar} from 'react-navigation'
 
 import SettingsScreen from './SettingsScreen'
 import UserProfileScreen from './UserProfileScreen'
 import Watchlist from './MoviesScreen/Watchlist'
+import WatchlistMovieScreen from './WatchlistMovieScreen'
 import WatchedMovies from './MoviesScreen/WatchedMovies'
 import WatchList from './MoviesScreen/Watchlist';
 
 var FBLoginButton = require('../components/FBLoginButton');
 
-
-
-export default class MoviesScreen extends React.Component {
+class MoviesScreen extends React.Component {
 
   getUserEmail = async() => {
     userEmail = '';
@@ -65,6 +64,10 @@ export default class MoviesScreen extends React.Component {
     this.setState({'email': email, 'name': name});
   }
 
+  watchlistOnPress = (posterpath, title) => {
+    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title});
+  }
+
   render() {
     return (
       <View style={{flex:1}}>
@@ -89,34 +92,37 @@ export default class MoviesScreen extends React.Component {
 
               {this.state.watchlist.map(movie => {
                 return (
-                  <WatchList imageUri={movie.posterpath}
-                             name={movie.title} />
+                  <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title)}>
+                    <WatchList imageUri={movie.posterpath}
+                               name={movie.title} />
+                  </TouchableOpacity>
+                  
                 )
               })
               }
             </ScrollView>
           </View>
 
-         <View style={{marginTop:10}}>
-           <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>
-             Movies I've watched
-           </Text>
+          <View style={{marginTop:10}}>
+            <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>
+              Movies I've watched
+            </Text>
 
-           <View style={{height:220, marginTop:20}}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={{marginLeft:20}}>
-              <WatchedMovies imageUri={require('../assets/captainmarvel.jpg')}
-                name="Captain Marvel"/>
-              <WatchedMovies imageUri={require('../assets/captainmarvel.jpg')}
-                name="Captain Marvel"/>
-              <WatchedMovies imageUri={require('../assets/captainmarvel.jpg')}
-                name="Captain Marvel"/>
-            </ScrollView>
-           </View>
+            <View style={{height:220, marginTop:20}}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                style={{marginLeft:20}}>
+                <WatchedMovies imageUri={require('../assets/pikachu.jpg')}
+                  name="Detective Pikachu"/>
+                <WatchedMovies imageUri={require('../assets/pikachu.jpg')}
+                  name="Detective Pikachu"/>
+                <WatchedMovies imageUri={require('../assets/pikachu.jpg')}
+                  name="Detective Pikachu"/>
+              </ScrollView>
+            </View>
 
-         </View>
+          </View>
 
         </ScrollView>
       </View>
@@ -124,8 +130,27 @@ export default class MoviesScreen extends React.Component {
   }
 }
 
+const MoviesScreenNavigator = createStackNavigator(
+{
+  Home: {
+    screen: MoviesScreen
+  },
+  WatchlistMovieScreen: {
+    screen: WatchlistMovieScreen
+  }
+},
+{
+  headerMode: 'none',
+  navigationOptions: {
+    headerVisible: false
+  }
+}
+)
+
 const styles = StyleSheet.create({
   Text: {
     fontFamily:'PT Sans Caption'
   }
 })
+
+export default createAppContainer(MoviesScreenNavigator);
