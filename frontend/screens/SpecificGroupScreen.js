@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import {Dimensions, TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View, ScrollView} from 'react-native';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+
+import GroupMovieScreen from './GroupMovieScreen';
 
 import MainStylesheet from '../styles/MainStylesheet';
 
-export default class SpecificGroupScreen extends Component {
+class SpecificGroupScreen extends Component {
   constructor(props) {
     super(props);
     this.selectMovieForGroup = this.selectMovieForGroup.bind(this);
@@ -17,6 +20,10 @@ export default class SpecificGroupScreen extends Component {
   componentDidMount() {
     this.selectMovieForGroup()
     this.getMembers()
+  }
+
+  watchlistOnPress = (posterpath, title, synopsis) => {
+    this.props.navigation.navigate('GroupMovie', {posterpath: posterpath, title: title, synopsis: synopsis});
   }
 
   selectMovieForGroup = () => {
@@ -71,10 +78,12 @@ export default class SpecificGroupScreen extends Component {
               {this.state.suggestedMovies.map(movie => {
                 return (
                   <View style={{flex:1, height:270, width:130, marginRight:20}}>
-                    <View style={{ height:200}}>
-                      <Image source={{uri: "https://image.tmdb.org/t/p/w500/"+ movie.posterPath}}
-                        style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius:5}}/>
-                    </View>
+                    <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterPath, movie.movieTitle, movie.synopsis)}>
+                      <View style={{ height:200}}>
+                        <Image source={{uri: "https://image.tmdb.org/t/p/w500/"+ movie.posterPath}}
+                          style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius:5}}/>
+                      </View>
+                    </TouchableOpacity>
                     <View style={{flexDirection: 'column'}}>
                       <Text style={{paddingTop:5}}>{movie.movieTitle}</Text>
                       <View style={{paddingTop:5, flexDirection: 'row'}}>
@@ -105,3 +114,23 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 2,
   },
 });
+
+const SpecificGroupsScreenNavigator = createStackNavigator(
+{
+  SpecificGroup: {
+    screen: SpecificGroupScreen
+  },
+  GroupMovie: {
+    screen: GroupMovieScreen
+  }
+},
+{
+  initialRouteName: 'SpecificGroup',
+  headerMode: 'none',
+  navigationOptions: {
+    headerVisible: false
+  }
+}
+)
+
+export default createAppContainer(SpecificGroupsScreenNavigator);
