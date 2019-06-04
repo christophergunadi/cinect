@@ -21,11 +21,10 @@ export default class SpecificGroupScreen extends Component {
     fetch("http://146.169.45.140:8000/cinect_api/suggest?groupid=" + this.props.navigation.getParam('groupid'))
     .then(response => response.json())
     .then((responseJson) => {
-      this.state.suggestedMovies.push({movieTitle: responseJson.movieTitle, 
-        posterPath: "https://image.tmdb.org/t/p/w500/" + responseJson.posterPath});
-      this.setState ({
-        movieTitle: responseJson.movieTitle,
-        posterPath: responseJson.posterPath,
+        this.setState ({
+          suggestedMovies: responseJson.data,
+          movieTitle: responseJson.movieTitle,
+          posterPath: responseJson.posterPath,
       })
       this.refs.suggestedMovieModal.openMovieModal();
     }).catch((error) => {
@@ -33,14 +32,14 @@ export default class SpecificGroupScreen extends Component {
     });
   }
 
+
   render() {
     return (
       <View style={MainStylesheet.container}>
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
         <Text>Members</Text>
-
         <View style={{flex: 1, paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
-           <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
+           <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>
              What to watch
            </Text>
         </View>
@@ -53,8 +52,11 @@ export default class SpecificGroupScreen extends Component {
 
               {this.state.suggestedMovies.map(movie => {
                 return (
-                  <WatchList imageUri={movie.posterPath}
-                             name={movie.movieTitle} />
+                  <View>
+                    <WatchList imageUri={movie.posterPath}
+                              name={movie.movieTitle} />
+                    <Text>{movie.count}</Text>
+                  </View>
                 )
               })}
 
