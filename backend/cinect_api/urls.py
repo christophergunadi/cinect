@@ -10,5 +10,6 @@ urlpatterns = [
     path('addswipedright', csrf_exempt(views.addSwipedRight), name='addswipedright'),
     path('creategroup', csrf_exempt(views.createGroup), name='creategroup'),
     path('getgroups',views.getGroups, name='getgroups'),
-    path('getswipedright', views.getUserMovies, name='getswipedright')
+    path('getswipedright', views.getUserMovies, name='getswipedright'),
+    path('deleteswipedright', csrf_exempt(views.deleteSwipedRight), name='deleteswipedright')
 ]

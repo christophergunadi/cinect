@@ -128,3 +128,26 @@ def getUserMovies(request):
                          'title': apiResponse['title']})
     httpResponse = {'data': response}
     return HttpResponse(json.dumps(httpResponse))
+
+def deleteSwipedRight(request):
+    data = {}
+    if request.method == 'POST':
+        #print(request.POST.get
+        if request.POST.get('email') and request.POST.get('movieid'):
+            # swipedRight = SwipedRight()
+            # user = User.objects.get(email=request.POST.get('email'))
+            email = request.POST.get('email')
+            # swipedRight.email = user
+            movieid = request.POST.get('movieid')
+            # swipedRight.movieid = movieid
+            # swipedRight.save()
+
+            print(email + movieid)
+            SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
+
+            # data['email'] = swipedRight.email.email
+            # data['movieid'] = swipedRight.movieid
+            print('deleting '+email+',movieid'+movieid)
+            return HttpResponse(getMovieByID(movieid))
+        return HttpResponse(json.dumps(data))
+    return HttpResponse(json.dumps(data))
