@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import {Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,TouchableOpacity, 
+import {AsyncStorage, Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,TouchableOpacity,
   Keyboard, LayoutAnimation, UIManager} from 'react-native';
 import Modal from 'react-native-modalbox';
 
@@ -10,6 +10,16 @@ var windowSize = Dimensions.get('window');
 
 export default class NewGroupModal extends Component {
 
+  getUserId = async() => {
+    userId = '';
+    try {
+      userId = await AsyncStorage.getItem('userId');
+    } catch (error) {
+      alert(error.message);
+    }
+    return userId;
+  }
+
   showAddModal = () => {
     this.refs.newGroupModal.open();
   }
@@ -17,21 +27,24 @@ export default class NewGroupModal extends Component {
   createGroup = () => {
     let formData = new FormData();
     formData.append('groupname', this.state.groupName);
-    formData.append('groupsize', this.state.groupMembers.length);
 
     var i;
     for (i = 0; i < this.state.groupMembers.length; i++) {
       formData.append('members', this.state.groupMembers[i].id);
     }
 
-    fetch("http://146.169.45.140:8000/cinect_api/creategroup", {
-      method: 'POST',
-      body: formData
-    }).then(response => response.json()).then((responseJson) => {
-      alert(responseJson.movieTitle)
-    });
+    // Add own ID to formData in request, then post to backend API
+    this.getUserId().then(value => {
+      formData.append('members', value);
+      fetch("http://146.169.45.140:8000/cinect_api/creategroup", {
+        method: 'POST',
+        body: formData
+      }).then(response => response.json()).then((responseJson) => {
+        alert(responseJson.movieTitle)
+      });
+    })
 
-    // Close model and reset form 
+    // Close model and reset form
     this.refs.newGroupModal.close();
     this.setState({
       groupMembers: [],
@@ -121,7 +134,7 @@ export default class NewGroupModal extends Component {
           <Text style={styles.groupName}>{f.name}</Text>
         </View>
       );
-    }))      
+    }))
   }
 
   render() {

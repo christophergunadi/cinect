@@ -28,8 +28,6 @@ export default class MoviesScreen extends React.Component {
     super(props);
     this.state = {
       watchlist: [],
-      email: '',
-      name: '',
     }
     this.onUserLogin = this.onUserLogin.bind(this);
   }
@@ -58,11 +56,11 @@ export default class MoviesScreen extends React.Component {
     try {
       await AsyncStorage.setItem('userEmail', email);
       await AsyncStorage.setItem('userName', name);
+      await AsyncStorage.setItem('userId', facebookid);
     } catch (error) {
       alert(error.message);
     }
     this.addUser(email, facebookid);
-    this.setState({'email': email, 'name': name});
   }
 
   render() {
