@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {Dimensions, TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View, ScrollView} from 'react-native';
 
 import MainStylesheet from '../styles/MainStylesheet';
-import SuggestedMovieModal from '../components/SuggestedMovieModal';
-import WatchList from './MoviesScreen/Watchlist';
 
 export default class SpecificGroupScreen extends Component {
   constructor(props) {
@@ -48,33 +46,42 @@ export default class SpecificGroupScreen extends Component {
 
   render() {
     return (
+      <ScrollView>
       <View style={MainStylesheet.container}>
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
-        <Text>Members</Text>
-          {/* {
+        <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>Members</Text>
+          {
             this.state.members.map(member => {
               return (
-                <View style={{ flexDirection: 'row' }}>
-                  <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-                  <Text style={styles.groupName}>{member.groupname}</Text>
+                <View style={{paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Image source={require('../assets/img/tempprofileicon.png')} style={{width: 20, height: 20}}/>
+                  <Text style={{fontSize: 15, fontWeight: '700', fontFamily: 'PT Sans Caption',}}>{member.name}</Text>
                 </View>
               )
-          })} */}
-        <View style={{paddingTop: 20}}>
+          })}
+        <View style={{paddingTop: 30}}>
            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>
              What to watch
            </Text>
-           <View style={{height:220, marginTop:10}}>
+           <View style={{height:270, marginTop:10}}>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
 
               {this.state.suggestedMovies.map(movie => {
                 return (
-                  <View>
-                    <WatchList imageUri={"https://image.tmdb.org/t/p/w500/"+ movie.posterPath}
-                              name={movie.movieTitle} />
-                    <Text>{movie.count}</Text>
+                  <View style={{flex:1, height:270, width:130, marginRight:20}}>
+                    <View style={{ height:200}}>
+                      <Image source={{uri: "https://image.tmdb.org/t/p/w500/"+ movie.posterPath}}
+                        style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius:5}}/>
+                    </View>
+                    <View style={{flexDirection: 'column'}}>
+                      <Text style={{paddingTop:5}}>{movie.movieTitle}</Text>
+                      <View style={{paddingTop:5, flexDirection: 'row'}}>
+                        <Image source={require('../assets/img/count.png')} style={{width: 14, height: 14, marginTop: 3}}/>
+                        <Text style={{paddingLeft: 10, fontSize: 13, fontWeight: '700', fontFamily: 'PT Sans Caption',}}>{movie.count}</Text>
+                      </View>
+                    </View>
                   </View>
                 )
               })}
@@ -82,11 +89,8 @@ export default class SpecificGroupScreen extends Component {
             </ScrollView>
           </View>
         </View>
-
-        <Text>{this.state.title}</Text>
-        <SuggestedMovieModal ref="suggestedMovieModal" movieTitle={this.state.movieTitle} posterPath={this.state.posterPath} ></SuggestedMovieModal>
-
       </View>
+      </ScrollView>
     )
   }
 }
