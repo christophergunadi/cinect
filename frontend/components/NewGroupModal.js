@@ -1,8 +1,10 @@
 import React , {Component} from 'react';
-import {AsyncStorage, Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,TouchableOpacity,
-  Keyboard, LayoutAnimation, UIManager} from 'react-native';
+import {Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,TouchableOpacity,
+  Keyboard, LayoutAnimation, UIManager, Animated} from 'react-native';
 import Modal from 'react-native-modalbox';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+import LottieView from 'lottie-react-native';
+
 
 import {GetUserProperty} from '../Helpers';
 
@@ -21,8 +23,11 @@ export default class NewGroupModal extends Component {
     this.state = {
       addingFriends: false,
       groupName: "Group",
-      myFriends: [], // Maps friend_id to friend name
+      myFriends: [], // Maps friend_id to friend name,
+      tickAnimations: [],
+      tickOn: [],
       groupMembers: [], // Currently added group members
+      fetchedFriends: false,
     };
   }
 
@@ -63,23 +68,42 @@ export default class NewGroupModal extends Component {
     } else {
       var i;
       friends = [];
+      marks = [];
+      ticks = [];
       for (i = 0; i < result.data.length; i++) {
         friends.push({id: result.data[i].id, name: result.data[i].name});
+        marks.push(new Animated.Value(0));
+        ticks.push(false);
       }
       this.setState({
         myFriends: friends,
+        tickAnimations: marks,
+        tickOn: ticks,
       });
     }
   }
 
   _onAddMemberButton = () => {
-    // Fetch my friends and store it in state.
-    new GraphRequestManager().addRequest(new GraphRequest("/me/friends", null, this._getFriendsCallback,)).start();
-    const animation = LayoutAnimation.create(300, 'linear', 'opacity');
-    LayoutAnimation.configureNext(animation, () => {});
+    // Fetch my friends and store it in state if not done so already.
+    if (!this.state.fetchedFriends) {
+      new GraphRequestManager().addRequest(new GraphRequest("/me/friends", null, this._getFriendsCallback,)).start();
+      const animation = LayoutAnimation.create(300, 'linear', 'opacity');
+      LayoutAnimation.configureNext(animation, () => {});
+      this.state.fetchedFriends = true;
+    } 
     this.setState({
       addingFriends: true,
     });
+    // Re-render ticks on currently added members.
+    var i;
+    for (i = 0; i < this.state.myFriends.length; i++) {
+      if (this.state.tickOn[i]) {
+        Animated.timing(this.state.tickAnimations[i], {
+          toValue: 1,
+          duration: 700,
+        }).start();
+      }
+    }
   }
 
   _onFinishAddingFriends = () => {
@@ -90,26 +114,40 @@ export default class NewGroupModal extends Component {
     });
   }
 
-  _onAddSpecificFriend = (friend) => {
-    //TODO : Adding someone to the group twice?
+  _onAddSpecificFriend = (friend, index) => {
     var i;
     for (i = 0; i < this.state.groupMembers.length; i++) {
       if (this.state.groupMembers[i].id == friend.id) {
+        this.state.groupMembers.splice(i, 1);
+        this.state.tickAnimations[index].setValue(0);
+        this.state.tickOn[index] = !this.state.tickOn[index];
         return;
       }
     }
     this.state.groupMembers.push(friend);
+    Animated.timing(this.state.tickAnimations[index], {
+      toValue: 1,
+      duration: 700,
+    }).start();
+    this.state.tickOn[index] = !this.state.tickOn[index];
   }
 
   renderFriends = () => {
     var friends = this.state.myFriends;
-    return (friends.map((f) => {
+    return (friends.map((f, index) => {
       return (
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <TouchableOpacity onPress={() => this._onAddSpecificFriend(f)}>
-            <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>{f.name}</Text>
+          <TouchableOpacity onPress={() => this._onAddSpecificFriend(f, index)}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}}>
+
+            <Text style={{fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 10}}>{f.name}</Text>
+            <LottieView progress={this.state.tickAnimations[index]}
+              source={require('../assets/animations/tick.json')}
+              loop={false}
+              style={{width: 35, height: 35,}}
+              />
+           </View>
           </TouchableOpacity>
-        </View>
+
       );
     }))
   }
@@ -130,7 +168,6 @@ export default class NewGroupModal extends Component {
       return (
         <Modal ref={'newGroupModal'}
         style={{
-          padding: 40,
           borderRadius: 20,
           shadowRadius: 10,
           width: windowSize.width - 70,
@@ -140,12 +177,15 @@ export default class NewGroupModal extends Component {
         backdrop={true}
       >
         <View style={styles.container}>
-          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
             <Text style={styles.title}>Add friends</Text>
               {this.renderFriends()}
-            <TouchableOpacity style={styles.createButton} onPress={this._onFinishAddingFriends}>
-            <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Back</Text>
-          </TouchableOpacity>
+            <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <TouchableOpacity style={styles.createButton} onPress={this._onFinishAddingFriends}>
+                <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Back</Text>
+              </TouchableOpacity>
+              {/* TODO: Create a green button that lights up when they are pressed */}
+            </View>
           </View>
         </View>
 
