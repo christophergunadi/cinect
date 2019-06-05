@@ -143,7 +143,7 @@ export default class NewGroupModal extends Component {
             <LottieView progress={this.state.tickAnimations[index]}
               source={require('../assets/animations/tick.json')}
               loop={false}
-              style={{width: 35, height: 35,}}
+              style={{width: 32, height: 32,}}
               />
            </View>
           </TouchableOpacity>

@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Button, Platform, StyleSheet, Text, View} from 'react-native';
+import {Button, Platform, StyleSheet, Text, View, Image} from 'react-native';
 import {createStackNavigator, createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -45,20 +45,20 @@ const MainNavigator = createMaterialTopTabNavigator(
           <Icon
             name="md-people"
             color='black'
-            size={24}
+            size={30}
           />
         )
       })
     },
     Home: {screen: HomeScreen,
       navigationOptions: () => ({
-        tabBarIcon: ({tintColor}) => (
-          <Icon
-            name="md-home"
-            color='black'
-            size={24}
+        tabBarIcon: ({ focused, tintColor}) => (
+          <Image
+            focused={focused}
+            source={require("./assets/img/cinectlogo.png")}
+            style={{width: 90, height: 20}}
           />
-        )
+        )      
       })
     },
     Movies: {screen: MoviesScreen,
@@ -67,7 +67,7 @@ const MainNavigator = createMaterialTopTabNavigator(
           <Icon
             name="md-film"
             color='black'
-            size={24}
+            size={30}
           />
         )
       })

@@ -60,9 +60,9 @@ class SpecificGroupScreen extends Component {
           {
             this.state.members.map(member => {
               return (
-                <View style={{paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
-                  <Image source={require('../assets/img/tempprofileicon.png')} style={{width: 20, height: 20}}/>
-                  <Text style={{fontSize: 15, fontWeight: '700', fontFamily: 'PT Sans Caption',}}>{member.name}</Text>
+                <View style={{paddingTop: 20, flexDirection: 'row'}}>
+                  <Image source={require('../assets/img/tempprofileicon.png')} style={{width: 23, height: 23, paddingTop: 5}}/>
+                  <Text style={{fontSize: 15, fontWeight: '700', fontFamily: 'PT Sans Caption', paddingLeft: 10}}>{member.name}</Text>
                 </View>
               )
           })}
@@ -88,7 +88,7 @@ class SpecificGroupScreen extends Component {
                       <Text style={{paddingTop:5}}>{movie.movieTitle}</Text>
                       <View style={{paddingTop:5, flexDirection: 'row'}}>
                         <Image source={require('../assets/img/count.png')} style={{width: 14, height: 14, marginTop: 3}}/>
-                        <Text style={{paddingLeft: 10, fontSize: 13, fontWeight: '700', fontFamily: 'PT Sans Caption',}}>{movie.count}</Text>
+                        <Text style={{paddingLeft: 10, fontSize: 13, fontWeight: '700', fontFamily: 'PT Sans Caption',}}>{movie.count} liked</Text>
                       </View>
                     </View>
                   </View>
