@@ -49,10 +49,10 @@ export default class GroupMovieScreen extends React.Component {
           url: 'https://www.netflix.com/title/80095314',
           logo: 'https://utellyassets7.imgix.net/locations_icons/utelly/black_new/Netflix.png?auto=compress&app_version=2977d84b-593d-4167-a904-57b1e6e814f1_2019-06-04&w=92',
         }, {
-          url: 'NULL',
+          url: null,
           logo: 'https://utellyassets7.imgix.net/locations_icons/utelly/black_new/Amazon.png?auto=compress&app_version=2977d84b-593d-4167-a904-57b1e6e814f1_2019-06-04&w=92',
         }, {
-          url: 'NULL',
+          url: null,
           logo: 'http://utellyassets7.imgix.net/locations_icons/utelly/live_tv_square/50d352abf0ca9f5798000383.jpg?auto=compress&app_version=2977d84b-593d-4167-a904-57b1e6e814f1_2019-06-04&w=92',
         }]
       })
@@ -89,8 +89,7 @@ export default class GroupMovieScreen extends React.Component {
                 <Text style={{fontWeight: 'bold'}}>Available on:</Text>
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
                   {this.state.showingOn.map(site => {
-
-                    if (site.url == null) {
+                    if (site.url !== null) {
                       return (
                         <TouchableOpacity onPress={() => Linking.openURL(site.url).catch(error => alert(error))}>
                           <OriginalSizeImage source={site.logo}/>
