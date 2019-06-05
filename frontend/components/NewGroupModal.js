@@ -22,7 +22,7 @@ export default class NewGroupModal extends Component {
 
     this.state = {
       addingFriends: false,
-      groupName: "Group",
+      groupName: "",
       myFriends: [], // Maps friend_id to friend name,
       tickAnimations: [],
       tickOn: [],
@@ -179,9 +179,9 @@ export default class NewGroupModal extends Component {
       >
         <TouchableWithoutFeedback>
           <View style={styles.container}>
-              <Text style={styles.title}>Add friends</Text>
+            <Text style={styles.title}>Add friends</Text>
                 {this.renderFriends()}
-              <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
+            <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity style={styles.createButton} onPress={this._onFinishAddingFriends}>
                   <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Add</Text>
@@ -215,7 +215,7 @@ export default class NewGroupModal extends Component {
                 <TouchableOpacity onPress={() => alert("I want to set a DP")}>
                   <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
                 </TouchableOpacity>
-                <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15}
+                <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15} value={this.state.groupName}
                   onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({groupName: text})}/>
               </View>
               <Text style={styles.subtitle}>Current members</Text>

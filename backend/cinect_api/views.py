@@ -75,7 +75,7 @@ def getMembers(request):
     response = []
     for i in range(0, len(members)):
         email = User.objects.get(pk=members[i]['email'])
-        response.append({'name': email.name })
+        response.append({'name': email.name, 'facebookid': email.facebookid})
 
     return HttpResponse(json.dumps({'data': response}))
 
