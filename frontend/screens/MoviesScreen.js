@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity} from 'react-native';
-import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar} from 'react-navigation'
+import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar, withNavigationFocus} from 'react-navigation'
 
 import SettingsScreen from './SettingsScreen'
 import UserProfileScreen from './UserProfileScreen'
@@ -9,6 +9,7 @@ import WatchlistMovieScreen from './WatchlistMovieScreen'
 import WatchedMovies from './MoviesScreen/WatchedMovies'
 import WatchList from './MoviesScreen/Watchlist';
 import {GetUserProperty} from '../Helpers';
+// import console = require('console');
 
 var FBLoginButton = require('../components/FBLoginButton');
 
@@ -21,22 +22,28 @@ class MoviesScreen extends React.Component {
     }
     this.getUserMovies = this.getUserMovies.bind(this);
     this.getWatchedMovies = this.getWatchedMovies.bind(this);
-    // this.getUserMovies();
+    this.refreshWatchlist = this.refreshWatchlist.bind(this);
+    this.refreshWatchedlist = this.refreshWatchedlist.bind(this);
     this.getWatchedMovies()
+    this.getUserMovies()
     // alert(this.state.watchedlist.length)
   }
 
-  getUserMovies() {
+  componentDidMount() {
+    this.getUserMovies()
+  }
+
+  async getUserMovies() {
     GetUserProperty('email').then(value => {
       fetch(("http://146.169.45.140:8000/cinect_api/getswipedright?useremail="+value))
       .then(response => response.json())
       .then((responseJson) => {
-        this.setState({watchlist: responseJson.data.reverse()});
+        this.setState({watchlist: responseJson.data.reverse()})
       });
-    })
+    });
   }
 
-  getWatchedMovies() {
+  async getWatchedMovies() {
     GetUserProperty('email').then(value => {
       fetch(("http://146.169.45.140:8000/cinect_api/getuserwatched?useremail="+value))
       .then(response => response.json())
@@ -46,12 +53,20 @@ class MoviesScreen extends React.Component {
     })
   }
 
+  refreshWatchlist() {
+    this.getUserMovies()
+  }
+
+  refreshWatchedlist() {
+    this.getWatchedMovies()
+  }
+
   watchlistOnPress = (posterpath, title, id, synopsis) => {
-    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis});
+    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist});
   }
 
   render() {
-    this.getUserMovies();
+    // this.getWatchedMovies()
     return (
       <View style={{flex:1}}>
 
@@ -102,10 +117,10 @@ class MoviesScreen extends React.Component {
               {this.state.watchedlist.map(movie => {
                 return (
                   // alert('here'),
-                  // <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
+                  <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
                     <WatchList imageUri={movie.posterpath}
                                name={movie.title} />
-                  // </TouchableOpacity>
+                  </TouchableOpacity>
 
                 )
               })

@@ -172,3 +172,29 @@ def getUserWatched(request):
                          'synopsis': apiResponse['overview']})
     httpResponse = {'data': response}
     return HttpResponse(json.dumps(httpResponse))
+
+def addUserWatched(request):
+    data = {}
+    #delete from swiped right
+    if request.method == 'POST':
+        if request.POST.get('email') and request.POST.get('movieid'):
+            email = request.POST.get('email')
+            movieid = request.POST.get('movieid')
+
+            SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
+
+            print('deleting '+email+',movieid'+movieid)
+
+            #add to user watched
+            userWatched = UserWatched()
+            user = User.objects.get(email=email)
+            userWatched.email = user
+            userWatched.movieid = movieid
+            userWatched.save()
+
+            print('adding' + email + ', movieid' + movieid)
+
+            return HttpResponse(getMovieByID(movieid))
+        return HttpResponse(json.dumps(data))
+    return HttpResponse(json.dumps(data))
+

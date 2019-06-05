@@ -39,10 +39,25 @@ export default class WatchlistMovieScreen extends React.Component {
             body: formData
         })
         // .then(alert('deleted'))
+        // .then()
+        .then(this.props.navigation.getParam('refresh'))
         .then(this.props.navigation.goBack())
         })
-      }
+    }
 
+    pressWatchedButton = (id) => {
+        let formData = new FormData();
+        GetUserProperty('email').then(value => {
+        formData.append('email', value)
+        formData.append('movieid', id);
+        fetch("http://146.169.45.140:8000/cinect_api/presswatched", {
+            method: 'POST',
+            body: formData
+        })
+        .then(this.props.navigation.getParam('refreshWatched'))
+        .then(this.props.navigation.goBack())
+        })
+    }
 
     render() {
         return (
@@ -64,7 +79,8 @@ export default class WatchlistMovieScreen extends React.Component {
                     <Text style={styles.buttonText}>Delete movie</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.watchedButton}>
+                <TouchableOpacity onPress={() => this.pressWatchedButton(this.props.navigation.getParam('id'))}
+                                  style={styles.watchedButton}>
                     <Text style={styles.buttonText}>I've watched this</Text>
                 </TouchableOpacity>
             </View>

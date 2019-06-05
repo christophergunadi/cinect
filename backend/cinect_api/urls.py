@@ -14,4 +14,5 @@ urlpatterns = [
     path('deleteswipedright', csrf_exempt(views.deleteSwipedRight), name='deleteswipedright'),
     path('getmembers', views.getMembers, name='getmembers'),
     path('getuserwatched', views.getUserWatched, name='getuserwatched'),
+    path('presswatched', csrf_exempt(views.addUserWatched), name='presswatched'),
 ]
