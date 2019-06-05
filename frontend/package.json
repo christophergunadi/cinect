@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@types/react-native": "^0.57.60",
+    "lottie-react-native": "^2.6.1",
     "react": "16.8.3",
     "react-native": "0.59.8",
     "react-native-elements": "^1.1.0",
