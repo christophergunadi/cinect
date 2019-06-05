@@ -41,6 +41,7 @@ class UserWatched(models.Model):
   movieid = models.CharField(max_length=10)
   class Meta:
     db_table = 'userwatched'
+    unique_together = ('email', 'movieid',)
   def __str__(self):
     return '{}: {} watched {}'.format(self.userwatchedid, self.email, self.movieid)
 
