@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, TouchableOpacity, Image, FlatList, Button, StyleSheet, 
+import {Dimensions, TouchableOpacity, Image, FlatList, Button, StyleSheet,
   Text, View, ScrollView, Animated, RefreshControl} from 'react-native';
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import LottieView from 'lottie-react-native';
@@ -64,18 +64,18 @@ class SpecificGroupScreen extends Component {
     if (this.state.loading) {
       return (
         <View style={{alignItems: 'center', paddingTop: 15}}>
-        <LottieView 
+        <LottieView
               source={require('../assets/animations/loading.json')}
               autoPlay={true} loop={true}
-              style={{width: 90, height: 90, justifyContent:'center'}}
-        />    
+              style={{width: 150, height: 150, justifyContent:'center'}}
+        />
         </View>
       )
     } else {
       return (
         <ScrollView horizontal={true}
         showsHorizontalScrollIndicator={false}>
-    
+
         {this.state.suggestedMovies.map(movie => {
           return (
             <View style={{flex:1, height:270, width:130, marginRight:20}}>
@@ -98,7 +98,7 @@ class SpecificGroupScreen extends Component {
       </ScrollView>
       )
     }
-   
+
   }
 
 
