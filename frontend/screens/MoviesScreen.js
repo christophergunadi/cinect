@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity} from 'react-native';
+import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity, RefreshControl} from 'react-native';
 import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar, withNavigationFocus} from 'react-navigation'
 
 import SettingsScreen from './SettingsScreen'
@@ -19,6 +19,7 @@ class MoviesScreen extends React.Component {
     this.state = {
       watchlist: [],
       watchedlist: [],
+      refreshing: false,
     }
     this.getUserMovies = this.getUserMovies.bind(this);
     this.getWatchedMovies = this.getWatchedMovies.bind(this);
@@ -31,6 +32,13 @@ class MoviesScreen extends React.Component {
 
   componentDidMount() {
     this.getUserMovies()
+  }
+
+  onRefresh = () => {
+    this.setState({refreshing: true})
+    this.getUserMovies()
+    this.getWatchedMovies()
+    this.setState({refreshing: false})
   }
 
   async getUserMovies() {
@@ -70,8 +78,7 @@ class MoviesScreen extends React.Component {
     return (
       <View style={{flex:1}}>
 
-        <ScrollView
-         scrollEventThrottle='16'>
+        <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16'>
          <View style={{flex: 1, paddingTop: 30, flexDirection: 'row', justifyContent: 'space-between'}}>
            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
              My Watchlist
