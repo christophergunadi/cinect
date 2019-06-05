@@ -6,6 +6,7 @@ import SettingsScreen from './SettingsScreen'
 import UserProfileScreen from './UserProfileScreen'
 import Watchlist from './MoviesScreen/Watchlist'
 import WatchlistMovieScreen from './WatchlistMovieScreen'
+import WatchedlistMovieScreen from './WatchedlistMovieScreen'
 import WatchedMovies from './MoviesScreen/WatchedMovies'
 import WatchList from './MoviesScreen/Watchlist';
 import {GetUserProperty} from '../Helpers';
@@ -73,6 +74,10 @@ class MoviesScreen extends React.Component {
     this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist});
   }
 
+  watchedlistOnPress = (posterpath, title, id, synopsis) => {
+    this.props.navigation.navigate('WatchedlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis})
+  }
+
   render() {
     // this.getWatchedMovies()
     return (
@@ -124,7 +129,7 @@ class MoviesScreen extends React.Component {
               {this.state.watchedlist.map(movie => {
                 return (
                   // alert('here'),
-                  <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
+                  <TouchableOpacity onPress={() => this.watchedlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
                     <WatchList imageUri={movie.posterpath}
                                name={movie.title} />
                   </TouchableOpacity>
@@ -169,6 +174,9 @@ const MoviesScreenNavigator = createStackNavigator(
   },
   WatchlistMovieScreen: {
     screen: WatchlistMovieScreen
+  },
+  WatchedlistMovieScreen: {
+    screen: WatchedlistMovieScreen
   }
 },
 {
