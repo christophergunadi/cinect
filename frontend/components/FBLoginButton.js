@@ -11,10 +11,11 @@ export default class FBLoginButton extends Component {
     this._userInfoCallback = this._userInfoCallback.bind(this);
   }
 
-  _addUser = (email, facebookid) => {
+  _addUser = (email, facebookid, name) => {
     let formData = new FormData();
     formData.append('email', email);
     formData.append('facebookid', facebookid);
+    formData.append('name', name);
     fetch("http://146.169.45.140:8000/cinect_api/user", {
       method: 'POST',
       body: formData
@@ -29,7 +30,7 @@ export default class FBLoginButton extends Component {
     } catch (error) {
       alert(error.message);
     }
-    this._addUser(email, facebookid);
+    this._addUser(email, facebookid, name);
   }
 
   _onUserLogout = async() => {

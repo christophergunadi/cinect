@@ -15,12 +15,13 @@ def index(request):
 # Gets a random movie and returns it
 def user(request):
     if request.method == 'POST':
-        if request.POST.get('email') and request.POST.get('facebookid'):
+        if request.POST.get('email') and request.POST.get('facebookid') and request.POST.get('name'):
             user = User()
             user.email = request.POST.get('email')
             user.facebookid = request.POST.get('facebookid')
+            user.name = request.POST.get('name')
             user.save()
-        return HttpResponse({'email': request.POST.get('email'), 'facebookid': request.POST.get('facebookid')})
+        return HttpResponse({'email': request.POST.get('email'), 'facebookid': request.POST.get('facebookid'), 'name': request.POST.get('name')})
     else:
         email = request.GET.get('email')
         response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
@@ -74,7 +75,7 @@ def getMembers(request):
     response = []
     for i in range(0, len(members)):
         email = User.objects.get(pk=members[i]['email'])
-        response.append({'name': email.email })
+        response.append({'name': email.name })
 
     return HttpResponse(json.dumps({'data': response}))
 
@@ -197,4 +198,3 @@ def addUserWatched(request):
             return HttpResponse(getMovieByID(movieid))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
-

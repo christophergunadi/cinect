@@ -3,6 +3,7 @@ from django.db import models
 class User(models.Model):
   email = models.EmailField(max_length=254, primary_key=True)
   facebookid  = models.CharField(max_length=255, unique=True, default='null')
+  name = models.CharField(max_length=92, default='null')
   class Meta:
     db_table = 'users'
   def __str__(self):
