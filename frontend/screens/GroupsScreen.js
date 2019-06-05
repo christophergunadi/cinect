@@ -61,7 +61,7 @@ export default class GroupsScreen extends React.Component {
       // TODO: ScrollView lines are buggy
       <View style={MainStylesheet.container}>
       <NewGroupModal ref={'newGroupModal'}>
-   </NewGroupModal>
+      </NewGroupModal>
    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
      <Text style={MainStylesheet.title}>My Groups</Text>
      <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
