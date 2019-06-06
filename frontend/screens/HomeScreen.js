@@ -105,7 +105,6 @@ export default class HomeScreen extends React.Component {
           method: 'POST',
           body: formData
         })
-        // .then(response => response.json())
       }
     });
   }
