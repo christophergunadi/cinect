@@ -72,6 +72,9 @@ export default class WatchlistMovieScreen extends React.Component {
                 <Text style={styles.infoText}>
                     {this.props.navigation.getParam('synopsis')}
                 </Text>
+                <Text style={styles.infoText}>
+                    IMDb rating: {this.props.navigation.getParam('rating')}
+                </Text>
             </ScrollView>
             
             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>

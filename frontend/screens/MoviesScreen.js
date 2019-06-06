@@ -71,8 +71,8 @@ class MoviesScreen extends React.Component {
     this.getWatchedMovies()
   }
 
-  watchlistOnPress = (posterpath, title, id, synopsis) => {
-    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist});
+  watchlistOnPress = (posterpath, title, id, synopsis, rating) => {
+    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis, rating: rating, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist});
   }
 
   watchedlistOnPress = (posterpath, title, id, synopsis) => {
@@ -103,7 +103,7 @@ class MoviesScreen extends React.Component {
 
               {this.state.watchlist.map(movie => {
                 return (
-                  <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
+                  <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis, movie.rating)}>
                     <WatchList imageUri={movie.posterpath}
                                name={movie.title} />
                   </TouchableOpacity>
