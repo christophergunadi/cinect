@@ -38,7 +38,7 @@ def getMoviesForUser(request):
 
     for i in range(0, len(responseMovies)):
         movies.append({
-            'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path'])
+            'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
             'id': responseMovies[i]['id']
         })
 
