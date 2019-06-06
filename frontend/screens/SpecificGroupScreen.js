@@ -3,6 +3,8 @@ import {Dimensions, TouchableOpacity, Image, FlatList, Button, StyleSheet,
   Text, View, ScrollView, Animated, RefreshControl} from 'react-native';
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import LottieView from 'lottie-react-native';
+import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+
 
 
 import GroupMovieScreen from './GroupMovieScreen';
@@ -17,6 +19,7 @@ class SpecificGroupScreen extends Component {
     this.state = {
       suggestedMovies: [],
       members: [],
+      membersPic: {},
       loading: false,
       loadingAnimation: new Animated.Value(1),
     }
@@ -53,9 +56,13 @@ class SpecificGroupScreen extends Component {
     .then((responseJson) => {
         this.setState ({
           members: responseJson.data,
+      });
+    }).then(() => {
+      this.state.members.map((member) => {
+        new GraphRequestManager().addRequest(
+          new GraphRequest("/"+ member.facebookid +"/picture?redirect=false", null, ((err, result) => {
+            this.state.membersPic[member.facebookid] = result.data.url;}),)).start();
       })
-    }).catch((error) => {
-      console.error(error);
     });
   }
 
@@ -109,11 +116,11 @@ class SpecificGroupScreen extends Component {
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
         <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>Members</Text>
           {
-            this.state.members.map(member => {
+            this.state.members.map((member, index) => {
               return (
                 <View style={{paddingTop: 20, flexDirection: 'row'}}>
-                  <Image source={require('../assets/img/tempprofileicon.png')} style={{width: 23, height: 23, paddingTop: 5}}/>
-                  <Text style={{fontSize: 15, fontWeight: '700', fontFamily: 'PT Sans Caption', paddingLeft: 10}}>{member.name}</Text>
+                  <Image source={{uri: this.state.membersPic[member.facebookid]}} style={{width: 40, height: 40, borderRadius: 21}}/>
+                  <Text style={{fontSize: 16, fontWeight: '700', fontFamily: 'PT Sans Caption', paddingLeft: 10, paddingTop: 6}}>{member.name}</Text>
                 </View>
               )
           })}
