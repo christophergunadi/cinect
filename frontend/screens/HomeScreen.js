@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, Alert } from 'react-native';
 
 import {GetUserProperty} from '../Helpers';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -215,8 +217,28 @@ export default class HomeScreen extends React.Component {
           {this.renderMovies()}
         </View>
 
-        <View style={{ height: 60 }}>
-
+        <View style={{ height: 85, flexDirection: 'row' }}>
+          <TouchableOpacity style={{padding:20}}>
+            <Icon  
+                  name='md-close'
+                  color='orangered' 
+                  size={50} 
+                  />
+          </TouchableOpacity>
+          <TouchableOpacity style={{padding:20}}>
+            <Icon 
+                  name='md-heart-empty'
+                  color='pink' 
+                  size={50} 
+                  />
+          </TouchableOpacity>
+          <TouchableOpacity style={{padding:20}}>
+            <Icon 
+                  name='md-checkmark'
+                  color='chartreuse' 
+                  size={50} 
+                  />
+          </TouchableOpacity>
         </View>
       </View>
     );
