@@ -77,9 +77,9 @@ export default class GroupMovieScreen extends React.Component {
 
             {/* <View style={{flex:2, justifyContent: "flex-end"}}> */}
                 <View style={{flex:1, flexDirection:'row', justifyContent: 'space-evenly'}}>
-                    <TouchableOpacity style={styles.watchedButton}>
+                    {/* <TouchableOpacity style={styles.watchedButton}>
                         <Text>Send movie invite</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <Text style={{fontWeight: 'bold'}}>Synopsis:{"\n"}</Text>
                 <Text>
