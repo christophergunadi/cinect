@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Text, Image, View, StyleSheet, Animated} from 'react-native';
 import LottieView from 'lottie-react-native';
 
+import {GetUserProperty} from '../Helpers';
+
 export default class SplashScreen extends Component {
 
     constructor(props) {
@@ -17,7 +19,13 @@ export default class SplashScreen extends Component {
             duration: 1900,
           }).start(({ finished }) => {
             if (finished) {
-              this.props.navigation.navigate('Main');
+                GetUserProperty('email').then((value) => {
+                    if (!value) {
+                        this.props.navigation.navigate('Login');
+                    } else {
+                        this.props.navigation.navigate('Main');
+                    }
+                })
             }
           });
     }
