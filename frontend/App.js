@@ -8,13 +8,14 @@
 
 import React, {Component} from 'react';
 import {Button, Platform, StyleSheet, Text, View, Image} from 'react-native';
-import {createStackNavigator, createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation';
+import {createStackNavigator, createAppContainer, createBottomTabNavigator, createMaterialTopTabNavigator, createSwitchNavigator} from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './screens/HomeScreen'
 import GroupsScreen from './screens/GroupsScreen';
 import MoviesScreen from './screens/MoviesScreen';
 import SpecificGroupScreen from './screens/SpecificGroupScreen';
+import SplashScreen from './screens/SplashScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,6 +37,7 @@ const GroupsNavigator = createStackNavigator(
     }
   }
 );
+
 
 const MainNavigator = createMaterialTopTabNavigator(
   {
@@ -89,4 +91,14 @@ const MainNavigator = createMaterialTopTabNavigator(
   }
 );
 
-export default App = createAppContainer(MainNavigator);
+
+const StartNavigator = createSwitchNavigator(
+  {
+    Splash: {screen: SplashScreen},
+    Main: {screen: MainNavigator},
+  }
+);
+
+
+
+export default App = createAppContainer(StartNavigator);

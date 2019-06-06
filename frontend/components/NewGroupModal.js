@@ -4,8 +4,6 @@ import {Dimensions, Text, View, StyleSheet, FlatList, Image, TextInput,Touchable
 import Modal from 'react-native-modalbox';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import LottieView from 'lottie-react-native';
-
-
 import {GetUserProperty} from '../Helpers';
 
 var windowSize = Dimensions.get('window');
@@ -57,8 +55,14 @@ export default class NewGroupModal extends Component {
 
     // Close model and reset form
     this.refs.newGroupModal.close();
+    var i;
+    for (i = 0; i < this.state.tickOn.length; i++) {
+      this.state.tickOn[i] = false;
+    }
+
     this.setState({
       groupMembers: [],
+      groupName: "",
     });
   }
 
@@ -167,28 +171,21 @@ export default class NewGroupModal extends Component {
     if (this.state.addingFriends) {
       return (
         <Modal ref={'newGroupModal'}
-        style={{
-          borderRadius: 20,
-          shadowRadius: 10,
-          width: windowSize.width - 70,
-          height: windowSize.height - 200
-        }}
-        position='center'
-        swipeToClose={false}
-        backButtonClose={true}
-      >
+        style={{borderRadius: 20, shadowRadius: 10, width: windowSize.width - 70, height: windowSize.height - 200}}
+        position='center' swipeToClose={false} backButtonClose={true}>
         <TouchableWithoutFeedback>
           <View style={styles.container}>
             <Text style={styles.title}>Add friends</Text>
-                {this.renderFriends()}
+              {this.renderFriends()}
+            
             <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity style={styles.createButton} onPress={this._onFinishAddingFriends}>
                   <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Add</Text>
                 </TouchableOpacity>
-                {/* TODO: Create a green button that lights up when they are pressed */}
               </View>
             </View>
+            
           </View>
         </TouchableWithoutFeedback>
       </Modal>
@@ -196,21 +193,12 @@ export default class NewGroupModal extends Component {
     } else {
       return (
         <Modal ref={'newGroupModal'}
-          style={{
-            justifyContent: 'center',
-            borderRadius: 20,
-            shadowRadius: 10,
-            width: windowSize.width - 70,
-            height: windowSize.height - 200
-          }}
-          position='center'
-          swipeToClose={false}
-          backButtonClose={false}
-        >
+          style={{justifyContent: 'center', borderRadius: 20, shadowRadius: 10, width: windowSize.width - 70,
+            height: windowSize.height - 200}} position='center' swipeToClose={false} backButtonClose={false}>
           <TouchableWithoutFeedback>
             <View style={styles.container}>
               <Text style={styles.title}>Create a new group</Text>
-
+              
               <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity onPress={() => alert("I want to set a DP")}>
                   <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
@@ -218,8 +206,8 @@ export default class NewGroupModal extends Component {
                 <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15} value={this.state.groupName}
                   onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({groupName: text})}/>
               </View>
+              
               <Text style={styles.subtitle}>Current members</Text>
-
               {this.renderCurrentMembers()}
 
               <TouchableOpacity style={styles.addButton} onPress={this._onAddMemberButton}>
