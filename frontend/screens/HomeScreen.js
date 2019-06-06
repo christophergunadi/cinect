@@ -164,6 +164,16 @@ export default class HomeScreen extends React.Component {
     this.fetchMoviesFromApi();
   }
 
+  rewindAnimation = () => {
+    if (this.state.currentIndex > 0) {
+      this.setState({ currentIndex: this.state.currentIndex - 1 });
+    } else {
+      alert('No movies to rewind back to')
+    }
+  }
+
+
+
   componentWillMount() {
     // for (var i = 0; i < 3; i++) {
     //   this.fetchMovieFromApi();
@@ -260,34 +270,59 @@ export default class HomeScreen extends React.Component {
           {this.renderMovies()}
         </View>
 
-        <View style={{ height: 80, flexDirection: 'row',justifyContent: 'space-evenly'}}>
-          <TouchableOpacity onPress={() => this.swipeLeftAnimation(200)}
-                            style={styles.hateButton}>
-            <Icon 
-                  name='md-close'
-                  color='orangered' 
-                  size={50} 
-                  fontWeight={20}
-                  />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.watchedAnimation()}
-                            style={styles.watchedButton}>
-            <Icon 
-                  name='md-heart'
-                  color='pink' 
-                  size={40} 
-                  fontWeight={20}
-                  />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.swipeRightAnimation(200)}
-                            style={styles.likeButton}>
-            <Icon 
-                  name='md-checkmark'
-                  color='palegreen' 
-                  size={50} 
-                  fontWeight={20}
-                  />
-          </TouchableOpacity>
+        <View style={{ height: 80, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <TouchableOpacity
+              onPress={() => this.rewindAnimation()}
+              style={styles.rewindButton}>
+              <Icon
+                name='md-refresh'
+                color='black'
+                size={25}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{flex: 5, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+            <TouchableOpacity 
+              onPress={() => this.swipeLeftAnimation(200)}
+              style={styles.hateButton}>
+              <Icon 
+                name='md-close'
+                color='orangered' 
+                size={50} 
+                fontWeight={20}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => this.watchedAnimation()}
+              style={styles.watchedButton}>
+              <Icon 
+                name='md-heart'
+                color='pink' 
+                size={40} 
+                fontWeight={20}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => this.swipeRightAnimation(200)}
+              style={styles.likeButton}>
+              <Icon 
+                name='md-checkmark'
+                color='palegreen' 
+                size={50} 
+                fontWeight={20}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{flex: 1}}>
+
+          </View>
+
+
+          
+          
         </View>
       </View>
     );
@@ -355,6 +390,18 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     width:60,
     height:60,
+    backgroundColor:'white',
+    borderRadius:50,
+  },
+  rewindButton: {
+    transform: [{rotateY: '180deg'}],
+    marginTop:11,
+    borderWidth:3,
+    borderColor:'rgba(0,0,0,0.1)',
+    alignItems:'center',
+    justifyContent:'center',
+    width:40,
+    height:40,
     backgroundColor:'white',
     borderRadius:50,
   },
