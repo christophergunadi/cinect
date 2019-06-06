@@ -60,7 +60,7 @@ const MainNavigator = createMaterialTopTabNavigator(
             source={require("./assets/img/cinectlogo.png")}
             style={{width: 90, height: 20}}
           />
-        )      
+        )
       })
     },
     Movies: {screen: MoviesScreen,
@@ -98,7 +98,5 @@ const StartNavigator = createSwitchNavigator(
     Main: {screen: MainNavigator},
   }
 );
-
-
 
 export default App = createAppContainer(StartNavigator);

@@ -47,7 +47,7 @@ export default class FBLoginButton extends Component {
     if (error) {
       alert('Error fetching data: ' + error.toString());
     } else {
-      this._onUserLogin(result.email, result.name, result.id);
+      this._onUserLogin(result.email, result.name, result.id).then(this.props.refresh());
     }
   }
 
@@ -68,7 +68,7 @@ export default class FBLoginButton extends Component {
           }
         }
       }
-      onLogoutFinished={() => this._onUserLogout()}/>
+      onLogoutFinished={() => this._onUserLogout().then(this.props.refresh())}/>
       </View>
     );
   }

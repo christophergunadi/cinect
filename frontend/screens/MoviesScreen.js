@@ -26,6 +26,7 @@ class MoviesScreen extends React.Component {
     this.getWatchedMovies = this.getWatchedMovies.bind(this);
     this.refreshWatchlist = this.refreshWatchlist.bind(this);
     this.refreshWatchedlist = this.refreshWatchedlist.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.getWatchedMovies()
     this.getUserMovies()
     // alert(this.state.watchedlist.length)
@@ -89,7 +90,7 @@ class MoviesScreen extends React.Component {
              My Watchlist
            </Text>
            <View style={{marginRight:10, marginTop: 3}}>
-             <FBLoginButton onLogin = { this.onUserLogin }/>
+             <FBLoginButton onLogin = { this.onUserLogin } refresh = { this.onRefresh }/>
            </View>
 
           </View>
@@ -112,8 +113,8 @@ class MoviesScreen extends React.Component {
               }
             </ScrollView>
           </View>
-          
-          
+
+
           <View style={{flex: 1, paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
               Movies I've watched
