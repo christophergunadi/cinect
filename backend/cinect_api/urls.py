@@ -16,4 +16,5 @@ urlpatterns = [
     path('getuserwatched', views.getUserWatched, name='getuserwatched'),
     path('presswatched', csrf_exempt(views.addUserWatched), name='presswatched'),
     path('addwatched', csrf_exempt(views.addUserWatchedFromHomeScreen), name='addwatched'),
+    path('getmovies', views.getMoviesForUser, name='getmovies'),
 ]

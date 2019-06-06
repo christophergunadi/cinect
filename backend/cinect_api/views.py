@@ -22,13 +22,28 @@ def user(request):
             user.name = request.POST.get('name')
             user.save()
         return HttpResponse({'email': request.POST.get('email'), 'facebookid': request.POST.get('facebookid'), 'name': request.POST.get('name')})
-    else:
-        email = request.GET.get('email')
-        response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
-        movies = response.json()['results']
-        x = random.randint(0, 8)
-        return HttpResponse(json.dumps(movies[x]))
+    # else:
+    #     email = request.GET.get('email')
+    #     response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
+    #     movies = response.json()['results']
+    #     x = random.randint(0, 8)
+    #     return HttpResponse(json.dumps(movies[x]))
 
+def getMoviesForUser(request):
+    email = request.GET.get('email')
+    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
+    responseMovies = response.json()['results']
+    
+    movies = []
+
+    for i in range(0, len(responseMovies)):
+        movies.append({
+            'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path'])
+            'id': responseMovies[i]['id']
+        })
+
+    jsonResponse = {'data': movies}
+    return HttpResponse(json.dumps(jsonResponse))
 
 # Helper function to take value in pair to sort suggestions
 def takeSecond(elem):

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, TouchableOpacity } from 'react-native';
+import LottieView from 'lottie-react-native';
 
 import {GetUserProperty} from '../Helpers';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,14 +8,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const Movies = [
-  { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg', id: '299537'},
-  // { uri : 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg'},
-  // { uri : 'https://image.tmdb.org/t/p/w500/wgQ7APnFpf1TuviKHXeEe3KnsTV.jpg'},
-  // { uri: require('../assets/movieposters/movie1.jpg') },
-  // { uri: require('../assets/movieposters/movie2.jpg') },
-  // { uri: require('../assets/movieposters/movie3.jpg') },
-]
+// const Movies = [
+//   { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg', id: '299537'},
+// ]
 
 export default class HomeScreen extends React.Component {
 
@@ -27,8 +23,8 @@ export default class HomeScreen extends React.Component {
     this.position = new Animated.ValueXY();
     this.state = {
       currentIndex: 0,
-      currentMovie: {},
-      nextMovie: {}
+      loading: false,
+      movies: [],
     }
     this.rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
@@ -62,23 +58,12 @@ export default class HomeScreen extends React.Component {
       extrapolate: 'clamp'
     })
 
-    // this.nextCardOpacity = this.calculateNextCardOpacity(this.position.x, this.position.y)
-
     this.nextCardScale = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
       outputRange: [1, 0.8, 1],
       extrapolate: 'clamp'
     })
   }
-
-  // calculateNextCardOpacity = (x, y) => {
-  //   value = Math.min(x, y);
-  //   return value.interpolate({
-  //     inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
-  //     outputRange: [1, 0, 1],
-  //     extrapolate: 'clamp'
-  //   })
-  // }
 
   fetchMovieFromApi = () => {
     fetch("http://146.169.45.140:8000/cinect_api/user")
@@ -88,7 +73,29 @@ export default class HomeScreen extends React.Component {
     })
   }
 
-  addSwipedRightMovie = (id) => { //send swiped right movie id to cinect_api to add to populate database
+  fetchMoviesFromApi = () => {
+
+    
+
+    if (this.state.currentIndex >= this.state.movies.length) {
+      this.setState({ loading: true })
+      fetch("http://146.169.45.140:8000/cinect_api/getmovies")
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({
+          movies: responseJson.data,
+          loading: false,
+          currentIndex: 0,
+        })
+        console.log("LENGTH:" + this.state.movies.length)
+      })
+      
+    }
+    
+  }
+
+  //send swiped right movie id to cinect_api to add to populate database
+  addSwipedRightMovie = (id) => { 
     let formData = new FormData();
     GetUserProperty('email').then(value => {
       if (!value) {
@@ -117,23 +124,6 @@ export default class HomeScreen extends React.Component {
       })
   }
 
-  fetchMovieById = (id) => {
-    fetch(("http://146.169.45.140:8000/cinect_api/addswipedright?id=" + id))
-    .then(response => response.json())
-    .then((responseJson) => {
-      alert(responseJson.movieTitle)
-      // this.props.navigator.navigate()
-    })
-  }
-
-  // replaceMovieInList = (i) => {
-  //   fetch("http://146.169.45.140:8000/cinect_api/user")
-  //   .then(response => response.json())
-  //   .then((responseJson) => {
-  //     Movies.push({ uri: 'https://image.tmdb.org/t/p/w500' + responseJson.poster_path })
-  //   })
-  // }
-
   swipeLeftAnimation = (yValue) => {
     Animated.spring(this.position, {
       toValue: {x: -(SCREEN_WIDTH + 100), y: yValue}
@@ -142,27 +132,29 @@ export default class HomeScreen extends React.Component {
         this.position.setValue({x: 0, y: 0})
       })
     })
-    this.fetchMovieFromApi();
+    // this.fetchMovieFromApi();
+    this.fetchMoviesFromApi();
   }
 
   swipeRightAnimation = (yValue) => {
     Animated.spring(this.position, {
       toValue: {x: SCREEN_WIDTH + 100, y: yValue}
     }).start(() => {
-      this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
+      this.addSwipedRightMovie(this.state.movies[this.state.currentIndex].id.toString());
 
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
       })
     })
-    this.fetchMovieFromApi();
+    // this.fetchMovieFromApi();
+    this.fetchMoviesFromApi();
   }
 
   watchedAnimation = () => {
     Animated.spring(this.position, {
       toValue: {x: 0, y: -(SCREEN_HEIGHT)}
     }).start(() => {
-      this.addWatchedMovie(Movies[this.state.currentIndex].id.toString())
+      this.addWatchedMovie(this.state.movies[this.state.currentIndex].id.toString())
 
       // TODO: this.addWatchedMovies
       // this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
@@ -171,13 +163,15 @@ export default class HomeScreen extends React.Component {
         this.position.setValue({x: 0, y: 0})
       })
     })
-    this.fetchMovieFromApi();
+    // this.fetchMovieFromApi();
+    this.fetchMoviesFromApi();
   }
 
   componentWillMount() {
-    for (var i = 0; i < 3; i++) {
-      this.fetchMovieFromApi();
-    }
+    // for (var i = 0; i < 3; i++) {
+    //   this.fetchMovieFromApi();
+    // }
+    this.fetchMoviesFromApi();
 
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder:(evt, gestureState) => true,
@@ -203,54 +197,62 @@ export default class HomeScreen extends React.Component {
   }
 
   renderMovies = () => {
-    return Movies.map((item, i) => {
-      if (i < this.state.currentIndex) {
-        return null;
-      } else if (i == this.state.currentIndex) {
-        return (
-          <Animated.View
-            {...this.PanResponder.panHandlers}
-            key={i}
-            style={[this.rotateAndTranslate, styles.card]}>
-
-            <Animated.View style={[{ opacity: this.likeOpacity }, styles.likeSign]}>
-              <Text
-                style={styles.signText}>
-                LIKE
-              </Text>
+    if (this.state.loading) {
+      return (
+        <View style={{alignItems: 'center', paddingTop: 15}}>
+        <LottieView
+              source={require('../assets/animations/loading.json')}
+              autoPlay={true} loop={true}
+              style={{width: 150, height: 150, justifyContent:'center'}}
+        />
+        </View>
+      )
+    } else {
+      return this.state.movies.map((item, i) => {
+        if (i < this.state.currentIndex) {
+          return null;
+        } else if (i == this.state.currentIndex) {
+          return (
+            <Animated.View
+              {...this.PanResponder.panHandlers}
+              key={i}
+              style={[this.rotateAndTranslate, styles.card]}>
+  
+              <Animated.View style={[{ opacity: this.likeOpacity }, styles.likeSign]}>
+                <Text
+                  style={styles.signText}>
+                  LIKE
+                </Text>
+              </Animated.View>
+  
+              <Animated.View style={[{ opacity: this.hateOpacity }, styles.hateSign]}>
+                <Text
+                  style={styles.signText}>
+                  NOPE
+                </Text>
+              </Animated.View>
+  
+              <Image
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
+                borderRadius: 20 }}
+                source={item} />
             </Animated.View>
-
-            <Animated.View style={[{ opacity: this.hateOpacity }, styles.hateSign]}>
-              <Text
-                style={styles.signText}>
-                NOPE
-              </Text>
+          )
+        } else {
+          return (
+            <Animated.View
+              key={i}
+              style={[{ opacity: this.nextCardOpacity, transform: [{scale: this.nextCardScale}] },
+                        styles.card]}>
+              <Image
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
+                borderRadius: 20 }}
+                source={item} />
             </Animated.View>
-
-            <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
-              borderRadius: 20 }}
-              source={item} />
-          </Animated.View>
-        )
-      } else {
-        return (
-          <Animated.View
-            key={i}
-            style={[{ opacity: this.nextCardOpacity, transform: [{scale: this.nextCardScale}] },
-                      styles.card]}>
-            <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
-              borderRadius: 20 }}
-              source={item} />
-          </Animated.View>
-        )
-      }
-
-
-    }).reverse()
-
-
+          )
+        }
+      }).reverse()
+    }
   }
 
   render() {
