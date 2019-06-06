@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {Text, Image, View, StyleSheet, Animated} from 'react-native';
 import LottieView from 'lottie-react-native';
+import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 
 import {GetUserProperty} from '../Helpers';
+
 
 export default class SplashScreen extends Component {
 
@@ -34,11 +36,14 @@ export default class SplashScreen extends Component {
 
     render() {
         return (
-          <View style={{backgroundColor: 'white', alignItems:'center', flex:1, justifyContent:'center'}}>
-            <Image source={require('../assets/img/cinectlogo.png')} style={{width: 250, height: 55}}/>
+          <View style={{backgroundColor: 'white', alignItems:'center', justifyContent:'center',
+          paddingTop: 150}}>
+            <Transition shared="logo">
+               <Image source={require('../assets/img/popcorn.png')} style={{width: 200, height: 200}}/>
+            </Transition>
             <LottieView source={require('../assets/animations/splash.json')}
               progress={this.state.progress}
-              style={{width: 400, height: 400, justifyContent:'center'}}/>
+              style={{width: 400, height: 400, justifyContent:'center', marginBottom: 100}}/>
           </View>
         )
       

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Text, View ,Image, AsyncStorage} from 'react-native';
 import { LoginButton, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
+import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 
 var FBLoginButton = require('../components/FBLoginButton');
 
@@ -61,8 +62,11 @@ export default class LoginScreen extends Component {
           <View style={{backgroundColor: 'white', alignItems:'center', flex:1, 
           justifyContent: 'space-between', paddingTop: 130}}>
             <View style={{alignItems: 'center'}}>
-            <Image source={require('../assets/img/cinectlogo.png')} style={{width: 250, height: 55}}/>
-            <Text style={{fontSize: 18, fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 20,}}>Making movies easy.</Text>
+            <Transition shared="logo">
+              <Image source={require('../assets/img/popcorn.png')} style={{width: 150, height: 150}}/>
+            </Transition>
+            <Image source={require('../assets/img/cinect.png')} style={{width: 150, height: 40, marginTop: 14}}/>
+            <Text style={{fontSize: 18, fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 20}}>Making movies easy.</Text>
             </View>
             <View style={{paddingBottom: 200}}>
             <LoginButton
