@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, Alert } from 'react-native';
+import {Button, StyleSheet, Text, View, Animated, Dimensions, Image, PanResponder, TouchableOpacity } from 'react-native';
 
 import {GetUserProperty} from '../Helpers';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -45,13 +44,13 @@ export default class HomeScreen extends React.Component {
     }
 
     this.likeOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
+      inputRange: [-SCREEN_WIDTH/4, 0, SCREEN_WIDTH/4],
       outputRange: [0, 0, 1],
       extrapolate: 'clamp'
     })
 
     this.hateOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
+      inputRange: [-SCREEN_WIDTH/4, 0, SCREEN_WIDTH/4],
       outputRange: [1, 0, 0],
       extrapolate: 'clamp'
     })
@@ -111,6 +110,30 @@ export default class HomeScreen extends React.Component {
   //   })
   // }
 
+  swipeLeftAnimation = (yValue) => {
+    Animated.spring(this.position, {
+      toValue: {x: -(SCREEN_WIDTH + 100), y: yValue}
+    }).start(() => {
+      this.setState({currentIndex: this.state.currentIndex + 1}, () => {
+        this.position.setValue({x: 0, y: 0})
+      })
+    })
+    this.fetchMovieFromApi();
+  }
+
+  swipeRightAnimation = (yValue) => {
+    Animated.spring(this.position, {
+      toValue: {x: SCREEN_WIDTH + 100, y: yValue}
+    }).start(() => {
+      this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
+
+      this.setState({currentIndex: this.state.currentIndex + 1}, () => {
+        this.position.setValue({x: 0, y: 0})
+      })
+    })
+    this.fetchMovieFromApi();
+  }
+
   componentWillMount() {
     for (var i = 0; i < 3; i++) {
       this.fetchMovieFromApi();
@@ -122,29 +145,20 @@ export default class HomeScreen extends React.Component {
         this.position.setValue({x: gestureState.dx, y: gestureState.dy})
       },
       onPanResponderRelease:(evt, gestureState) => {
-        //swipe right
         if (gestureState.dx > 120) {
-          Animated.spring(this.position, {
-            toValue: {x: SCREEN_WIDTH + 100, y: gestureState.dy}
-          }).start(() => {
-            this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
+          
 
-            this.setState({currentIndex: this.state.currentIndex + 1}, () => {
-              this.position.setValue({x: 0, y: 0})
-            })
-          })
-          this.fetchMovieFromApi();
-
-        } else if (gestureState.dx < -120) {
-          //swipe left
-          Animated.spring(this.position, {
-            toValue: {x: -(SCREEN_WIDTH + 100), y: gestureState.dy}
-          }).start(() => {
-            this.setState({currentIndex: this.state.currentIndex + 1}, () => {
-              this.position.setValue({x: 0, y: 0})
-            })
-          })
-          this.fetchMovieFromApi();
+        } 
+        else if (gestureState.dx < -120) {
+          this.swipeLeftAnimation(gestureState.dy);
+          // Animated.spring(this.position, {
+          //   toValue: {x: -(SCREEN_WIDTH + 100), y: gestureState.dy}
+          // }).start(() => {
+          //   this.setState({currentIndex: this.state.currentIndex + 1}, () => {
+          //     this.position.setValue({x: 0, y: 0})
+          //   })
+          // })
+          // this.fetchMovieFromApi();
 
         } else {
           Animated.spring(this.position, {
@@ -167,7 +181,7 @@ export default class HomeScreen extends React.Component {
           <Animated.View
             {...this.PanResponder.panHandlers}
             key={i}
-            style={[this.rotateAndTranslate, styles.currentCard]}>
+            style={[this.rotateAndTranslate, styles.card]}>
 
             <Animated.View style={[{ opacity: this.likeOpacity }, styles.likeSign]}>
               <Text
@@ -194,7 +208,7 @@ export default class HomeScreen extends React.Component {
           <Animated.View
             key={i}
             style={[{ opacity: this.nextCardOpacity, transform: [{scale: this.nextCardScale}] },
-                      styles.nextCard]}>
+                      styles.card]}>
             <Image
               style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
               borderRadius: 20 }}
@@ -218,7 +232,7 @@ export default class HomeScreen extends React.Component {
         </View>
 
         <View style={{ height: 85, flexDirection: 'row' }}>
-          <TouchableOpacity style={{padding:20}}>
+          <TouchableOpacity style={{padding:20}} onPress={() => this.swipeLeftAnimation(200)}>
             <Icon  
                   name='md-close'
                   color='orangered' 
@@ -232,7 +246,7 @@ export default class HomeScreen extends React.Component {
                   size={50} 
                   />
           </TouchableOpacity>
-          <TouchableOpacity style={{padding:20}}>
+          <TouchableOpacity style={{padding:20}} onPress={() => this.swipeRightAnimation(200)}>
             <Icon 
                   name='md-checkmark'
                   color='chartreuse' 
@@ -246,13 +260,7 @@ export default class HomeScreen extends React.Component {
 };
 
 const styles = StyleSheet.create({
-  currentCard: {
-    height: SCREEN_HEIGHT - 140,
-    width: SCREEN_WIDTH,
-    padding: 10,
-    position: 'absolute'
-  },
-  nextCard: {
+  card: {
     height: SCREEN_HEIGHT - 140,
     width: SCREEN_WIDTH,
     padding: 10,
