@@ -61,12 +61,23 @@ export default class HomeScreen extends React.Component {
       extrapolate: 'clamp'
     })
 
+    // this.nextCardOpacity = this.calculateNextCardOpacity(this.position.x, this.position.y)
+
     this.nextCardScale = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
       outputRange: [1, 0.8, 1],
       extrapolate: 'clamp'
     })
   }
+
+  // calculateNextCardOpacity = (x, y) => {
+  //   value = Math.min(x, y);
+  //   return value.interpolate({
+  //     inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
+  //     outputRange: [1, 0, 1],
+  //     extrapolate: 'clamp'
+  //   })
+  // }
 
   fetchMovieFromApi = () => {
     fetch("http://146.169.45.140:8000/cinect_api/user")
@@ -134,6 +145,21 @@ export default class HomeScreen extends React.Component {
     this.fetchMovieFromApi();
   }
 
+  watchedAnimation = () => {
+    Animated.spring(this.position, {
+      toValue: {x: 0, y: -(SCREEN_HEIGHT)}
+    }).start(() => {
+
+      // TODO: this.addWatchedMovies
+      // this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
+
+      this.setState({currentIndex: this.state.currentIndex + 1}, () => {
+        this.position.setValue({x: 0, y: 0})
+      })
+    })
+    this.fetchMovieFromApi();
+  }
+
   componentWillMount() {
     for (var i = 0; i < 3; i++) {
       this.fetchMovieFromApi();
@@ -146,20 +172,10 @@ export default class HomeScreen extends React.Component {
       },
       onPanResponderRelease:(evt, gestureState) => {
         if (gestureState.dx > 120) {
-          
-
+          this.swipeRightAnimation(gestureState.dy);
         } 
         else if (gestureState.dx < -120) {
           this.swipeLeftAnimation(gestureState.dy);
-          // Animated.spring(this.position, {
-          //   toValue: {x: -(SCREEN_WIDTH + 100), y: gestureState.dy}
-          // }).start(() => {
-          //   this.setState({currentIndex: this.state.currentIndex + 1}, () => {
-          //     this.position.setValue({x: 0, y: 0})
-          //   })
-          // })
-          // this.fetchMovieFromApi();
-
         } else {
           Animated.spring(this.position, {
             toValue: {x: 0, y: 0},
@@ -239,7 +255,7 @@ export default class HomeScreen extends React.Component {
                   size={50} 
                   />
           </TouchableOpacity>
-          <TouchableOpacity style={{padding:20}}>
+          <TouchableOpacity style={{padding:20}} onPress={() => this.watchedAnimation()}>
             <Icon 
                   name='md-heart-empty'
                   color='pink' 
