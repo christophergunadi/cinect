@@ -75,9 +75,7 @@ export default class HomeScreen extends React.Component {
 
   fetchMoviesFromApi = () => {
 
-    
-
-    if (this.state.currentIndex >= this.state.movies.length) {
+    if (this.state.currentIndex >= this.state.movies.length - 1) {
       this.setState({ loading: true })
       fetch("http://146.169.45.140:8000/cinect_api/getmovies")
       .then(response => response.json())
@@ -107,7 +105,7 @@ export default class HomeScreen extends React.Component {
           method: 'POST',
           body: formData
         })
-        .then(response => response.json())
+        // .then(response => response.json())
       }
     });
   }
@@ -209,9 +207,7 @@ export default class HomeScreen extends React.Component {
       )
     } else {
       return this.state.movies.map((item, i) => {
-        if (i < this.state.currentIndex) {
-          return null;
-        } else if (i == this.state.currentIndex) {
+        if (i == this.state.currentIndex) {
           return (
             <Animated.View
               {...this.PanResponder.panHandlers}
@@ -238,7 +234,7 @@ export default class HomeScreen extends React.Component {
                 source={item} />
             </Animated.View>
           )
-        } else {
+        } else if (i == this.state.currentIndex + 1) {
           return (
             <Animated.View
               key={i}
@@ -250,6 +246,8 @@ export default class HomeScreen extends React.Component {
                 source={item} />
             </Animated.View>
           )
+        } else {
+          return null;
         }
       }).reverse()
     }
@@ -265,16 +263,7 @@ export default class HomeScreen extends React.Component {
 
         <View style={{ height: 80, flexDirection: 'row',justifyContent: 'space-evenly'}}>
           <TouchableOpacity onPress={() => this.swipeLeftAnimation(200)}
-                            style={{marginTop:11, 
-                            borderWidth:3,
-                            borderColor:'rgba(0,0,0,0.1)',
-                            alignItems:'center',
-                            justifyContent:'center',
-                            width:60,
-                            height:60,
-                            backgroundColor:'white',
-                            borderRadius:50,
-                          }}>
+                            style={styles.hateButton}>
             <Icon 
                   name='md-close'
                   color='orangered' 
@@ -283,16 +272,7 @@ export default class HomeScreen extends React.Component {
                   />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.watchedAnimation()}
-                            style={{marginTop:11, paddingTop:2,
-                            borderWidth:3,
-                            borderColor:'rgba(0,0,0,0.1)',
-                            alignItems:'center',
-                            justifyContent:'center',
-                            width:60,
-                            height:60,
-                            backgroundColor:'white',
-                            borderRadius:50,
-                          }}>
+                            style={styles.watchedButton}>
             <Icon 
                   name='md-heart'
                   color='pink' 
@@ -301,16 +281,7 @@ export default class HomeScreen extends React.Component {
                   />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.swipeRightAnimation(200)}
-                            style={{marginTop:11, paddingTop:2,
-                            borderWidth:3,
-                            borderColor:'rgba(0,0,0,0.1)',
-                            alignItems:'center',
-                            justifyContent:'center',
-                            width:60,
-                            height:60,
-                            backgroundColor:'white',
-                            borderRadius:50,
-                          }}>
+                            style={styles.likeButton}>
             <Icon 
                   name='md-checkmark'
                   color='palegreen' 
@@ -352,5 +323,40 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '900',
     padding: 10
+  },
+  likeButton: {
+    marginTop:11, 
+    paddingTop:2,
+    borderWidth:3,
+    borderColor:'rgba(0,0,0,0.1)',
+    alignItems:'center',
+    justifyContent:'center',
+    width:60,
+    height:60,
+    backgroundColor:'white',
+    borderRadius:50,
+  },
+  hateButton: {
+    marginTop:11,
+    borderWidth:3,
+    borderColor:'rgba(0,0,0,0.1)',
+    alignItems:'center',
+    justifyContent:'center',
+    width:60,
+    height:60,
+    backgroundColor:'white',
+    borderRadius:50,
+  },
+  watchedButton: {
+    marginTop:11, 
+    paddingTop:2,
+    borderWidth:3,
+    borderColor:'rgba(0,0,0,0.1)',
+    alignItems:'center',
+    justifyContent:'center',
+    width:60,
+    height:60,
+    backgroundColor:'white',
+    borderRadius:50,
   },
 });
