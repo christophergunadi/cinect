@@ -22,6 +22,7 @@ export default class NewGroupModal extends Component {
       addingFriends: false,
       groupName: "",
       myFriends: [], // Maps friend_id to friend name,
+      myFriendsPic: {},
       tickAnimations: [],
       tickOn: [],
       groupMembers: [], // Currently added group members
@@ -66,6 +67,10 @@ export default class NewGroupModal extends Component {
     });
   }
 
+  _getFriendPicCallBack = (error, result, id) => {
+    this.state.myFriendsPic[id] = res.data.url;
+  }
+
   _getFriendsCallback = (error, result) => {
     if (error) {
       alert("Failed to retrieve your friends. Please log in or sign up to create a group.")
@@ -84,13 +89,23 @@ export default class NewGroupModal extends Component {
         tickAnimations: marks,
         tickOn: ticks,
       });
+
+      this.state.myFriends.map((friend) => {
+        new GraphRequestManager().addRequest(
+          new GraphRequest("/"+ friend.id +"/picture?redirect=false", null, ((err, res) => {
+            this.state.myFriendsPic[friend.id] = res.data.url;
+            this.setState({}); //TODO OH MY THIS IS SO BAD
+          }))).start();
+      });
     }
   }
 
   _onAddMemberButton = () => {
     // Fetch my friends and store it in state if not done so already.
     if (!this.state.fetchedFriends) {
-      new GraphRequestManager().addRequest(new GraphRequest("/me/friends", null, this._getFriendsCallback,)).start();
+      new GraphRequestManager().addRequest(
+        new GraphRequest("/me/friends", null, this._getFriendsCallback,)).start();
+
       const animation = LayoutAnimation.create(300, 'linear', 'opacity');
       LayoutAnimation.configureNext(animation, () => {});
       this.state.fetchedFriends = true;
@@ -142,9 +157,12 @@ export default class NewGroupModal extends Component {
       return (
           <TouchableOpacity onPress={() => this._onAddSpecificFriend(f, index)}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}}>
-
-            <Text style={{fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 10}}>{f.name}</Text>
-            <LottieView progress={this.state.tickAnimations[index]}
+              <View style={{flexDirection:'row'}}>
+              <Image source={{uri: this.state.myFriendsPic[f.id]}} 
+                   style={{width: 35, height: 35, borderRadius: 18, paddingTop: 10}}/>
+            <Text style={{fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 10, paddingLeft: 12}}>{f.name}</Text>
+              </View>
+             <LottieView progress={this.state.tickAnimations[index]}
               source={require('../assets/animations/tick.json')}
               loop={false}
               style={{width: 32, height: 32,}}
@@ -159,9 +177,10 @@ export default class NewGroupModal extends Component {
   renderCurrentMembers = () => {
     return (this.state.groupMembers.map((f) => {
       return (
-        <View style={{ flexDirection: 'row' }}>
-          <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-          <Text style={styles.groupName}>{f.name}</Text>
+        <View style={{ flexDirection: 'row', paddingTop: 7}}>
+          <Image source={{uri: this.state.myFriendsPic[f.id]}} 
+          style={{width: 45, height: 45, borderRadius: 25}}/>
+          <Text style={{fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 10, paddingLeft: 12}}>{f.name}</Text>
         </View>
       );
     }))
@@ -177,7 +196,6 @@ export default class NewGroupModal extends Component {
           <View style={styles.container}>
             <Text style={styles.title}>Add friends</Text>
               {this.renderFriends()}
-
             <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity style={styles.createButton} onPress={this._onFinishAddingFriends}>
@@ -287,6 +305,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 25,
     marginRight: 30,
-    marginTop: 5,
+    marginTop: 12,
   },
 })
