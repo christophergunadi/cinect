@@ -96,7 +96,7 @@ class SpecificGroupScreen extends Component {
                 <Text style={{paddingTop:5}}>{movie.movieTitle}</Text>
                 <View style={{paddingTop:5, flexDirection: 'row'}}>
                   <Image source={require('../assets/img/count.png')} style={{width: 14, height: 14, marginTop: 3}}/>
-                  <Text style={{paddingLeft: 10, fontSize: 13, fontWeight: '700', fontFamily: 'PT Sans Caption',}}>{movie.count} liked</Text>
+                  <Text style={{paddingLeft: 10, fontSize: 13, fontWeight: '700', fontFamily: 'PT Sans Caption',}}>{movie.count} votes</Text>
                 </View>
               </View>
             </View>

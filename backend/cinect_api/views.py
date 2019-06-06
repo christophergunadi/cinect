@@ -9,6 +9,9 @@ import requests
 import json
 import random
 
+
+x = 1
+
 def index(request):
     return HttpResponse("Hello, world.")
 
@@ -30,8 +33,10 @@ def user(request):
     #     return HttpResponse(json.dumps(movies[x]))
 
 def getMoviesForUser(request):
+    global x
     email = request.GET.get('email')
-    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
+    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=" + str(x))
+    x = x + 1
     responseMovies = response.json()['results']
     
     movies = []

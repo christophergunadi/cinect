@@ -127,10 +127,10 @@ export default class HomeScreen extends React.Component {
     }).start(() => {
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
+        this.fetchMoviesFromApi()
       })
     })
     // this.fetchMovieFromApi();
-    this.fetchMoviesFromApi();
   }
 
   swipeRightAnimation = (yValue) => {
@@ -141,10 +141,11 @@ export default class HomeScreen extends React.Component {
 
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
+        this.fetchMoviesFromApi()
       })
     })
     // this.fetchMovieFromApi();
-    this.fetchMoviesFromApi();
+    // this.fetchMoviesFromApi();
   }
 
   watchedAnimation = () => {
@@ -158,10 +159,11 @@ export default class HomeScreen extends React.Component {
 
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
+        this.fetchMoviesFromApi()
       })
     })
     // this.fetchMovieFromApi();
-    this.fetchMoviesFromApi();
+    // this.fetchMoviesFromApi();
   }
 
   rewindAnimation = () => {
@@ -206,7 +208,7 @@ export default class HomeScreen extends React.Component {
   renderMovies = () => {
     if (this.state.loading) {
       return (
-        <View style={{alignItems: 'center', paddingTop: 15}}>
+        <View style={{alignItems: 'center', paddingTop: 200}}>
         <LottieView
               source={require('../assets/animations/loading.json')}
               autoPlay={true} loop={true}
