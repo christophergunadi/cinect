@@ -13,6 +13,7 @@ export default class WatchlistMovieScreen extends React.Component {
             width: '100%',
             height: '80%'
         }
+        this.pressRateButton = this.pressRateButton.bind(this)
     }
 
     getUserEmail = async() => {
@@ -27,6 +28,10 @@ export default class WatchlistMovieScreen extends React.Component {
           alert("Please log in or sign up to start swiping!")
         }
         return userEmail;
+    }
+
+    pressRateButton() {
+        this.props.navigation.goBack()
     }
 
     render() {
@@ -44,7 +49,8 @@ export default class WatchlistMovieScreen extends React.Component {
             </ScrollView>
             
             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity style={styles.watchedButton}>
+                <TouchableOpacity onPress={() => this.pressRateButton()}
+                                  style={styles.watchedButton}>
                     <Text style={styles.buttonText}>Rate movie</Text>
                 </TouchableOpacity>
                 {/* <TouchableOpacity onPress={() => this.pressDeleteButton(this.props.navigation.getParam('id'))}

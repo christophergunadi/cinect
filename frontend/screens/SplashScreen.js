@@ -27,7 +27,7 @@ export default class SplashScreen extends Component {
     render() {
         return (
           <View style={{backgroundColor: 'white', alignItems:'center', flex:1, justifyContent:'center'}}>
-            <Image source={require('../assets/img/cinectlogo.png')} style={{width: 250, height: 50}}/>
+            <Image source={require('../assets/img/cinectlogo.png')} style={{width: 250, height: 55}}/>
             <LottieView source={require('../assets/animations/splash.json')}
               progress={this.state.progress}
               style={{width: 400, height: 400, justifyContent:'center'}}/>
