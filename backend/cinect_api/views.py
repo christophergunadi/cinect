@@ -198,3 +198,23 @@ def addUserWatched(request):
             return HttpResponse(getMovieByID(movieid))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
+
+def addUserWatchedFromHomeScreen(request):
+    data = {}
+    if request.method == 'POST':
+        if request.POST.get('email') and request.POST.get('movieid'):
+            email = request.POST.get('email')
+            movieid = request.POST.get('movieid')
+
+            #add to user watched
+            userWatched = UserWatched()
+            user = User.objects.get(email=email)
+            userWatched.email = user
+            userWatched.movieid = movieid
+            userWatched.save()
+
+            print('adding' + email + ', movieid' + movieid)
+
+            return HttpResponse(getMovieByID(movieid))
+        return HttpResponse(json.dumps(data))
+    return HttpResponse(json.dumps(data))

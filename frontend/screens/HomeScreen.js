@@ -22,6 +22,7 @@ export default class HomeScreen extends React.Component {
     super();
 
     this.addSwipedRightMovie = this.addSwipedRightMovie.bind(this);
+    this.addWatchedMovie = this.addWatchedMovie.bind(this);
 
     this.position = new Animated.ValueXY();
     this.state = {
@@ -104,6 +105,18 @@ export default class HomeScreen extends React.Component {
     });
   }
 
+  addWatchedMovie = (id) => { //send watched movie id to cinect_api to add to populate database
+    let formData = new FormData();
+        GetUserProperty('email').then(value => {
+        formData.append('email', value)
+        formData.append('movieid', id);
+        fetch("http://146.169.45.140:8000/cinect_api/addwatched", {
+            method: 'POST',
+            body: formData
+        })
+      })
+  }
+
   fetchMovieById = (id) => {
     fetch(("http://146.169.45.140:8000/cinect_api/addswipedright?id=" + id))
     .then(response => response.json())
@@ -149,6 +162,7 @@ export default class HomeScreen extends React.Component {
     Animated.spring(this.position, {
       toValue: {x: 0, y: -(SCREEN_HEIGHT)}
     }).start(() => {
+      this.addWatchedMovie(Movies[this.state.currentIndex].id.toString())
 
       // TODO: this.addWatchedMovies
       // this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
@@ -247,26 +261,59 @@ export default class HomeScreen extends React.Component {
           {this.renderMovies()}
         </View>
 
-        <View style={{ height: 85, flexDirection: 'row' }}>
-          <TouchableOpacity style={{padding:20}} onPress={() => this.swipeLeftAnimation(200)}>
-            <Icon  
+        <View style={{ height: 80, flexDirection: 'row',justifyContent: 'space-evenly'}}>
+          <TouchableOpacity onPress={() => this.swipeLeftAnimation(200)}
+                            style={{marginTop:11, 
+                            borderWidth:3,
+                            borderColor:'rgba(0,0,0,0.1)',
+                            alignItems:'center',
+                            justifyContent:'center',
+                            width:60,
+                            height:60,
+                            backgroundColor:'white',
+                            borderRadius:50,
+                          }}>
+            <Icon 
                   name='md-close'
                   color='orangered' 
                   size={50} 
+                  fontWeight={20}
                   />
           </TouchableOpacity>
-          <TouchableOpacity style={{padding:20}} onPress={() => this.watchedAnimation()}>
+          <TouchableOpacity onPress={() => this.watchedAnimation()}
+                            style={{marginTop:11, paddingTop:2,
+                            borderWidth:3,
+                            borderColor:'rgba(0,0,0,0.1)',
+                            alignItems:'center',
+                            justifyContent:'center',
+                            width:60,
+                            height:60,
+                            backgroundColor:'white',
+                            borderRadius:50,
+                          }}>
             <Icon 
-                  name='md-heart-empty'
+                  name='md-heart'
                   color='pink' 
-                  size={50} 
+                  size={40} 
+                  fontWeight={20}
                   />
           </TouchableOpacity>
-          <TouchableOpacity style={{padding:20}} onPress={() => this.swipeRightAnimation(200)}>
+          <TouchableOpacity onPress={() => this.swipeRightAnimation(200)}
+                            style={{marginTop:11, paddingTop:2,
+                            borderWidth:3,
+                            borderColor:'rgba(0,0,0,0.1)',
+                            alignItems:'center',
+                            justifyContent:'center',
+                            width:60,
+                            height:60,
+                            backgroundColor:'white',
+                            borderRadius:50,
+                          }}>
             <Icon 
                   name='md-checkmark'
-                  color='chartreuse' 
+                  color='palegreen' 
                   size={50} 
+                  fontWeight={20}
                   />
           </TouchableOpacity>
         </View>
