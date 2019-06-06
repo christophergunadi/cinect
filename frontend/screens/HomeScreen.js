@@ -225,13 +225,13 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   currentCard: {
-    height: SCREEN_HEIGHT - 120,
+    height: SCREEN_HEIGHT - 140,
     width: SCREEN_WIDTH,
     padding: 10,
     position: 'absolute'
   },
   nextCard: {
-    height: SCREEN_HEIGHT - 120,
+    height: SCREEN_HEIGHT - 140,
     width: SCREEN_WIDTH,
     padding: 10,
     position: 'absolute'
@@ -251,11 +251,11 @@ const styles = StyleSheet.create({
     zIndex: 1000
   },
   signText: {
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: 'white',
     color: 'white',
     fontSize: 32,
-    fontWeight: '800',
+    fontWeight: '900',
     padding: 10
   },
 });
