@@ -48,12 +48,12 @@ export default class NewGroupModal extends Component {
       fetch("http://146.169.45.140:8000/cinect_api/creategroup", {
         method: 'POST',
         body: formData
-      }).then(response => response.json()).then((responseJson) => {
-        alert(responseJson.movieTitle)
-      });
+      })
+      .then(this.props.refresh());
     })
 
     // Close model and reset form
+
     this.refs.newGroupModal.close();
     var i;
     for (i = 0; i < this.state.tickOn.length; i++) {
@@ -177,7 +177,7 @@ export default class NewGroupModal extends Component {
           <View style={styles.container}>
             <Text style={styles.title}>Add friends</Text>
               {this.renderFriends()}
-            
+
             <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity style={styles.createButton} onPress={this._onFinishAddingFriends}>
@@ -185,7 +185,7 @@ export default class NewGroupModal extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-            
+
           </View>
         </TouchableWithoutFeedback>
       </Modal>
@@ -198,7 +198,7 @@ export default class NewGroupModal extends Component {
           <TouchableWithoutFeedback>
             <View style={styles.container}>
               <Text style={styles.title}>Create a new group</Text>
-              
+
               <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity onPress={() => alert("I want to set a DP")}>
                   <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
@@ -206,7 +206,7 @@ export default class NewGroupModal extends Component {
                 <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15} value={this.state.groupName}
                   onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({groupName: text})}/>
               </View>
-              
+
               <Text style={styles.subtitle}>Current members</Text>
               {this.renderCurrentMembers()}
 

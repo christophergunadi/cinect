@@ -10,6 +10,7 @@ export default class GroupsScreen extends React.Component {
     super(props);
     this._onAddGroupButton  = this._onAddGroupButton.bind(this);
     this._onNavigateToGroup = this._onNavigateToGroup.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.state = {
       myGroups: [],
       refreshing: false,
@@ -31,7 +32,7 @@ export default class GroupsScreen extends React.Component {
     })
   }
 
-  _onRefresh = () => {
+  onRefresh = () => {
     this.setState({refreshing: true});
     GetUserProperty('email').then(value => {
       fetch("http://146.169.45.140:8000/cinect_api/getgroups?email=" + value)
@@ -60,28 +61,27 @@ export default class GroupsScreen extends React.Component {
     return (
       // TODO: ScrollView lines are buggy
       <View style={MainStylesheet.container}>
-      <NewGroupModal ref={'newGroupModal'}>
-      </NewGroupModal>
-   <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-     <Text style={MainStylesheet.title}>My Groups</Text>
-     <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
-       <Text style={MainStylesheet.title}>+</Text>
-     </TouchableOpacity>
-   </View>
-   <ScrollView contentContainerStyle={{flexGrow: 1}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
+      <NewGroupModal ref={'newGroupModal'} refresh={this._onRefresh} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={MainStylesheet.title}>My Groups</Text>
+          <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
+            <Text style={MainStylesheet.title}>+</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView contentContainerStyle={{flexGrow: 1}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}>
 
-   {this.state.myGroups.map((group) => {
-     return (
-       <View style={{ flexDirection: 'row' }}>
-         <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
-         <TouchableOpacity onPress={() => this._onNavigateToGroup(group.groupname, group.groupid)}>
-           <Text style={styles.groupName}>{group.groupname}</Text>
-         </TouchableOpacity>
-       </View>
-     );
-   })}
-   </ScrollView>
- </View>
+        {this.state.myGroups.map((group) => {
+          return (
+            <View style={{ flexDirection: 'row' }}>
+              <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
+              <TouchableOpacity onPress={() => this._onNavigateToGroup(group.groupname, group.groupid)}>
+                <Text style={styles.groupName}>{group.groupname}</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        })}
+        </ScrollView>
+      </View>
     );
   }
 }
