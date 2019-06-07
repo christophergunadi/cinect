@@ -226,12 +226,13 @@ def addUserWatched(request):
             userWatched = UserWatched()
             user = User.objects.get(email=email)
             userWatched.email = user
-            userWatched.movieid = movieid
+            movie = getMovieByID(movieid)
+            userWatched.movieid = movie
             userWatched.save()
 
             print('adding' + email + ', movieid' + movieid)
 
-            return HttpResponse(formatMovieToJson(getMovieByID(movieid)))
+            return HttpResponse(formatMovieToJson(movie))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
 
