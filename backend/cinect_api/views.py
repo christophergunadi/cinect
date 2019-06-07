@@ -4,6 +4,7 @@ from .models import SwipedRight
 from .models import User
 from .models import Group
 from .models import UserWatched
+from .models import Movie
 
 import requests
 import json
@@ -129,9 +130,23 @@ def getGroups(request):
     return HttpResponse(json.dumps(response))
 
 def getMovieByID(id):
-    response = requests.get("https://api.themoviedb.org/3/movie/"+id+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
-    response = {'movieTitle': response['title'], 'posterPath': response['poster_path']}
-    return HttpResponse(json.dumps(response))
+    movie = Movie.objects.filter(pk=id).first()
+    response = []
+    if movie is None:
+        print("aoisjdoAJISODJASODSA")
+        response = requests.get("https://api.themoviedb.org/3/movie/"+id+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        movie = Movie()
+        movie.movieid = id
+        movie.movietitle = response['title']
+        movie.posterpath = response['poster_path']
+        movie.synopsis = response['overview']
+        movie.rating = response['vote_average']
+        movie.save()
+
+    return movie
+
+def formatMovieToJson(movie):
+        return json.dumps({'movieTitle': movie.movietitle, 'posterPath': movie.posterpath})
 
 def addSwipedRight(request): #adds movie into user's watchlist database
     data = {}
@@ -141,13 +156,13 @@ def addSwipedRight(request): #adds movie into user's watchlist database
             user = User.objects.get(email=request.POST.get('email'))
             swipedRight.email = user
             movieid = request.POST.get('movieid')
-            swipedRight.movieid = movieid
+            movie = getMovieByID(movieid)
+
+            swipedRight.movieid = movie
             swipedRight.save()
 
-            # data['email'] = swipedRight.email.email
-            # data['movieid'] = swipedRight.movieid
-            return HttpResponse(getMovieByID(movieid))
-            # return HttpResponse(json.dumps(data))
+            response = formatMovieToJson(movie)
+            return HttpResponse(response)
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
 
@@ -177,7 +192,7 @@ def deleteSwipedRight(request):
             SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
 
             print('deleting '+email+',movieid'+movieid)
-            return HttpResponse(getMovieByID(movieid))
+            return HttpResponse(formatMovieToJson(getMovieByID(movieid)))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
 
@@ -216,7 +231,7 @@ def addUserWatched(request):
 
             print('adding' + email + ', movieid' + movieid)
 
-            return HttpResponse(getMovieByID(movieid))
+            return HttpResponse(formatMovieToJson(getMovieByID(movieid)))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
 
