@@ -33,6 +33,19 @@ def user(request):
     #     x = random.randint(0, 8)
     #     return HttpResponse(json.dumps(movies[x]))
 
+def updatePreferences(request):
+    genres = ['Action', 'Comedy', 'Thriller', 'Animation', 'Romance', 'Scifi', 'Horror', 'Family']
+    email = request.POST.get('email')
+    user = User.objects.get(email=email)
+
+    for i in range(0, 8):
+        like = request.POST.get(genres[i])
+        user[0][genres[i]] = like
+    
+    user.save()
+    return HttpResponse(json.dumps({}))
+
+
 def getMoviesForUser(request):
     global x
     email = request.GET.get('email')

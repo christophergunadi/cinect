@@ -4,6 +4,15 @@ class User(models.Model):
   email = models.EmailField(max_length=254, primary_key=True)
   facebookid  = models.CharField(max_length=255, unique=True, default='null')
   name = models.CharField(max_length=92, default='null')
+  likesAction = models.BooleanField(default=False)
+  likesComedy = models.BooleanField(default=False)
+  likesThriller = models.BooleanField(default=False)
+  likesAnimation = models.BooleanField(default=False)
+  likesRomance = models.BooleanField(default=False)
+  likesScifi = models.BooleanField(default=False)
+  likesHorror = models.BooleanField(default=False)
+  likesFamily = models.BooleanField(default=False)
+
   class Meta:
     db_table = 'users'
   def __str__(self):
