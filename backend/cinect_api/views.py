@@ -59,6 +59,24 @@ def takeSecond(elem):
 def filterLikedByMoreThanOne(elem):
     return int(elem[1]) > 1
 
+def friendsWhoLike(request):
+    movieid = request.GET.get('movieid')
+    friendids = request.GET.getlist('friendids')
+    friendnames = request.GET.getlist('friendnames')
+
+    friendsWhoAlsoLike = []
+
+    for i in range(len(friends)):
+        email = User.objects.filter(facebookid__facebookid=friendids[i]).values('email')
+        like = SwipedRight.objects.filter(email__email=email[0]['email']).filter(movieid__movieid=movieid)
+        if like:
+            friendsWhoAlsoLike.append(friendnames[i])
+
+    return HttpResponse(json.dumps({'data': friendsWhoAlsoLike}))
+
+
+
+
 def groupSuggestion(request):
     groupid = request.GET.get('groupid')
 
