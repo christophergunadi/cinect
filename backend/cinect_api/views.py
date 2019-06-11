@@ -60,16 +60,16 @@ def filterLikedByMoreThanOne(elem):
     return int(elem[1]) > 1
 
 def friendsWhoLike(request):
-    movieid = request.GET.get('movieid')
-    friendids = request.GET.getlist('friendids')
-    friendnames = request.GET.getlist('friendnames')
+    movieid = request.POST.get('movieid')
+    friendids = request.POST.getlist('friendids')
+    friendnames = request.POST.getlist('friendnames')
 
     friendsWhoAlsoLike = []
-
-    for i in range(len(friends)):
-        email = User.objects.filter(facebookid__facebookid=friendids[i]).values('email')
-        like = SwipedRight.objects.filter(email__email=email[0]['email']).filter(movieid__movieid=movieid)
-        if like:
+    
+    for i in range(len(friendids)):
+        email = User.objects.get(facebookid=friendids[i])
+        like = SwipedRight.objects.filter(email__email=email.email).filter(movieid__movieid=movieid)
+        if like.exists():
             friendsWhoAlsoLike.append(friendnames[i])
 
     return HttpResponse(json.dumps({'data': friendsWhoAlsoLike}))

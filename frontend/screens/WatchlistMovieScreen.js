@@ -6,6 +6,8 @@ import OriginalSizeImage from '../components/OriginalSizeImage';
 
 import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
+// import { formatResultsErrors } from 'jest-message-util';
+import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 export default class WatchlistMovieScreen extends React.Component {
     constructor(props) {
@@ -14,11 +16,62 @@ export default class WatchlistMovieScreen extends React.Component {
             width: '100%',
             height: '80%',
             showingOn: [],
+            friendsWhoAlsoLike: [],
         }
     }
 
     componentDidMount() {
         this.getStreamingAvailability()
+        this.getFriendsWhoAlsoLikeThis()
+    }
+
+
+    getFriendsWhoAlsoLikeThis = () => {
+      new GraphRequestManager().addRequest(
+        new GraphRequest("/me/friends", null, this._getFriendsCallback,)).start();
+    }
+
+    _getFriendsCallback = (err, result) => {
+      let formData = new FormData();
+      formData.append('movieid', this.props.navigation.getParam('id'));
+      var i;
+      for (i = 0; i < result.data.length; i++) {
+        formData.append('friendids', result.data[i].id)
+        formData.append('friendnames', result.data[i].name)
+      }
+
+      fetch("http://146.169.45.140:8000/cinect_api/friendswholike", {
+        method: 'POST',
+        body: formData
+      }).then(response => response.json())
+      .then((responseJson) => {
+        this.setState ({
+          friendsWhoAlsoLike: responseJson.data,
+        });
+      })
+
+    }
+
+    renderFriendsWhoAlsoLike = () => {
+      if (this.state.friendsWhoAlsoLike.length == 0) {
+        return (<View></View>)
+      } else if (this.state.friendsWhoAlsoLike.length == 1) {
+        return (
+          <View style={{flex: 1, flexDirection: 'row', paddingBottom: 15}}>
+            <Text style={{fontFamily: 'PT_Sans-Caption-Bold', color: 'black'}}>{this.state.friendsWhoAlsoLike[0]}</Text>
+            <Text style={{paddingLeft: 4, color: 'black'}}>also wants to watch this</Text>
+          </View>
+        );
+      } else {
+        return (
+        <View style={{flex: 1, flexDirection: 'row', paddingBottom: 15}}>
+          <Text style={{fontFamily: 'PT_Sans-Caption-Bold', color: 'black'}}>{this.state.friendsWhoAlsoLike[0]}</Text>
+          <Text style={{paddingLeft: 4, color: 'black'}}>and</Text>
+          <TouchableOpacity onPress={this.showFriendsWhoAlsoLike} style={{paddingLeft: 4, color: 'black'}}>{this.state.friendsWhoAlsoLike - 1} others</Text>
+          <Text>also want to watch this</Text>
+        </View>
+        )
+      }
     }
 
     getUserEmail = async() => {
@@ -114,6 +167,7 @@ export default class WatchlistMovieScreen extends React.Component {
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
                 </Text>
+                  {this.renderFriendsWhoAlsoLike()}
                 <Text style={{fontWeight: 'bold'}}>Synopsis:</Text>
                 <Text style={styles.infoText}>
                     {this.props.navigation.getParam('synopsis')}
