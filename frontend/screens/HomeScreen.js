@@ -285,7 +285,7 @@ export default class HomeScreen extends React.Component {
             </TouchableOpacity>
           </View>
 
-          <View style={{flex: 5, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+          <View style={{flex: 3, flexDirection: 'row', justifyContent: 'space-between'}}>
             <TouchableOpacity 
               onPress={() => this.swipeLeftAnimation(200)}
               style={styles.hateButton}>
@@ -300,8 +300,8 @@ export default class HomeScreen extends React.Component {
               onPress={() => this.watchedAnimation()}
               style={styles.watchedButton}>
               <Icon 
-                name='md-heart'
-                color='pink' 
+                name='md-eye'
+                color='skyblue' 
                 size={40} 
                 fontWeight={20}
               />
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
   },
   watchedButton: {
     marginTop:11, 
-    paddingTop:2,
+    // paddingTop:2,
     borderWidth:3,
     borderColor:'rgba(0,0,0,0.1)',
     alignItems:'center',
