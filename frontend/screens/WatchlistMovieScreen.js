@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Text, View, Image, Button, Dimensions, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, View, Image, Button, Dimensions, TouchableOpacity, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 
 import {GetUserProperty} from '../Helpers';
 import OriginalSizeImage from '../components/OriginalSizeImage';
 
 import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
+import Modal from 'react-native-modalbox';
 // import { formatResultsErrors } from 'jest-message-util';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
@@ -52,6 +53,10 @@ export default class WatchlistMovieScreen extends React.Component {
 
     }
 
+    showFriendsWhoAlsoLike = () => {
+
+    }
+
     renderFriendsWhoAlsoLike = () => {
       if (this.state.friendsWhoAlsoLike.length == 0) {
         return (<View></View>)
@@ -67,7 +72,7 @@ export default class WatchlistMovieScreen extends React.Component {
         <View style={{flex: 1, flexDirection: 'row', paddingBottom: 15}}>
           <Text style={{fontFamily: 'PT_Sans-Caption-Bold', color: 'black'}}>{this.state.friendsWhoAlsoLike[0]}</Text>
           <Text style={{paddingLeft: 4, color: 'black'}}>and</Text>
-          <TouchableOpacity onPress={this.showFriendsWhoAlsoLike} style={{paddingLeft: 4, color: 'black'}}>
+          <TouchableOpacity onPress={() => this.refs.friendsWhoLikeModal.open()} style={{paddingLeft: 4, color: 'black'}}>
             <Text style={{fontFamily: 'PT_Sans-Caption-Bold', color: 'black'}}>{this.state.friendsWhoAlsoLike.length - 1} others</Text>
             </TouchableOpacity>
           <Text> want to watch this</Text>
@@ -163,6 +168,32 @@ export default class WatchlistMovieScreen extends React.Component {
     render() {
         return (
         <View style={MainStylesheet.container}>
+          <Modal ref={'friendsWhoLikeModal'}
+        style={{borderRadius: 20, shadowRadius: 10, width: Dimensions.get('window').width - 70, height: Dimensions.get('window').height - 500}}
+        position='center' swipeToClose={false} backButtonClose={true}>
+        <TouchableWithoutFeedback>
+          <View style={styles.container}>
+            <Text style={styles.title}>Other friends</Text>
+              {this.state.friendsWhoAlsoLike.map((friend) => {
+                return (
+                  <View>
+                    <Text style={{fontFamily: 'PT_Sans-Caption-Regular', color: 'black', paddingTop: 6}}>{friend}</Text>
+                  </View>
+                )
+              })}
+            <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity style={styles.closeButton} onPress={() => {
+                  this.refs.friendsWhoLikeModal.close();
+                }}>
+                  <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            </View>
+          </TouchableWithoutFeedback>
+         </Modal>
             <ScrollView style={{width: '103%', height: '100%'}}>
                 <Image source={{uri: this.props.navigation.getParam('posterpath')}}
                     style={{width: 330, height: 500, borderRadius: 10}}/>
@@ -236,5 +267,24 @@ const styles = StyleSheet.create({
     },
     infoText: {
         marginBottom:10
-    }
+    },
+    closeButton: {
+      borderRadius: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#5ac4e8',
+      height: 30,
+      width: Dimensions.get('window').width / 3,
+    },
+    container: {
+      flex: 1,
+      margin: 30,
+    },
+    title: {
+      fontFamily: 'PT_Sans-Caption-Bold',
+      fontSize: 25,
+      color: '#463D3D',
+      marginVertical: 5,
+      marginBottom: 10,
+    },
 });
