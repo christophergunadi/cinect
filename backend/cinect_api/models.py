@@ -9,10 +9,21 @@ class User(models.Model):
   def __str__(self):
     return '{}: {}'.format(self.facebookid, self.email)
 
+class Movie(models.Model):
+  movieid = models.CharField(max_length=10, primary_key=True)
+  movietitle = models.CharField(max_length=100)
+  posterpath = models.CharField(max_length=200)
+  synopsis = models.CharField(max_length=600)
+  rating = models.IntegerField()
+  class Meta:
+    db_table = 'movies'
+  def _str_(self):
+    return '{}: {}, {}, {}, {}'.format(self.movieid, self.movietitle, self.posterpath, self.synopsis, self.rating)
+
 class SwipedRight(models.Model):
   swiperightid = models.AutoField(primary_key=True)
   email = models.ForeignKey(User, on_delete=models.CASCADE)
-  movieid = models.CharField(max_length=10)
+  movieid = models.ForeignKey(Movie, on_delete=models.CASCADE)
   class Meta:
     db_table = 'swipedright'
     unique_together = ('email', 'movieid',)
@@ -39,19 +50,9 @@ class GroupUser(models.Model):
 class UserWatched(models.Model):
   userwatchedid = models.AutoField(primary_key=True)
   email = models.ForeignKey(User, on_delete=models.CASCADE)
-  movieid = models.CharField(max_length=10)
+  movieid = models.ForeignKey(Movie, on_delete=models.CASCADE)
   class Meta:
     db_table = 'userwatched'
     unique_together = ('email', 'movieid',)
   def __str__(self):
     return '{}: {} watched {}'.format(self.userwatchedid, self.email, self.movieid)
-
-
-# class MovieInfo(models.Model):
-  # movieid = models.CharField(max_length=10, primary_key=True)
-  # movietitle = models.CharField(max_length=100)
-  # posterpath = models.CharField(max_length=200)
-  # class Meta:
-  #   db_table = 'movies'
-  # def _str_(self):
-  #   return '{}: {}'.format(self.movieid, self.movietitle, self.posterpath)
