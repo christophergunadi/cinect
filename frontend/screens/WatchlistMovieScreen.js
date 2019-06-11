@@ -67,8 +67,10 @@ export default class WatchlistMovieScreen extends React.Component {
         <View style={{flex: 1, flexDirection: 'row', paddingBottom: 15}}>
           <Text style={{fontFamily: 'PT_Sans-Caption-Bold', color: 'black'}}>{this.state.friendsWhoAlsoLike[0]}</Text>
           <Text style={{paddingLeft: 4, color: 'black'}}>and</Text>
-          <TouchableOpacity onPress={this.showFriendsWhoAlsoLike} style={{paddingLeft: 4, color: 'black'}}>{this.state.friendsWhoAlsoLike - 1} others</Text>
-          <Text>also want to watch this</Text>
+          <TouchableOpacity onPress={this.showFriendsWhoAlsoLike} style={{paddingLeft: 4, color: 'black'}}>
+            <Text style={{fontFamily: 'PT_Sans-Caption-Bold', color: 'black'}}>{this.state.friendsWhoAlsoLike.length - 1} others</Text>
+            </TouchableOpacity>
+          <Text> want to watch this</Text>
         </View>
         )
       }
