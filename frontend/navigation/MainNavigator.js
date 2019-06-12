@@ -6,13 +6,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 // import {createReduxBoundAddListener, createReduxNavigationReduxMiddleware} from 'react-navigation-redux-helpers';
 
 import GroupsNavigator from './GroupsNavigator';
+import GroupFriendsNavigator from './GroupFriendsNavigator';
 
 import HomeScreen from '../screens/HomeScreen'
 import MoviesScreen from '../screens/MoviesScreen';
 
 const MainNavigator = createMaterialTopTabNavigator(
   {
-    Groups: {screen: GroupsNavigator,
+    Groups: {screen: GroupFriendsNavigator,
       navigationOptions: () => ({
         tabBarIcon: ({tintColor}) => (
           <Icon
