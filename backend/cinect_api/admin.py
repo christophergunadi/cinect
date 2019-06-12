@@ -7,5 +7,6 @@ admin.site.register(Group)
 admin.site.register(GroupUser)
 admin.site.register(UserWatched)
 admin.site.register(Movie)
+admin.site.register(UserRating)
 
 # Register your models here.
