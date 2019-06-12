@@ -20,7 +20,7 @@ genresDict = {'Action': 28,
      'Family': 10751
     }
 
-class Movie():
+class MovieContainer():
     def __init__(self, movieObject):
         self.movieObject = movieObject
     def __eq__(self, other):
@@ -93,7 +93,7 @@ def getMoviesForUser(request):
     responseMovies = response.json()['results']
 
     for i in range(0, len(responseMovies)):
-        movies.append(Movie({
+        movies.append(MovieContainer({
             'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
             'id': responseMovies[i]['id']
         }))
@@ -103,7 +103,7 @@ def getMoviesForUser(request):
         responseMovies = response.json()['results']
         
         for i in range(0, len(responseMovies)):
-            movies.append(Movie({
+            movies.append(MovieContainer({
                 'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
                 'id': responseMovies[i]['id']
             }))
