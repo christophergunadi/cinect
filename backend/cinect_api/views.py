@@ -43,19 +43,19 @@ def user(request):
     #     x = random.randint(0, 8)
     #     return HttpResponse(json.dumps(movies[x]))
 
-def updatePreferences(request): 
-    email = request.POST.get('email') 
- 
-    user = User.objects.filter(pk=email).update(likesAction=(request.POST.get('Action') == 'true')) 
-    user = User.objects.filter(pk=email).update(likesComedy=(request.POST.get('Comedy') == 'true')) 
-    user = User.objects.filter(pk=email).update(likesThriller=(request.POST.get('Thriller') == 'true')) 
-    user = User.objects.filter(pk=email).update(likesAnimation=(request.POST.get('Animation') == 'true')) 
-    user = User.objects.filter(pk=email).update(likesRomance=(request.POST.get('Romance') == 'true')) 
-    user = User.objects.filter(pk=email).update(likesScifi=(request.POST.get('Scifi') == 'true')) 
-    user = User.objects.filter(pk=email).update(likesHorror=(request.POST.get('Horror') == 'true')) 
-    user = User.objects.filter(pk=email).update(likesFamily=(request.POST.get('Family') == 'true')) 
- 
-    return HttpResponse(json.dumps({})) 
+def updatePreferences(request):
+    email = request.POST.get('email')
+
+    user = User.objects.filter(pk=email).update(likesAction=(request.POST.get('Action') == 'true'))
+    user = User.objects.filter(pk=email).update(likesComedy=(request.POST.get('Comedy') == 'true'))
+    user = User.objects.filter(pk=email).update(likesThriller=(request.POST.get('Thriller') == 'true'))
+    user = User.objects.filter(pk=email).update(likesAnimation=(request.POST.get('Animation') == 'true'))
+    user = User.objects.filter(pk=email).update(likesRomance=(request.POST.get('Romance') == 'true'))
+    user = User.objects.filter(pk=email).update(likesScifi=(request.POST.get('Scifi') == 'true'))
+    user = User.objects.filter(pk=email).update(likesHorror=(request.POST.get('Horror') == 'true'))
+    user = User.objects.filter(pk=email).update(likesFamily=(request.POST.get('Family') == 'true'))
+
+    return HttpResponse(json.dumps({}))
 
 def getPreferences(request):
     email = request.GET.get('email')
@@ -120,7 +120,7 @@ def friendsWhoLike(request):
     friendnames = request.POST.getlist('friendnames')
 
     friendsWhoAlsoLike = []
-    
+
     for i in range(len(friendids)):
         email = User.objects.get(facebookid=friendids[i])
         like = SwipedRight.objects.filter(email__email=email.email).filter(movieid__movieid=movieid)
@@ -320,7 +320,8 @@ def addUserWatchedFromHomeScreen(request):
             userWatched = UserWatched()
             user = User.objects.get(email=email)
             userWatched.email = user
-            userWatched.movieid = movieid
+            movie = getMovieByID(movieid)
+            userWatched.movieid = movie
             userWatched.save()
 
             print('adding' + email + ', movieid' + movieid)
