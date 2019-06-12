@@ -77,16 +77,21 @@ export default class HomeScreen extends React.Component {
 
     if (this.state.currentIndex >= this.state.movies.length - 1) {
       this.setState({ loading: true })
-      fetch("http://146.169.45.140:8000/cinect_api/getmovies")
-      .then(response => response.json())
-      .then((responseJson) => {
-        this.setState({
-          movies: responseJson.data,
-          loading: false,
-          currentIndex: 0,
+
+      GetUserProperty('email').then(email => {
+        fetch("http://146.169.45.140:8000/cinect_api/getmovies?email=" + email)
+        .then(response => response.json())
+        .then((responseJson) => {
+         this.setState({
+           movies: responseJson.data,
+           loading: false,
+           currentIndex: 0,
+         })
+         console.log("LENGTH:" + this.state.movies.length)
         })
-        console.log("LENGTH:" + this.state.movies.length)
       })
+
+      
       
     }
     

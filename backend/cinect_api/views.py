@@ -13,6 +13,16 @@ import random
 
 x = 1
 
+genresDict = {'Action': 28,
+     'Comedy': 35,
+     'Thriller': 53,
+     'Animation': 16,
+     'Romance': 10749,
+     'Scifi': 878,
+     'Horror': 27,
+     'Family': 10751
+    }
+
 def index(request):
     return HttpResponse("Hello, world.")
 
@@ -66,17 +76,32 @@ def getPreferences(request):
 def getMoviesForUser(request):
     global x
     email = request.GET.get('email')
-    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=" + str(x))
-    x = x + 1
-    responseMovies = response.json()['results']
-    
+
+    user = User.objects.get(pk=email)
+    preferences = []
+    if user.likesAction : preferences.append(genresDict.get('Action'))
+    if user.likesComedy : preferences.append(genresDict.get('Comedy'))
+    if user.likesThriller : preferences.append(genresDict.get('Thriller'))
+    if user.likesAnimation : preferences.append(genresDict.get('Animation'))
+    if user.likesRomance : preferences.append(genresDict.get('Romance'))
+    if user.likesScifi : preferences.append(genresDict.get('Scifi'))
+    if user.likesHorror : preferences.append(genresDict.get('Horror'))
+    if user.likesFamily : preferences.append(genresDict.get('Family'))
+
     movies = []
 
-    for i in range(0, len(responseMovies)):
-        movies.append({
-            'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
-            'id': responseMovies[i]['id']
-        })
+    for preference in preferences:
+        response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&with_genres=" + str(preference) + "&page=1")
+        responseMovies = response.json()['results']
+        
+        for i in range(0, len(responseMovies)):
+            movies.append({
+                'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
+                'id': responseMovies[i]['id']
+            })
+
+
+    random.shuffle(movies)
 
     jsonResponse = {'data': movies}
     return HttpResponse(json.dumps(jsonResponse))
