@@ -49,23 +49,19 @@ def updatePreferences(request):
 
 def getPreferences(request):
     email = request.GET.get('email')
-    user = User.objects.filter(pk=email)
+    user = User.objects.get(pk=email)
     jsonResponse = {
-        Action: user.likesAction,
-        Comedy: user.likesComedy,
-        Thriller: user.likesThriller,
-        Animation: user.likesAnimation,
-        Romance: user.likesRomance,
-        Scifi: user.likesScifi,
-        Horror: user.likesHorror,
-        Family: user.likesFamily
+        'Action': user.likesAction,
+        'Comedy': user.likesComedy,
+        'Thriller': user.likesThriller,
+        'Animation': user.likesAnimation,
+        'Romance': user.likesRomance,
+        'Scifi': user.likesScifi,
+        'Horror': user.likesHorror,
+        'Family': user.likesFamily
     }
 
     return HttpResponse(json.dumps(jsonResponse))
-
-
-
-
 
 def getMoviesForUser(request):
     global x
