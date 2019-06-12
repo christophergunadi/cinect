@@ -304,3 +304,22 @@ def addUserWatchedFromHomeScreen(request):
             return HttpResponse(getMovieByID(movieid))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
+
+def searchMovie(request):
+  query = request.GET.get('query')
+  apiResponse = requests.get("https://api.themoviedb.org/3/search/movie?api_key=edf754f30aad617f73e80dc66b5337d0&query=" + query).json()
+  searchResults = apiResponse['results']
+
+  response = []
+  for i in range(0, len(searchResults)):
+    searchResult = searchResults[i]
+    response.append({
+      'movieid': searchResult['id'],
+      'movieTitle': searchResult['title'],
+      'posterPath': searchResult['poster_path'],
+      'synopsis': searchResult['overview'],
+      'rating': searchResult['vote_average']
+    })
+
+    jsonResponse = {'data': response}
+    return HttpResponse(json.dumps(jsonResponse))

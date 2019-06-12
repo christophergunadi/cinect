@@ -20,4 +20,5 @@ urlpatterns = [
     path('friendswholike', csrf_exempt(views.friendsWhoLike), name='friendswholike'),
     path('updatepreferences', csrf_exempt(views.updatePreferences), name='updatepreferences'),
     path('getpreferences', csrf_exempt(views.getPreferences), name='getpreferences'),
+    path('search', csrf_exempt(views.searchMovie), name='search'),
 ]
