@@ -10,9 +10,6 @@ import requests
 import json
 import random
 
-
-x = 1
-
 genresDict = {'Action': 28,
      'Comedy': 35,
      'Thriller': 53,
@@ -22,6 +19,14 @@ genresDict = {'Action': 28,
      'Horror': 27,
      'Family': 10751
     }
+
+class Movie():
+    def __init__(self, movieObject):
+        self.movieObject = movieObject
+    def __eq__(self, other):
+        return self.movieObject['id'] == other.movieObject['id']
+    def __hash__(self):
+        return self.movieObject['id']
 
 def index(request):
     return HttpResponse("Hello, world.")
@@ -36,12 +41,6 @@ def user(request):
             user.name = request.POST.get('name')
             user.save()
         return HttpResponse({'email': request.POST.get('email'), 'facebookid': request.POST.get('facebookid'), 'name': request.POST.get('name')})
-    # else:
-    #     email = request.GET.get('email')
-    #     response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
-    #     movies = response.json()['results']
-    #     x = random.randint(0, 8)
-    #     return HttpResponse(json.dumps(movies[x]))
 
 def updatePreferences(request):
     email = request.POST.get('email')
@@ -90,16 +89,26 @@ def getMoviesForUser(request):
 
     movies = []
 
+    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
+    responseMovies = response.json()['results']
+
+    for i in range(0, len(responseMovies)):
+        movies.append(Movie({
+            'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
+            'id': responseMovies[i]['id']
+        }))
+
     for preference in preferences:
         response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&with_genres=" + str(preference) + "&page=1")
         responseMovies = response.json()['results']
         
         for i in range(0, len(responseMovies)):
-            movies.append({
+            movies.append(Movie({
                 'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
                 'id': responseMovies[i]['id']
-            })
+            }))
 
+    movies = list(map(lambda m : m.movieObject, movies))
 
     random.shuffle(movies)
 
