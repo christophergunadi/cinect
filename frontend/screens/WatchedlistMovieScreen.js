@@ -37,13 +37,12 @@ export default class WatchlistMovieScreen extends React.Component {
 
     submitRating = () => {
         let formData = new FormData();
-
         GetUserProperty('email').then(value => {
             formData.append('email', value);
             formData.append('stars', this.state.stars);
             formData.append('comment', this.state.comment);
             formData.append('movieid', this.props.navigation.getParam('id'));
-            fetch("http://146.169.45.140:8000/cinect_api/submitRating", {
+            fetch("http://146.169.45.140:8000/cinect_api/rateMovie", {
               method: 'POST',
               body: formData
             }).then(() => {

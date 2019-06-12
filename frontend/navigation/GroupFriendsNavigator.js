@@ -2,11 +2,25 @@ import React, {Component} from 'react';
 import {createMaterialTopTabNavigator} from 'react-navigation';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupsNavigator from './GroupsNavigator';
+import UserProfileScreen from '../screens/UserProfileScreen';
+import {createStackNavigator} from 'react-navigation';
+
+const FriendsNavigator = createStackNavigator(
+  {
+    Friends: {screen: FriendsScreen},
+    UserProfile: {screen: UserProfileScreen},
+  },
+  {
+    defaultNavigationOptions: {
+      header: null
+    }
+  }
+);
 
 const GroupFriendsNavigator = createMaterialTopTabNavigator(
   {
     Groups: {screen: GroupsNavigator},
-    Friends: {screen: FriendsScreen},
+    Friends: {screen: FriendsNavigator},
   },
   {
     defaultNavigationOptions: {

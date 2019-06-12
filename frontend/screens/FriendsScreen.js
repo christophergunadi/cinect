@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Text, Image, View, StyleSheet, Animated, TouchableOpacity, ScrollView} from 'react-native';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+import UserProfileScreen from './UserProfileScreen';
 
 export default class FriendsScreen extends Component {
 
@@ -47,7 +48,7 @@ export default class FriendsScreen extends Component {
             <ScrollView style={{backgroundColor: 'white', paddingLeft: 12, paddingRight: 12}}>
                 
                 {this.state.myFriends.map((f) => { return (
-            <TouchableOpacity onPress={() => alert("DO THIS")}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('UserProfile', {name: f.name, facebookid: f.id})}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}}>
               <View style={{flexDirection:'row', paddingLeft: 17}}>
                 <Image source={{uri: this.state.myFriendsPic[f.id]}} 
