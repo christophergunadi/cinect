@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, View } from 'react-native';
+import { AsyncStorage, View, Dimensions } from 'react-native';
 import { LoginButton, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 export default class FBLoginButton extends Component {
@@ -54,7 +54,7 @@ export default class FBLoginButton extends Component {
   render() {
     return (
       <View>
-      <LoginButton
+      <LoginButton style={{width: Dimensions.get('window').width / 2.5, height: 32}}
       readPermissions={["email", "user_friends"]}
       onLoginFinished={
         (error, result) => {

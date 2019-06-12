@@ -47,7 +47,7 @@ export default class SettingsScreen extends React.Component {
     if (this.state[genre]) {
       return (
         <TouchableOpacity style={{
-          backgroundColor: 'green',
+          backgroundColor: '#93f2a9',
           width: (Dimensions.get('window').width / 2) - 30, 
           height: (Dimensions.get('window').height / 4) - 50,
           margin: 5,
@@ -66,7 +66,7 @@ export default class SettingsScreen extends React.Component {
     } else {
       return (
         <TouchableOpacity style={{
-          backgroundColor: 'grey',
+          backgroundColor: '#dee0de',
           width: (Dimensions.get('window').width / 2) - 30, 
           height: (Dimensions.get('window').height / 4) - 50,
           margin: 5,
@@ -127,8 +127,10 @@ export default class SettingsScreen extends React.Component {
           {this.renderGridEntry('Scifi')}
           {this.renderGridEntry('Thriller')}
         </View>
-        <View style={{flexDirection: 'row', paddingTop: 10, paddingBottom: 30}}>
-          <Button onPress={this._onUpdatePreferences} title="Save"/>
+        <View style={{flexDirection: 'row', paddingTop: 10, paddingBottom: 30, alignItems: 'center'}}>
+          <TouchableOpacity style={styles.saveButton} onPress={this._onUpdatePreferences}>
+            <Text style={{fontFamily: 'PT_Sans-Caption-Regular'}}>Save</Text>
+          </TouchableOpacity>
           <FBLoginButton onLogin = { this.onUserLogin } refresh = { this.onRefresh }/>
         </View>
       </View>
@@ -140,5 +142,14 @@ const styles = StyleSheet.create({
   gridEntryText: {
     fontFamily: 'PT_Sans-Caption-Regular',
     fontSize: 22,
+  },
+  saveButton: {
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fc9797',
+    height: 32,
+    width: Dimensions.get('window').width / 2.5,
+    marginRight: 15
   },
 })
