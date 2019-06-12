@@ -29,6 +29,18 @@ class Movie(models.Model):
   def _str_(self):
     return '{}: {}, {}, {}, {}'.format(self.movieid, self.movietitle, self.posterpath, self.synopsis, self.rating)
 
+class UserRating(models.Model):
+  ratingid = models.AutoField(primary_key=True)
+  email = models.ForeignKey(User, on_delete=models.CASCADE)
+  stars = models.IntegerField(default=0)
+  comment = models.CharField(max_length=25)
+  movieid = models.ForeignKey(Movie, on_delete=models.CASCADE)
+  class Meta:
+    db_table = 'userRatings'
+  def __str__(self):
+    return '{} rated {} {} {}'.format(self.email, self.movieid, self.stars, self.comment)
+
+
 class SwipedRight(models.Model):
   swiperightid = models.AutoField(primary_key=True)
   email = models.ForeignKey(User, on_delete=models.CASCADE)

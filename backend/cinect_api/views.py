@@ -5,6 +5,7 @@ from .models import User
 from .models import Group
 from .models import UserWatched
 from .models import Movie
+from .models import UserRating
 
 import requests
 import json
@@ -42,6 +43,17 @@ def user(request):
             user.save()
         return HttpResponse({'email': request.POST.get('email'), 'facebookid': request.POST.get('facebookid'), 'name': request.POST.get('name')})
 
+def rateMovie(request):
+    rating = UserRating()
+    rating.stars = int(request.POST.get('stars'))
+    rating.comment = request.POST.get('comment')
+    rating.movieid = request.POST.get('movieid')
+    rating.email = request.POST.get('email')
+    rating.save()
+
+    return HttpResponse({})
+    
+    
 def updatePreferences(request):
     email = request.POST.get('email')
 
