@@ -105,7 +105,8 @@ export default class SettingsScreen extends React.Component {
         method: 'POST',
         body: formData,
       });
-    })    
+    })
+    .then(this.props.navigation.goBack()) 
   }
 
   render() {
