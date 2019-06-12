@@ -2,17 +2,18 @@ import React, {Component} from 'react';
 import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity, RefreshControl} from 'react-native';
 import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar, withNavigationFocus} from 'react-navigation'
 
-import SettingsScreen from './SettingsScreen'
 import UserProfileScreen from './UserProfileScreen'
 import Watchlist from './MoviesScreen/Watchlist'
 import WatchlistMovieScreen from './WatchlistMovieScreen'
 import WatchedlistMovieScreen from './WatchedlistMovieScreen'
 import WatchedMovies from './MoviesScreen/WatchedMovies'
 import WatchList from './MoviesScreen/Watchlist';
+import SettingsScreen from './SettingsScreen';
 import {GetUserProperty} from '../Helpers';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 // import console = require('console');
 
-var FBLoginButton = require('../components/FBLoginButton');
 
 class MoviesScreen extends React.Component {
   constructor(props) {
@@ -89,9 +90,6 @@ class MoviesScreen extends React.Component {
            <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
              My Watchlist
            </Text>
-           <View style={{marginRight:10, marginTop: 3}}>
-             <FBLoginButton onLogin = { this.onUserLogin } refresh = { this.onRefresh }/>
-           </View>
 
           </View>
 
@@ -139,6 +137,13 @@ class MoviesScreen extends React.Component {
               })
               }
             </ScrollView>
+            <View style={{position: 'absolute', bottom: 0, right: 0, marginBottom: 20, marginRight: 23}}>
+              <TouchableOpacity style={{backgroundColor: '#ff044e', opacity: 50, padding: 10, borderRadius: 25
+              , width: 50, height: 50, alignItems: 'center', elevation: 8}}
+               onPress={() => this.props.navigation.navigate('Settings')}>
+              <Icon name='md-settings' style={{color: 'white'}} size={30}></Icon>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* <View style={{marginTop:10}}>
@@ -178,7 +183,10 @@ const MoviesScreenNavigator = createStackNavigator(
   },
   WatchedlistMovieScreen: {
     screen: WatchedlistMovieScreen
-  }
+  },
+  Settings: {
+    screen: SettingsScreen
+  },
 },
 {
   initialRouteName: 'Movies',

@@ -33,17 +33,38 @@ def user(request):
     #     x = random.randint(0, 8)
     #     return HttpResponse(json.dumps(movies[x]))
 
-def updatePreferences(request):
-    genres = ['Action', 'Comedy', 'Thriller', 'Animation', 'Romance', 'Scifi', 'Horror', 'Family']
-    email = request.POST.get('email')
-    user = User.objects.get(email=email)
+def updatePreferences(request): 
+    email = request.POST.get('email') 
+ 
+    user = User.objects.filter(pk=email).update(likesAction=(request.POST.get('Action') == 'true')) 
+    user = User.objects.filter(pk=email).update(likesComedy=(request.POST.get('Comedy') == 'true')) 
+    user = User.objects.filter(pk=email).update(likesThriller=(request.POST.get('Thriller') == 'true')) 
+    user = User.objects.filter(pk=email).update(likesAnimation=(request.POST.get('Animation') == 'true')) 
+    user = User.objects.filter(pk=email).update(likesRomance=(request.POST.get('Romance') == 'true')) 
+    user = User.objects.filter(pk=email).update(likesScifi=(request.POST.get('Scifi') == 'true')) 
+    user = User.objects.filter(pk=email).update(likesHorror=(request.POST.get('Horror') == 'true')) 
+    user = User.objects.filter(pk=email).update(likesFamily=(request.POST.get('Family') == 'true')) 
+ 
+    return HttpResponse(json.dumps({})) 
 
-    for i in range(0, 8):
-        like = request.POST.get(genres[i])
-        user[0][genres[i]] = like
-    
-    user.save()
-    return HttpResponse(json.dumps({}))
+def getPreferences(request):
+    email = request.GET.get('email')
+    user = User.objects.filter(pk=email)
+    jsonResponse = {
+        Action: user.likesAction,
+        Comedy: user.likesComedy,
+        Thriller: user.likesThriller,
+        Animation: user.likesAnimation,
+        Romance: user.likesRomance,
+        Scifi: user.likesScifi,
+        Horror: user.likesHorror,
+        Family: user.likesFamily
+    }
+
+    return HttpResponse(json.dumps(jsonResponse))
+
+
+
 
 
 def getMoviesForUser(request):
