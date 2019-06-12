@@ -20,6 +20,29 @@ export default class SettingsScreen extends React.Component {
   }
 
 
+  componentDidMount() { 
+    this.getPreferences(); 
+  }
+
+  getPreferences = () => {
+    GetUserProperty('email').then(email => {
+      fetch("http://146.169.45.140:8000/cinect_api/getpreferences?email=" + email, {
+      }).then(response => response.json())
+      .then((responseJson) => {
+        this.setState ({
+          Action: responseJson.Action,
+          Comedy: responseJson.Comedy,
+          Thriller: responseJson.Thriller,
+          Animation: responseJson.Animation,
+          Romance: responseJson.Romance,
+          Scifi: responseJson.Scifi,
+          Horror: responseJson.Horror,
+          Family: responseJson.Family,
+        });
+      })
+    })  
+  }
+
   renderGridEntry = (genre) => {
     if (this.state[genre]) {
       return (
@@ -30,7 +53,8 @@ export default class SettingsScreen extends React.Component {
           margin: 5,
           alignItems: 'center',
           padding: 20,
-          justifyContent:'center'
+          justifyContent:'center',
+          borderRadius: 15,
           }}
           onPress={() => {
             this.state[genre] = !this.state[genre];
@@ -49,6 +73,7 @@ export default class SettingsScreen extends React.Component {
           alignItems: 'center',
           padding: 20,
           justifyContent:'center',
+          borderRadius: 15,
           }}
           onPress={() => {
             this.state[genre] = !this.state[genre];
@@ -70,7 +95,6 @@ export default class SettingsScreen extends React.Component {
         formData.append('Comedy', this.state.Comedy)
         formData.append('Thriller', this.state.Thriller)
         formData.append('Animation', this.state.Animation)
-  
         formData.append('Romance', this.state.Romance)
         formData.append('Scifi', this.state.Scifi)
         formData.append('Horror', this.state.Horror)
@@ -79,7 +103,7 @@ export default class SettingsScreen extends React.Component {
 
       fetch("http://146.169.45.140:8000/cinect_api/updatepreferences", {
         method: 'POST',
-        body: formData
+        body: formData,
       });
     })    
   }
@@ -105,7 +129,7 @@ export default class SettingsScreen extends React.Component {
         </View>
         <View style={{flexDirection: 'row', paddingTop: 10, paddingBottom: 30}}>
           <Button onPress={this._onUpdatePreferences} title="Save"/>
-          <FBLoginButton/>
+          <FBLoginButton onLogin = { this.onUserLogin } refresh = { this.onRefresh }/>
         </View>
       </View>
     );
