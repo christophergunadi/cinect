@@ -17,6 +17,8 @@ export default class HomeScreen extends React.Component {
     this.addWatchedMovie = this.addWatchedMovie.bind(this);
 
     this.position = new Animated.ValueXY();
+    this.position2 = new Animated.ValueXY();
+
     this.state = {
       currentIndex: 0,
       loading: false,
@@ -126,45 +128,49 @@ export default class HomeScreen extends React.Component {
     Animated.spring(this.position, {
       toValue: {x: -(SCREEN_WIDTH + 100), y: yValue}
     }).start(() => {
+
+    })
+
+    setTimeout(() => {
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
         this.fetchMoviesFromApi()
       })
-    })
-    // this.fetchMovieFromApi();
+    }, 200)
   }
 
   swipeRightAnimation = (yValue) => {
+    this.addSwipedRightMovie(this.state.movies[this.state.currentIndex].id.toString());
+
     Animated.spring(this.position, {
       toValue: {x: SCREEN_WIDTH + 100, y: yValue}
     }).start(() => {
-      this.addSwipedRightMovie(this.state.movies[this.state.currentIndex].id.toString());
+      
+    })
 
+    setTimeout(() => {
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
         this.fetchMoviesFromApi()
       })
-    })
-    // this.fetchMovieFromApi();
-    // this.fetchMoviesFromApi();
+    }, 200)
   }
 
   watchedAnimation = () => {
+    this.addWatchedMovie(this.state.movies[this.state.currentIndex].id.toString())
+
     Animated.spring(this.position, {
       toValue: {x: 0, y: -(SCREEN_HEIGHT)}
     }).start(() => {
-      this.addWatchedMovie(this.state.movies[this.state.currentIndex].id.toString())
+      
+    })
 
-      // TODO: this.addWatchedMovies
-      // this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
-
+    setTimeout(() => {
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
         this.fetchMoviesFromApi()
       })
-    })
-    // this.fetchMovieFromApi();
-    // this.fetchMoviesFromApi();
+    }, 200)
   }
 
   rewindAnimation = () => {

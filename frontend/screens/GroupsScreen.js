@@ -60,14 +60,8 @@ export default class GroupsScreen extends React.Component {
   render() {
     return (
       // TODO: ScrollView lines are buggy
-      <View style={MainStylesheet.container}>
+      <View style={{flex: 1, paddingTop: 12, paddingLeft: 30, paddingRight: 30, paddingBottom: 30, backgroundColor: 'transparent',}}>
       <NewGroupModal ref={'newGroupModal'} refresh={this._onRefresh} />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={MainStylesheet.title}>My Groups</Text>
-          <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
-            <Text style={MainStylesheet.title}>+</Text>
-          </TouchableOpacity>
-        </View>
         <ScrollView contentContainerStyle={{flexGrow: 1}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}>
 
         {this.state.myGroups.map((group) => {
@@ -81,6 +75,12 @@ export default class GroupsScreen extends React.Component {
           );
         })}
         </ScrollView>
+        <View style={{position: 'absolute', bottom: 0, right: 0, marginBottom: 35, marginRight: 40}}>
+          <TouchableOpacity style={styles.addButton} onPress={this._onAddGroupButton}>
+            <Text style={{fontFamily: 'PT_Sans-Caption-Bold', fontSize: 30, color: 'white',
+               marginVertical: 5, marginBottom: 10,}}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -104,13 +104,14 @@ const styles = StyleSheet.create({
   },
   addButton: {
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0)',
+    borderColor: '#ff044e',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 40,
-    height: 40,
-    backgroundColor: '#fff',
+    width: 50,
+    height: 50,
+    backgroundColor: '#ff044e',
     borderRadius: 100,
     marginTop: 5,
+    elevation: 3,
   },
 });
