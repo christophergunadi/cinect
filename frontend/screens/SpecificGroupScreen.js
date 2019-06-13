@@ -30,8 +30,8 @@ class SpecificGroupScreen extends Component {
     this.getMembers()
   }
 
-  watchlistOnPress = (posterpath, title, synopsis) => {
-    this.props.navigation.navigate('GroupMovie', {posterpath: posterpath, title: title, synopsis: synopsis});
+  watchlistOnPress = (posterpath, title, synopsis, movieid) => {
+    this.props.navigation.navigate('GroupMovie', {posterpath: posterpath, title: title, synopsis: synopsis, members: this.state.members, movieid: movieid});
   }
 
   selectMovieForGroup = () => {
@@ -86,7 +86,7 @@ class SpecificGroupScreen extends Component {
         {this.state.suggestedMovies.map(movie => {
           return (
             <View style={{flex:1, height:270, width:130, marginRight:20}}>
-              <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterPath, movie.movieTitle, movie.synopsis)}>
+              <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterPath, movie.movieTitle, movie.synopsis, movie.movieid)}>
                 <View style={{ height:200}}>
                   <Image source={{uri: "https://image.tmdb.org/t/p/w500/"+ movie.posterPath}}
                     style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius:5}}/>

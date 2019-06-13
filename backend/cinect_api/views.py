@@ -264,7 +264,8 @@ def groupSuggestion(request):
         jsonResults.append({'movieTitle': response['title'],
                             'posterPath': response['poster_path'],
                             'synopsis': response['overview'],
-                            'count': filteredResults[i][1]})
+                            'count': filteredResults[i][1]},
+                            'movieid': response['id'])
 
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
@@ -426,6 +427,31 @@ def addUserWatchedFromHomeScreen(request):
         if request.POST.get('email') and request.POST.get('movieid'):
             email = request.POST.get('email')
             movieid = request.POST.get('movieid')
+
+            #add to user watched
+            userWatched = UserWatched()
+            user = User.objects.get(email=email)
+            userWatched.email = user
+            movie = getMovieByID(movieid)
+            userWatched.movieid = movie
+            userWatched.save()
+
+            print('adding' + email + ', movieid' + movieid)
+
+            return HttpResponse(getMovieByID(movieid))
+        return HttpResponse(json.dumps(data))
+    return HttpResponse(json.dumps(data))
+
+def addUserWatchedFromGroupScreen(request):
+    data = {}
+    if request.method == 'POST':
+        if request.POST.get('facebookid') and request.POST.get('movieid'):
+            facebookid = request.POST.get('facebookid')
+            user = User.objects.get(facebookid=facebookid)
+            email = user.email
+            movieid = request.POST.get('movieid')
+
+            SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
 
             #add to user watched
             userWatched = UserWatched()

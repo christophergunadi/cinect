@@ -25,4 +25,5 @@ urlpatterns = [
     path('getuserprofile', views.getUserProfile, name='getuserprofile'),
     path('getmovieratings', views.getMovieRatings, name='getmovieratings'),
     path('getcommonmovieswith', views.getCommonMoviesWith, name='getcommonmovieswith'),
+    path('pressgroupwatched', csrf_exempt(views.addUserWatchedFromGroupScreen), name='pressgroupwatched'),
 ]
