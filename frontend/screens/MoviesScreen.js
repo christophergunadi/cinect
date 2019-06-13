@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
-import {Button, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity, RefreshControl} from 'react-native';
-import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar, withNavigationFocus} from 'react-navigation'
+import {Button, Dimensions, Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity, RefreshControl, Animated} from 'react-native';
+import {createBottomTabNavigator, createStackNavigator, createAppContainer, BottomTabBar, withNavigationFocus} from 'react-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {SearchBar} from 'react-native-elements';
 
-import UserProfileScreen from './UserProfileScreen'
-import Watchlist from './MoviesScreen/Watchlist'
-import WatchlistMovieScreen from './WatchlistMovieScreen'
-import WatchedlistMovieScreen from './WatchedlistMovieScreen'
-import WatchedMovies from './MoviesScreen/WatchedMovies'
+import UserProfileScreen from './UserProfileScreen';
+import Watchlist from './MoviesScreen/Watchlist';
+import WatchlistMovieScreen from './WatchlistMovieScreen';
+import WatchedlistMovieScreen from './WatchedlistMovieScreen';
+import WatchedMovies from './MoviesScreen/WatchedMovies';
 import WatchList from './MoviesScreen/Watchlist';
 import SettingsScreen from './SettingsScreen';
 import {GetUserProperty} from '../Helpers';
-import Icon from 'react-native-vector-icons/Ionicons';
+import SearchMovieModal from '../components/SearchMovieModal';
 
-// import console = require('console');
-
+var windowWidth = Dimensions.get('window').width;
 
 class MoviesScreen extends React.Component {
   constructor(props) {
@@ -22,15 +23,18 @@ class MoviesScreen extends React.Component {
       watchlist: [],
       watchedlist: [],
       refreshing: false,
+      search: '',
+      searchresults: [],
+      searchBarWidth: new Animated.Value(0)
     }
     this.getUserMovies = this.getUserMovies.bind(this);
     this.getWatchedMovies = this.getWatchedMovies.bind(this);
     this.refreshWatchlist = this.refreshWatchlist.bind(this);
     this.refreshWatchedlist = this.refreshWatchedlist.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
     this.getWatchedMovies()
     this.getUserMovies()
-    // alert(this.state.watchedlist.length)
   }
 
   componentDidMount() {
@@ -70,6 +74,7 @@ class MoviesScreen extends React.Component {
 
   refreshWatchedlist() {
     this.getWatchedMovies()
+        alert(this.state.searchBarWidth);
   }
 
   watchlistOnPress = (posterpath, title, id, synopsis, rating) => {
@@ -80,19 +85,76 @@ class MoviesScreen extends React.Component {
     this.props.navigation.navigate('WatchedlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis})
   }
 
+  searchMovies = (query) => {
+    fetch("http://146.169.45.140:8000/cinect_api/search?query="+query)
+      .then(response => response.json())
+      .then((responseJson) => {
+        console.log(JSON.stringify(responseJson));
+        this.setState({searchresults: responseJson.data.reverse()}, () => {
+          this.refs.searchResultsModal.updateResultsModal(this.state.searchresults);
+        });
+      })
+  }
+
+  updateSearch = (search) => {
+    this.setState({search: search}, () => {
+      if (search != '') {
+        Animated.timing(this.state.searchBarWidth, {
+          toValue: 1,
+          duration: 1000
+        }).start();
+        this.searchMovies(search);
+        this.refs.searchResultsModal.showResultsModal();
+      } else {
+        Animated.timing(this.state.searchBarWidth, {
+          toValue: 0,
+          duration: 1000
+        }).start();
+        this.refs.searchResultsModal.hideResultsModal();
+      }
+    });
+  }
+
+  _onAddGroupButton() {
+    this.refs.newGroupModal.showAddModal();
+  }
+
   render() {
-    // this.getWatchedMovies()
+    const barWidth = this.state.searchBarWidth.interpolate(
+      {
+        inputRange: [0, 1],
+        outputRange: [windowWidth/2, windowWidth - 40]
+      }
+    );
+    const textWidth = this.state.searchBarWidth.interpolate(
+      {
+        inputRange: [0, 1],
+        outputRange: [windowWidth/2 - 15, 0]
+      }
+    )
     return (
       <View style={{flex:1}}>
-
         <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16'>
-         <View style={{flex: 1, paddingTop: 30, flexDirection: 'row', justifyContent: 'space-between'}}>
-           <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
-             My Watchlist
-           </Text>
+         <View style={{flex: 1, paddingTop: 30, flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'nowrap'}}>
+           <Animated.View style={{width: textWidth, height: 40, overflow: 'hidden'}}>
+             <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20, paddingTop: 8}}>
+               My Watchlist
+             </Text>
+           </Animated.View>
+           <Animated.View style={{width:barWidth, height:32, marginRight: 20}}>
+             <SearchBar platform="android"
+               placeholder="Search for a movie..."
+               containerStyle={{height: 32, zIndex: 3, backgroundColor: 'transparent'}}
+               inputStyle={{marginLeft: 3, marginRight: 0, fontFamily: 'PT Sans Caption', fontSize: 12}}
+               inputContainerStyle={{backgroundColor:'#ededed', borderRadius: 20, height: 32, zIndex: 3}}
+               onChangeText={this.updateSearch}
+               value={this.state.search}
+               returnKeyType='search'/>
+          </Animated.View>
 
           </View>
 
+          <SearchMovieModal ref={'searchResultsModal'}/>
           <View style={{height:250, marginTop:20}}>
             <ScrollView
               horizontal={true}
@@ -145,27 +207,6 @@ class MoviesScreen extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-
-          {/* <View style={{marginTop:10}}>
-            <Text style={{fontSize:24, fontWeight:'700', fontFamily:'PT Sans Caption', color: '#463D3D', paddingHorizontal:20}}>
-              Movies I've watched
-            </Text>
-
-            <View style={{height:220, marginTop:20}}>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                style={{marginLeft:20}}>
-                <WatchedMovies imageUri={require('../assets/pikachu.jpg')}
-                  name="Detective Pikachu"/>
-                <WatchedMovies imageUri={require('../assets/pikachu.jpg')}
-                  name="Detective Pikachu"/>
-                <WatchedMovies imageUri={require('../assets/pikachu.jpg')}
-                  name="Detective Pikachu"/>
-              </ScrollView>
-            </View>
-
-          </View> */}
 
         </ScrollView>
       </View>
