@@ -113,6 +113,7 @@ def LikedByTwo(elem):
     return int(elem[1]) == 2
 
 def getCommonMoviesWith(request):
+    print(request.GET.get('facebookid'))
     friend = User.objects.get(facebookid=request.GET.get('facebookid'))
     me = User.objects.get(pk=request.GET.get('email'))
     result = {}
@@ -120,16 +121,16 @@ def getCommonMoviesWith(request):
     moviesILike = SwipedRight.objects.filter(email__email=me.email).values('movieid')
 
     for j in range(0, len(moviesFriendLikes)):
-        if movies[j]['movieid'] in result:
-            result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
+        if moviesFriendLikes[j]['movieid'] in result:
+            result[moviesFriendLikes[j]['movieid']] = result[moviesFriendLikes[j]['movieid']] + 1
         else:
-            result[movies[j]['movieid']] = 1
+            result[moviesFriendLikes[j]['movieid']] = 1
 
     for j in range(0, len(moviesILike)):
-        if movies[j]['movieid'] in result:
-            result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
+        if moviesILike[j]['movieid'] in result:
+            result[moviesILike[j]['movieid']] = result[moviesILike[j]['movieid']] + 1
         else:
-            result[movies[j]['movieid']] = 1
+            result[moviesILike[j]['movieid']] = 1
 
     filteredResults = list(filter(LikedByTwo, result.items()))
     jsonResults = []
@@ -143,6 +144,8 @@ def getCommonMoviesWith(request):
 
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
+
+  
 
 def getPreferences(request):
     email = request.GET.get('email')
@@ -261,7 +264,8 @@ def groupSuggestion(request):
         jsonResults.append({'movieTitle': response['title'],
                             'posterPath': response['poster_path'],
                             'synopsis': response['overview'],
-                            'count': filteredResults[i][1]})
+                            'count': filteredResults[i][1]},
+                            'movieid': response['id'])
 
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
@@ -423,6 +427,31 @@ def addUserWatchedFromHomeScreen(request):
         if request.POST.get('email') and request.POST.get('movieid'):
             email = request.POST.get('email')
             movieid = request.POST.get('movieid')
+
+            #add to user watched
+            userWatched = UserWatched()
+            user = User.objects.get(email=email)
+            userWatched.email = user
+            movie = getMovieByID(movieid)
+            userWatched.movieid = movie
+            userWatched.save()
+
+            print('adding' + email + ', movieid' + movieid)
+
+            return HttpResponse(getMovieByID(movieid))
+        return HttpResponse(json.dumps(data))
+    return HttpResponse(json.dumps(data))
+
+def addUserWatchedFromGroupScreen(request):
+    data = {}
+    if request.method == 'POST':
+        if request.POST.get('facebookid') and request.POST.get('movieid'):
+            facebookid = request.POST.get('facebookid')
+            user = User.objects.get(facebookid=facebookid)
+            email = user.email
+            movieid = request.POST.get('movieid')
+
+            SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
 
             #add to user watched
             userWatched = UserWatched()

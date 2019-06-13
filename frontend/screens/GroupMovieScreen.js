@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, memo} from 'react';
 import {Text, View, Image, Button, Dimensions, Linking, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 
 import OriginalSizeImage from '../components/OriginalSizeImage';
@@ -13,11 +13,14 @@ export default class GroupMovieScreen extends React.Component {
             width: '100%',
             height: '80%',
             showingOn: [],
+            members: [],
         }
+        this.pressWatched = this.pressWatched.bind(this)
     }
 
     componentDidMount() {
       this.getStreamingAvailability()
+      this.setState({members: this.props.navigation.getParam('members')})
     }
 
     getStreamingAvailability = () => {
@@ -62,6 +65,20 @@ export default class GroupMovieScreen extends React.Component {
 
     }
 
+    pressWatched() {
+      for (i = 0; i < this.state.members.length; i++) {
+        let formData = new FormData();
+      
+        formData.append('facebookid', this.state.members[i].facebookid)
+        formData.append('movieid', this.props.navigation.getParam('movieid'));
+        fetch("http://146.169.45.140:8000/cinect_api/pressgroupwatched", {
+            method: 'POST',
+            body: formData
+        })
+        .then(this.props.navigation.goBack())
+      }
+    }
+
     render() {
         return (
         <View style={MainStylesheet.container}>
@@ -81,12 +98,12 @@ export default class GroupMovieScreen extends React.Component {
                         <Text>Send movie invite</Text>
                     </TouchableOpacity> */}
                 </View>
-                <Text style={{fontWeight: 'bold'}}>Synopsis:{"\n"}</Text>
+                <Text style={styles.movietitleStyle}>Synopsis:{"\n"}</Text>
                 <Text>
                   {this.props.navigation.getParam('synopsis')}
                   {"\n"}
                 </Text>
-                <Text style={{fontWeight: 'bold'}}>Available on:</Text>
+                <Text style={styles.movietitleStyle}>Available on:</Text>
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
                   {this.state.showingOn.map(site => {
                     if (site.url !== null) {
@@ -105,6 +122,13 @@ export default class GroupMovieScreen extends React.Component {
             {/* </View> */}
 
           </ScrollView>
+              
+          <View style={{flex:1, flexDirection:'row', justifyContent: 'space-evenly', marginBottom:30}}>
+            <TouchableOpacity style={styles.watchedButton} onPress={this.pressWatched}>
+              <Text style={styles.buttonTextStyle}>We've watched this</Text>
+            </TouchableOpacity>
+          </View>
+          
         </View>
         );
     }
@@ -126,6 +150,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'skyblue',
         height: 35,
-        width: Dimensions.get('window').width / 3,
+        width: Dimensions.get('window').width / 2,
+    },
+    movietitleStyle: {
+      fontFamily: 'PT_Sans-Caption-Bold',
+      fontSize: 15,
+      color: 'black',
+    },
+    buttonTextStyle: {
+      fontFamily: 'PT_Sans-Caption-Bold',
+      fontSize: 15,
+      color: 'black',
     },
 });

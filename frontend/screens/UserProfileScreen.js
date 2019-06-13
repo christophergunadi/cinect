@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StyleSheet, ScrollView} from 'react-native';
+import {Text, View, Image, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 
 import {Rating, AirbnbRating} from 'react-native-elements';
 import LottieView from 'lottie-react-native';
+import WatchList from './MoviesScreen/Watchlist';
+import { GetUserProperty } from '../Helpers';
 
 export default class UserProfileScreen extends React.Component {
 
@@ -12,11 +14,13 @@ export default class UserProfileScreen extends React.Component {
       moviesWatched: 0,
       ratedMovies: [], // each rating is in the format {moviename: xx, stars: x, comment: xx}
       loading: true,
+      commonWatchList: [],
     }
   }
 
   componentDidMount() {
     this.getUserProfile();
+    this.getCommonWatchList();
   }
 
 
@@ -28,11 +32,32 @@ export default class UserProfileScreen extends React.Component {
         this.setState ({
           ratedMovies: responseJson.ratedMovies,
           moviesWatched: responseJson.count,
-          loading: false,
       })
     }).catch((error) => {
       console.error(error);
     });
+  }
+
+  getCommonWatchList = () => {
+    GetUserProperty('email').then(value => {
+      fetch("http://146.169.45.140:8000/cinect_api/getcommonmovieswith?facebookid="
+       + this.props.navigation.getParam('facebookid') + "&email=" + value)
+      .then(response => response.json())
+      .then((responseJson) => {
+          this.setState ({
+            commonWatchList: responseJson.data,
+            loading: false,
+        })
+      }).catch((error) => {
+        console.error(error);
+      });
+    })
+  }
+
+  watchlistOnPress = (posterpath, title, id, synopsis, rating) => {
+    this.props.navigation.navigate('WatchlistMovie', 
+    {posterpath: posterpath, title: title, id: id, synopsis: synopsis, 
+      rating: rating, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist});
   }
 
   render() {
@@ -70,6 +95,24 @@ export default class UserProfileScreen extends React.Component {
             </View>
           )
         })}
+        <View style={{height:290, marginTop:20}}>
+          <Text style={{fontFamily: 'PT_Sans-Caption-Bold',fontSize: 20,color: 'black',
+            marginVertical: 5, marginBottom: 10}}>Movies you would both enjoy</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {this.state.commonWatchList.map(movie => {
+                return (
+                  <TouchableOpacity onPress={() => this.watchlistOnPress("https://image.tmdb.org/t/p/w500"+ movie.posterPath, movie.movieTitle, movie.key, movie.synopsis, movie.rating)}>
+                    <WatchList imageUri={"https://image.tmdb.org/t/p/w500" + movie.posterPath}
+                               name={movie.movieTitle}/>
+                  </TouchableOpacity>
+
+                )
+              })
+              }
+            </ScrollView>
+          </View>
       </ScrollView>
     );
       }
@@ -93,6 +136,6 @@ const styles = StyleSheet.create({
   movietitleStyle: {
     fontFamily: 'PT_Sans-Caption-Bold',
     fontSize: 15,
-    color: 'black',
+    color: '#463D3D',
   },
 })

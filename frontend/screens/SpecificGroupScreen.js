@@ -30,8 +30,8 @@ class SpecificGroupScreen extends Component {
     this.getMembers()
   }
 
-  watchlistOnPress = (posterpath, title, synopsis) => {
-    this.props.navigation.navigate('GroupMovie', {posterpath: posterpath, title: title, synopsis: synopsis});
+  watchlistOnPress = (posterpath, title, synopsis, movieid) => {
+    this.props.navigation.navigate('GroupMovie', {posterpath: posterpath, title: title, synopsis: synopsis, members: this.state.members, movieid: movieid});
   }
 
   selectMovieForGroup = () => {
@@ -86,7 +86,7 @@ class SpecificGroupScreen extends Component {
         {this.state.suggestedMovies.map(movie => {
           return (
             <View style={{flex:1, height:270, width:130, marginRight:20}}>
-              <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterPath, movie.movieTitle, movie.synopsis)}>
+              <TouchableOpacity onPress={() => this.watchlistOnPress(movie.posterPath, movie.movieTitle, movie.synopsis, movie.movieid)}>
                 <View style={{ height:200}}>
                   <Image source={{uri: "https://image.tmdb.org/t/p/w500/"+ movie.posterPath}}
                     style={{flex:1, width:null, height:null, resizeMode:'cover', borderRadius:5}}/>
@@ -112,7 +112,7 @@ class SpecificGroupScreen extends Component {
   render() {
     return (
       <ScrollView refreshControl={<RefreshControl refreshing={false} onRefresh={this.selectMovieForGroup}/>}>
-      <View style={{flex: 1, paddingTop: 4,paddingLeft: 30, paddingRight: 30, paddingBottom: 30,
+      <View style={{flex: 1, paddingTop: 4 ,paddingLeft: 35, paddingRight: 35, paddingBottom: 30,
          backgroundColor: 'transparent',}}>
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
         <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>Members</Text>

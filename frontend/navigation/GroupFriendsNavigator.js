@@ -4,11 +4,13 @@ import FriendsScreen from '../screens/FriendsScreen';
 import GroupsNavigator from './GroupsNavigator';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import {createStackNavigator} from 'react-navigation';
+import WatchlistMovieScreen from '../screens/WatchlistMovieScreen';
 
 const FriendsNavigator = createStackNavigator(
   {
     Friends: {screen: FriendsScreen},
     UserProfile: {screen: UserProfileScreen},
+    WatchlistMovie : {screen: WatchlistMovieScreen},
   },
   {
     defaultNavigationOptions: {
