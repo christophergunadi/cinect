@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import {Dimensions, Text, View, StyleSheet, FlatList, Image, Animated, TouchableWithoutFeedback} from 'react-native';
+import {TouchableOpacity, Dimensions, Text, View, StyleSheet, FlatList, Image, Animated, TouchableWithoutFeedback} from 'react-native';
 import Modal from 'react-native-modalbox';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -34,16 +34,24 @@ export default class SearchMovieModal extends Component {
   renderResult = ({item}) => {
     var strResult = JSON.stringify(item);
     return (
-      <View style={{width: Dimensions.get('window').width - 210, height: 170, flexDirection: 'row'}}>
-        <Image source={{uri: item.posterPath}}
-          style={{width: 110, height: 160, borderRadius: 10, marginRight: 10}}/>
-        <View style={{height: 140, marginTop: 15}}>
-          <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.movieTitle}</Text>
-          <Text style={{flex: 1}}>{item.synopsis}</Text>
-          <LinearGradient colors={['transparent', 'transparent', 'transparent', '#FFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
+      <TouchableOpacity onPress={() => this.props.navigate('SearchedMovieScreen', {posterpath: item.posterPath, title: item.movieTitle, id: item.movieid, synopsis: item.synopsis, rating: item.rating, refreshWatchlist: this.props.refreshWatchlist, refreshWatched: this.props.refreshWatchedlist})}>
+        <View style={{width: Dimensions.get('window').width - 210, height: 170, flexDirection: 'row'}}>
+          <Image source={{uri: item.posterPath}}
+            style={{width: 110, height: 160, borderRadius: 10, marginRight: 10}}/>
+          <View style={{height: 140, marginTop: 15}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.movieTitle}</Text>
+            <Text style={{flex: 1}}>{item.synopsis}</Text>
+            <LinearGradient colors={['transparent', 'transparent', 'transparent', '#FFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
+  }
+
+  noResultComponent = () => {
+    return (
+      <Text>No results found! Try another search.</Text>
+    );
   }
 
   resultSeparator = () => {
@@ -54,18 +62,17 @@ export default class SearchMovieModal extends Component {
 
   render() {
     return (
-      <Modal ref={'searchResultsModal'}
+      <Modal ref={'searchResultsModal'} onClosed={this.props.shrinkSearchBar}
         style={{borderRadius: 20, width: windowSize.width - 30, height: windowSize.height - 190, marginTop: 40}}
         position='center' swipeToClose={false} backButtonClose={true}>
         <TouchableWithoutFeedback>
           <View style={styles.container}>
             <Text style={styles.title}>Search Results:</Text>
-            <FlatList data={this.state.results} extraData={this.state.results} renderItem={this.renderResult} ItemSeparatorComponent={this.resultSeparator}/>
+            <FlatList data={this.state.results} extraData={this.state.results} renderItem={this.renderResult} ItemSeparatorComponent={this.resultSeparator} ListEmptyComponent={this.noResultComponent}/>
             <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               </View>
             </View>
-
           </View>
         </TouchableWithoutFeedback>
       </Modal>

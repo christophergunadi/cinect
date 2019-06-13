@@ -249,7 +249,6 @@ def getMovieByID(id):
     movie = Movie.objects.filter(pk=id).first()
     response = []
     if movie is None:
-        print("aoisjdoAJISODJASODSA")
         response = requests.get("https://api.themoviedb.org/3/movie/"+id+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
         movie = Movie()
         movie.movieid = id
@@ -384,7 +383,7 @@ def searchMovie(request):
     response.append({
       'movieid': searchResult['id'],
       'movieTitle': searchResult['title'],
-      'posterPath': "https://image.tmdb.org/t/p/w500/" + searchResult['poster_path'],
+      'posterPath': "https://image.tmdb.org/t/p/w500/" + str(searchResult['poster_path']),
       'synopsis': searchResult['overview'],
       'rating': searchResult['vote_average']
     })

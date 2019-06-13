@@ -10,6 +10,7 @@ import WatchlistMovieScreen from './WatchlistMovieScreen';
 import WatchedlistMovieScreen from './WatchedlistMovieScreen';
 import WatchedMovies from './MoviesScreen/WatchedMovies';
 import WatchList from './MoviesScreen/Watchlist';
+import SearchedMovieScreen from './SearchedMovieScreen';
 import SettingsScreen from './SettingsScreen';
 import {GetUserProperty} from '../Helpers';
 import SearchMovieModal from '../components/SearchMovieModal';
@@ -33,6 +34,8 @@ class MoviesScreen extends React.Component {
     this.refreshWatchedlist = this.refreshWatchedlist.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
+    this.shrinkSearchBar = this.shrinkSearchBar.bind(this);
+    this.expandSearchBar = this.expandSearchBar.bind(this);
     this.getWatchedMovies()
     this.getUserMovies()
   }
@@ -89,30 +92,37 @@ class MoviesScreen extends React.Component {
     fetch("http://146.169.45.140:8000/cinect_api/search?query="+query)
       .then(response => response.json())
       .then((responseJson) => {
-        console.log(JSON.stringify(responseJson));
         this.setState({searchresults: responseJson.data.reverse()}, () => {
           this.refs.searchResultsModal.updateResultsModal(this.state.searchresults);
         });
-      })
+      });
   }
 
   updateSearch = (search) => {
     this.setState({search: search}, () => {
       if (search != '') {
-        Animated.timing(this.state.searchBarWidth, {
-          toValue: 1,
-          duration: 1000
-        }).start();
+        this.expandSearchBar();
         this.searchMovies(search);
         this.refs.searchResultsModal.showResultsModal();
       } else {
-        Animated.timing(this.state.searchBarWidth, {
-          toValue: 0,
-          duration: 1000
-        }).start();
+        this.shrinkSearchBar();
         this.refs.searchResultsModal.hideResultsModal();
       }
     });
+  }
+
+  expandSearchBar = () => {
+    Animated.timing(this.state.searchBarWidth, {
+      toValue: 1,
+      duration: 1000
+    }).start();
+  }
+
+  shrinkSearchBar = () => {
+    Animated.timing(this.state.searchBarWidth, {
+      toValue: 0,
+      duration: 1000
+    }).start();
   }
 
   _onAddGroupButton() {
@@ -149,12 +159,13 @@ class MoviesScreen extends React.Component {
                inputContainerStyle={{backgroundColor:'#ededed', borderRadius: 20, height: 32, zIndex: 3}}
                onChangeText={this.updateSearch}
                value={this.state.search}
+               onCancel={this.shrinkSearchBar}
                returnKeyType='search'/>
           </Animated.View>
 
           </View>
 
-          <SearchMovieModal ref={'searchResultsModal'}/>
+          <SearchMovieModal ref={'searchResultsModal'} navigate={this.props.navigation.navigate} refreshWatchlist={this.refreshWatchlist} refreshWatchedlist={this.refreshWatchedlist} shrinkSearchBar={this.shrinkSearchBar}/>
           <View style={{height:250, marginTop:20}}>
             <ScrollView
               horizontal={true}
@@ -224,6 +235,9 @@ const MoviesScreenNavigator = createStackNavigator(
   },
   WatchedlistMovieScreen: {
     screen: WatchedlistMovieScreen
+  },
+  SearchedMovieScreen: {
+    screen: SearchedMovieScreen
   },
   Settings: {
     screen: SettingsScreen

@@ -7,10 +7,9 @@ import OriginalSizeImage from '../components/OriginalSizeImage';
 import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
-// import { formatResultsErrors } from 'jest-message-util';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
-export default class WatchlistMovieScreen extends React.Component {
+export default class SearchedMovieScreen extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -25,7 +24,6 @@ export default class WatchlistMovieScreen extends React.Component {
         this.getStreamingAvailability()
         this.getFriendsWhoAlsoLikeThis()
     }
-
 
     getFriendsWhoAlsoLikeThis = () => {
       new GraphRequestManager().addRequest(
@@ -95,18 +93,18 @@ export default class WatchlistMovieScreen extends React.Component {
         return userEmail;
     }
 
-    pressDeleteButton = (id) => {
-        let formData = new FormData();
-        GetUserProperty('email').then(value => {
+    pressWatchButton = (id) => {
+      let formData = new FormData();
+      GetUserProperty('email').then(value => {
         formData.append('email', value)
         formData.append('movieid', id);
-        fetch("http://146.169.45.140:8000/cinect_api/deleteswipedright", {
-            method: 'POST',
-            body: formData
+        fetch("http://146.169.45.140:8000/cinect_api/addswipedright", {
+          method: 'POST',
+          body: formData
         })
         .then(this.props.navigation.getParam('refreshWatchlist'))
         .then(this.props.navigation.goBack())
-        })
+      })
     }
 
     pressWatchedButton = (id) => {
@@ -225,9 +223,9 @@ export default class WatchlistMovieScreen extends React.Component {
             </ScrollView>
 
             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity onPress={() => this.pressDeleteButton(this.props.navigation.getParam('id'))}
-                                  style={styles.deleteButton}>
-                    <Text style={styles.buttonText}>Delete movie</Text>
+                <TouchableOpacity onPress={() => this.pressWatchButton(this.props.navigation.getParam('id'))}
+                                  style={styles.watchButton}>
+                    <Text style={styles.buttonText}>Add to watchlist</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => this.pressWatchedButton(this.props.navigation.getParam('id'))}
@@ -242,7 +240,7 @@ export default class WatchlistMovieScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    deleteButton: {
+    watchButton: {
       borderRadius: 15,
       justifyContent: 'center',
       alignItems: 'center',
