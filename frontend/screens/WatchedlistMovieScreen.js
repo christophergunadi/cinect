@@ -67,7 +67,7 @@ export default class WatchlistMovieScreen extends React.Component {
             style={{ paddingBottom: 20}}/>
             <View style={{paddingBottom: 12}}>
             <TextInput style={styles.textInput} placeholder="Write a comment" maxLength={20} 
-            value={this.state.comment} underlineColorAndroid='transparent' placeholderStyle={{padding: 4, marginLeft: 3}}
+            value={this.state.comment} underlineColorAndroid='transparent' placeholderStyle={{paddingLeft: 10, marginLeft: 10}}
             onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({comment: text})}/> 
             </View>
               
@@ -137,5 +137,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#c2c4c6',
         marginBottom: 10,
+        alignItems: 'center',
       },
 });

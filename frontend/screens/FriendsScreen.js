@@ -45,10 +45,11 @@ export default class FriendsScreen extends Component {
     
     render() {
         return (
-            <ScrollView style={{backgroundColor: 'white', paddingLeft: 12, paddingRight: 12}}>
+            <ScrollView style={{backgroundColor: 'white', paddingLeft: 15, paddingRight: 15}}>
                 
                 {this.state.myFriends.map((f) => { return (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('UserProfile', {name: f.name, facebookid: f.id})}>
+            <TouchableOpacity onPress={() => 
+            this.props.navigation.navigate('UserProfile', {name: f.name, facebookid: f.id, picture: this.state.myFriendsPic[f.id],})}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}}>
               <View style={{flexDirection:'row', paddingLeft: 17}}>
                 <Image source={{uri: this.state.myFriendsPic[f.id]}} 
