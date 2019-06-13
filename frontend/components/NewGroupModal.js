@@ -191,7 +191,7 @@ export default class NewGroupModal extends Component {
       return (
         <Modal ref={'newGroupModal'}
         style={{borderRadius: 20, shadowRadius: 10, width: windowSize.width - 70, height: windowSize.height - 200}}
-        position='center' swipeToClose={false} backButtonClose={true}>
+        position='center' swipeToClose={false} backButtonClose={true} coverScreen={true}>
         <TouchableWithoutFeedback>
           <View style={styles.container}>
             <Text style={styles.title}>Add friends</Text>
@@ -212,7 +212,8 @@ export default class NewGroupModal extends Component {
       return (
         <Modal ref={'newGroupModal'}
           style={{justifyContent: 'center', borderRadius: 20, shadowRadius: 10, width: windowSize.width - 70,
-            height: windowSize.height - 200}} position='center' swipeToClose={false} backButtonClose={false}>
+            height: windowSize.height - 200}} position='center' swipeToClose={false} backButtonClose={false}
+            coverScreen={true}>
           <TouchableWithoutFeedback>
             <View style={styles.container}>
               <Text style={styles.title}>Create a new group</Text>
