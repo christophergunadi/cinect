@@ -108,6 +108,42 @@ def updatePreferences(request):
 
     return HttpResponse(json.dumps({}))
 
+
+def LikedByTwo(elem):
+    return int(elem[1]) == 2
+
+def getCommonMoviesWith(request):
+    friend = User.objects.get(facebookid=request.GET.get('facebookid'))
+    me = User.objects.get(pk=request.GET.get('email'))
+    result = {}
+    moviesFriendLikes = SwipedRight.objects.filter(email__email=friend.email).values('movieid')
+    moviesILike = SwipedRight.objects.filter(email__email=me.email).values('movieid')
+
+    for j in range(0, len(moviesFriendLikes)):
+        if movies[j]['movieid'] in result:
+            result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
+        else:
+            result[movies[j]['movieid']] = 1
+
+    for j in range(0, len(moviesILike)):
+        if movies[j]['movieid'] in result:
+            result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
+        else:
+            result[movies[j]['movieid']] = 1
+
+    filteredResults = list(filter(LikedByTwo, result.items()))
+    jsonResults = []
+
+    for i in range(0, len(filteredResults)):
+        response = requests.get("https://api.themoviedb.org/3/movie/"+filteredResults[i][0]+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        jsonResults.append({'movieTitle': response['title'],
+                            'posterPath': response['poster_path'],
+                            'synopsis': response['overview'],
+                            'count': filteredResults[i][1]})
+
+    jsonResponse = {'data': jsonResults}
+    return HttpResponse(json.dumps(jsonResponse))
+
 def getPreferences(request):
     email = request.GET.get('email')
     user = User.objects.get(pk=email)

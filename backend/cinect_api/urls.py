@@ -24,4 +24,5 @@ urlpatterns = [
     path('rateMovie', csrf_exempt(views.rateMovie), name='ratemovie'),
     path('getuserprofile', views.getUserProfile, name='getuserprofile'),
     path('getmovieratings', views.getMovieRatings, name='getmovieratings'),
+    path('getcommonmovieswith', views.getCommonMoviesWith, name='getcommonmovieswith'),
 ]
