@@ -149,6 +149,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-linear-gradient')
     implementation project(':lottie-react-native')
     implementation project(':react-native-fbsdk')
     implementation project(':react-native-vector-icons')

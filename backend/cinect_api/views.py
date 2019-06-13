@@ -52,7 +52,7 @@ def rateMovie(request):
     rating.save()
 
     return HttpResponse({})
-    
+
 def getUserProfile(request):
     facebookid = request.GET.get('facebookid')
     user = User.objects.get(facebookid=facebookid)
@@ -75,7 +75,7 @@ def getUserProfile(request):
         
     return HttpResponse(json.dumps({'count': numMovies, 'ratedMovies': ratedMovieInfo}))
 
-    
+
 def updatePreferences(request):
     email = request.POST.get('email')
 
@@ -135,7 +135,7 @@ def getMoviesForUser(request):
     for preference in preferences:
         response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&with_genres=" + str(preference) + "&page=1")
         responseMovies = response.json()['results']
-        
+
         for i in range(0, len(responseMovies)):
             movies.append(MovieContainer({
                 'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
@@ -384,10 +384,10 @@ def searchMovie(request):
     response.append({
       'movieid': searchResult['id'],
       'movieTitle': searchResult['title'],
-      'posterPath': searchResult['poster_path'],
+      'posterPath': "https://image.tmdb.org/t/p/w500/" + searchResult['poster_path'],
       'synopsis': searchResult['overview'],
       'rating': searchResult['vote_average']
     })
 
-    jsonResponse = {'data': response}
-    return HttpResponse(json.dumps(jsonResponse))
+  jsonResponse = {'data': response}
+  return HttpResponse(json.dumps(jsonResponse))
