@@ -8,10 +8,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// const Movies = [
-//   { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg', id: '299537'},
-// ]
-
 export default class HomeScreen extends React.Component {
 
   constructor() {
@@ -21,6 +17,8 @@ export default class HomeScreen extends React.Component {
     this.addWatchedMovie = this.addWatchedMovie.bind(this);
 
     this.position = new Animated.ValueXY();
+    this.position2 = new Animated.ValueXY();
+
     this.state = {
       currentIndex: 0,
       loading: false,
@@ -130,12 +128,15 @@ export default class HomeScreen extends React.Component {
     Animated.spring(this.position, {
       toValue: {x: -(SCREEN_WIDTH + 100), y: yValue}
     }).start(() => {
+
+    })
+
+    setTimeout(() => {
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
         this.fetchMoviesFromApi()
       })
-    })
-    // this.fetchMovieFromApi();
+    }, 200)
   }
 
   swipeRightAnimation = (yValue) => {
@@ -143,14 +144,14 @@ export default class HomeScreen extends React.Component {
       toValue: {x: SCREEN_WIDTH + 100, y: yValue}
     }).start(() => {
       this.addSwipedRightMovie(this.state.movies[this.state.currentIndex].id.toString());
+    })
 
+    setTimeout(() => {
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
         this.fetchMoviesFromApi()
       })
-    })
-    // this.fetchMovieFromApi();
-    // this.fetchMoviesFromApi();
+    }, 200)
   }
 
   watchedAnimation = () => {
@@ -158,17 +159,14 @@ export default class HomeScreen extends React.Component {
       toValue: {x: 0, y: -(SCREEN_HEIGHT)}
     }).start(() => {
       this.addWatchedMovie(this.state.movies[this.state.currentIndex].id.toString())
+    })
 
-      // TODO: this.addWatchedMovies
-      // this.addSwipedRightMovie(Movies[this.state.currentIndex].id.toString());
-
+    setTimeout(() => {
       this.setState({currentIndex: this.state.currentIndex + 1}, () => {
         this.position.setValue({x: 0, y: 0})
         this.fetchMoviesFromApi()
       })
-    })
-    // this.fetchMovieFromApi();
-    // this.fetchMoviesFromApi();
+    }, 200)
   }
 
   rewindAnimation = () => {
