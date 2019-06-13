@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {TouchableOpacity, Image, FlatList, Button, StyleSheet, Text, View, RefreshControl, ScrollView} from 'react-native';
 
 import NewGroupModal from '../components/NewGroupModal';
-import MainStylesheet from '../styles/MainStylesheet';
 import {GetUserProperty} from '../Helpers';
 
 export default class GroupsScreen extends React.Component {
@@ -59,7 +58,6 @@ export default class GroupsScreen extends React.Component {
 
   render() {
     return (
-      // TODO: ScrollView lines are buggy
       <View style={{flex: 1, paddingTop: 12, paddingLeft: 30, paddingRight: 30, paddingBottom: 30, backgroundColor: 'transparent',}}>
       <NewGroupModal ref={'newGroupModal'} refresh={this._onRefresh} />
         <ScrollView contentContainerStyle={{flexGrow: 1}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}>
