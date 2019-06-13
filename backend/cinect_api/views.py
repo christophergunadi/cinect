@@ -113,6 +113,7 @@ def LikedByTwo(elem):
     return int(elem[1]) == 2
 
 def getCommonMoviesWith(request):
+    print(request.GET.get('facebookid'))
     friend = User.objects.get(facebookid=request.GET.get('facebookid'))
     me = User.objects.get(pk=request.GET.get('email'))
     result = {}
@@ -120,16 +121,16 @@ def getCommonMoviesWith(request):
     moviesILike = SwipedRight.objects.filter(email__email=me.email).values('movieid')
 
     for j in range(0, len(moviesFriendLikes)):
-        if movies[j]['movieid'] in result:
-            result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
+        if moviesFriendLikes[j]['movieid'] in result:
+            result[moviesFriendLikes[j]['movieid']] = result[moviesFriendLikes[j]['movieid']] + 1
         else:
-            result[movies[j]['movieid']] = 1
+            result[moviesFriendLikes[j]['movieid']] = 1
 
     for j in range(0, len(moviesILike)):
-        if movies[j]['movieid'] in result:
-            result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
+        if moviesILike[j]['movieid'] in result:
+            result[moviesILike[j]['movieid']] = result[moviesILike[j]['movieid']] + 1
         else:
-            result[movies[j]['movieid']] = 1
+            result[moviesILike[j]['movieid']] = 1
 
     filteredResults = list(filter(LikedByTwo, result.items()))
     jsonResults = []
@@ -143,6 +144,8 @@ def getCommonMoviesWith(request):
 
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
+
+  
 
 def getPreferences(request):
     email = request.GET.get('email')
