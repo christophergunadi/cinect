@@ -106,6 +106,8 @@ def getPreferences(request):
 
     return HttpResponse(json.dumps(jsonResponse))
 
+# Get movies for user to swiped on based on their preferences.
+# Returns 20 movies from most popular overall + 20 movies from each preference, randomised.
 def getMoviesForUser(request):
     global x
     email = request.GET.get('email')
@@ -263,6 +265,38 @@ def getMovieByID(id):
 def formatMovieToJson(movie):
         return json.dumps({'movieTitle': movie.movietitle, 'posterPath': movie.posterpath})
 
+def getUserMovies(request):
+    useremail = request.GET.get('useremail')
+    #get list of movie ids that user swiped right on
+    movieids = SwipedRight.objects.filter(email__email=useremail).values('movieid')
+    watched = UserWatched.objects.filter(email__email=useremail).values('movieid')
+    movieids = movieids.difference(watched)
+
+    response = []
+    for id in movieids:
+        apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        response.append({'key': id['movieid'],
+                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
+                         'title': apiResponse['title'],
+                         'synopsis': apiResponse['overview'],
+                         'rating': apiResponse['vote_average']})
+    httpResponse = {'data': response}
+    return HttpResponse(json.dumps(httpResponse))
+
+def getUserWatched(request):
+    useremail = request.GET.get('useremail')
+    #get list of movie ids that user swiped right on
+    movieids = UserWatched.objects.filter(email__email=useremail).values('movieid')
+    response = []
+    for id in movieids:
+        apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
+        response.append({'key': id['movieid'],
+                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
+                         'title': apiResponse['title'],
+                         'synopsis': apiResponse['overview']})
+    httpResponse = {'data': response}
+    return HttpResponse(json.dumps(httpResponse))
+
 def addSwipedRight(request): #adds movie into user's watchlist database
     data = {}
     if request.method == 'POST':
@@ -281,20 +315,7 @@ def addSwipedRight(request): #adds movie into user's watchlist database
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
 
-def getUserMovies(request):
-    useremail = request.GET.get('useremail')
-    #get list of movie ids that user swiped right on
-    movieids = SwipedRight.objects.filter(email__email=useremail).values('movieid')
-    response = []
-    for id in movieids:
-        apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
-        response.append({'key': id['movieid'],
-                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
-                         'title': apiResponse['title'],
-                         'synopsis': apiResponse['overview'],
-                         'rating': apiResponse['vote_average']})
-    httpResponse = {'data': response}
-    return HttpResponse(json.dumps(httpResponse))
+
 
 def deleteSwipedRight(request):
     data = {}
@@ -310,20 +331,6 @@ def deleteSwipedRight(request):
             return HttpResponse(formatMovieToJson(getMovieByID(movieid)))
         return HttpResponse(json.dumps(data))
     return HttpResponse(json.dumps(data))
-
-def getUserWatched(request):
-    useremail = request.GET.get('useremail')
-    #get list of movie ids that user swiped right on
-    movieids = UserWatched.objects.filter(email__email=useremail).values('movieid')
-    response = []
-    for id in movieids:
-        apiResponse = requests.get("https://api.themoviedb.org/3/movie/"+id['movieid']+"?api_key=edf754f30aad617f73e80dc66b5337d0").json()
-        response.append({'key': id['movieid'],
-                         'posterpath': ("https://image.tmdb.org/t/p/w500/" + apiResponse['poster_path']),
-                         'title': apiResponse['title'],
-                         'synopsis': apiResponse['overview']})
-    httpResponse = {'data': response}
-    return HttpResponse(json.dumps(httpResponse))
 
 def addUserWatched(request):
     data = {}

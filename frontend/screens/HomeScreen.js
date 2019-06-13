@@ -140,10 +140,12 @@ export default class HomeScreen extends React.Component {
   }
 
   swipeRightAnimation = (yValue) => {
+    this.addSwipedRightMovie(this.state.movies[this.state.currentIndex].id.toString());
+
     Animated.spring(this.position, {
       toValue: {x: SCREEN_WIDTH + 100, y: yValue}
     }).start(() => {
-      this.addSwipedRightMovie(this.state.movies[this.state.currentIndex].id.toString());
+      
     })
 
     setTimeout(() => {
@@ -155,10 +157,12 @@ export default class HomeScreen extends React.Component {
   }
 
   watchedAnimation = () => {
+    this.addWatchedMovie(this.state.movies[this.state.currentIndex].id.toString())
+
     Animated.spring(this.position, {
       toValue: {x: 0, y: -(SCREEN_HEIGHT)}
     }).start(() => {
-      this.addWatchedMovie(this.state.movies[this.state.currentIndex].id.toString())
+      
     })
 
     setTimeout(() => {
