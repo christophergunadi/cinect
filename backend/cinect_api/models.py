@@ -37,6 +37,7 @@ class UserRating(models.Model):
   movieid = models.ForeignKey(Movie, on_delete=models.CASCADE)
   class Meta:
     db_table = 'userRatings'
+    unique_together = ('email', 'movieid',)
   def __str__(self):
     return '{} rated {} {} {}'.format(self.email, self.movieid, self.stars, self.comment)
 

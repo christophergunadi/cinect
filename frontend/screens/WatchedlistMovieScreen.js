@@ -15,7 +15,7 @@ export default class WatchlistMovieScreen extends React.Component {
         this.state = {
             width: '100%',
             height: '80%',
-            stars: 0,
+            stars: 3,
             comment: '',
         }
     }
@@ -66,7 +66,8 @@ export default class WatchlistMovieScreen extends React.Component {
             onFinishRating={(rating) => this.state.stars = rating}
             style={{ paddingBottom: 20}}/>
             <View style={{paddingBottom: 12}}>
-            <TextInput style={styles.textInput} placeholder="Write a comment" maxLength={20} value={this.state.comment}
+            <TextInput style={styles.textInput} placeholder="Write a comment" maxLength={20} 
+            value={this.state.comment} underlineColorAndroid='transparent' placeholderStyle={{padding: 4, marginLeft: 3}}
             onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({comment: text})}/> 
             </View>
               
@@ -130,8 +131,11 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: Dimensions.get('window').width / 2,
+        height: 40,
         borderBottomColor: '#000000',
-        borderBottomWidth: 1,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: '#c2c4c6',
         marginBottom: 10,
       },
 });

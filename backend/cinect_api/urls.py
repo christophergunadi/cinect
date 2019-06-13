@@ -22,4 +22,5 @@ urlpatterns = [
     path('getpreferences', csrf_exempt(views.getPreferences), name='getpreferences'),
     path('search', csrf_exempt(views.searchMovie), name='search'),
     path('rateMovie', csrf_exempt(views.rateMovie), name='ratemovie'),
+    path('getuserprofile', views.getUserProfile, name='getuserprofile'),
 ]

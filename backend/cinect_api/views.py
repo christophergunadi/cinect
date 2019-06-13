@@ -48,28 +48,31 @@ def rateMovie(request):
     rating.stars = int(request.POST.get('stars'))
     rating.comment = request.POST.get('comment')
     rating.movieid = getMovieByID(request.POST.get('movieid'))
-    rating.email = request.POST.get('email')
+    rating.email = User.objects.filter(pk=request.POST.get('email')).first()
     rating.save()
 
     return HttpResponse({})
     
 def getUserProfile(request):
-    facebookid = request.GET.get('friendid')
+    facebookid = request.GET.get('facebookid')
     user = User.objects.get(facebookid=facebookid)
 
     # Number of movies he/she has watched
-    numMovies = UserWatched.objects.filter(email__email=user.email).values('movieid').count()
-
-    # Movies that they have rated 
+    moviesWatched = UserWatched.objects.filter(email__email=user.email)
+    numMovies = 0
+    for id in moviesWatched:
+        numMovies = numMovies + 1
+    
+    # Movies that they have rated
     ratedMovies = UserRating.objects.filter(email__email=user.email)
     ratedMovieInfo = []
     for i in range(0, len(ratedMovies)):
-        ratedMovies.append({
-            'movieTitle': Movie.objects.get(movieid=ratedMovies[i].movieid).movietitle,
+        ratedMovieInfo.append({
+            'movieTitle': Movie.objects.filter(pk=ratedMovies[i].movieid.movieid).first().movietitle,
             'stars': ratedMovies[i].stars,
             'comment': ratedMovies[i].comment,
         })
-    
+        
     return HttpResponse(json.dumps({'count': numMovies, 'ratedMovies': ratedMovieInfo}))
 
     
