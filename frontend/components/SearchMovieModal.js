@@ -64,11 +64,11 @@ export default class SearchMovieModal extends Component {
     return (
       <Modal ref={'searchResultsModal'} onClosed={this.props.shrinkSearchBar}
         style={{borderRadius: 20, width: windowSize.width - 30, height: windowSize.height - 190, marginTop: 40}}
-        position='center' swipeToClose={false} backButtonClose={true}>
+        position='center' swipeToClose={false} backButtonClose={true} swipeArea={50}>
         <TouchableWithoutFeedback>
           <View style={styles.container}>
             <Text style={styles.title}>Search Results:</Text>
-            <ScrollView keyboardShouldPersistTaps='never'>
+            <ScrollView keyboardShouldPersistTaps='never' keyboardDismissMode='on-drag'>
               <FlatList data={this.state.results} extraData={this.state.results} renderItem={this.renderResult} ItemSeparatorComponent={this.resultSeparator} ListEmptyComponent={this.noResultComponent}/>
             </ScrollView>
           </View>

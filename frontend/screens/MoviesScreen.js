@@ -169,7 +169,8 @@ class MoviesScreen extends React.Component {
     )
     return (
       <View style={{flex:1}}>
-        <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16'>
+        <SearchMovieModal ref={'searchResultsModal'} navigate={this.props.navigation.navigate} refreshWatchlist={this.refreshWatchlist} refreshWatchedlist={this.refreshWatchedlist} shrinkSearchBar={this.shrinkSearchBar}/>
+        <ScrollView style={{zIndex: 2}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16'>
          <View style={{flex: 1, paddingTop: 30, flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'nowrap'}}>
            <Animated.View style={{width: textWidth, height: 40, overflow: 'hidden'}}>
              <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20, paddingTop: 8}}>
@@ -179,9 +180,9 @@ class MoviesScreen extends React.Component {
            <Animated.View style={{width:barWidth, height:32, marginRight: 20}}>
              <SearchBar platform="android"
                placeholder="Search for a movie..."
-               containerStyle={{height: 32, zIndex: 3, backgroundColor: 'transparent'}}
+               containerStyle={{height: 32, zIndex: 5, backgroundColor: 'transparent'}}
                inputStyle={{marginLeft: 3, marginRight: 0, fontFamily: 'PT Sans Caption', fontSize: 12}}
-               inputContainerStyle={{backgroundColor:'#ededed', borderRadius: 20, height: 32, zIndex: 3}}
+               inputContainerStyle={{backgroundColor:'#ededed', borderRadius: 20, height: 32, zIndex: 5}}
                onChangeText={this.updateSearch}
                value={this.state.search}
                onFocus={this.onSearchBarFocus}
@@ -191,7 +192,10 @@ class MoviesScreen extends React.Component {
 
           </View>
 
-          <SearchMovieModal ref={'searchResultsModal'} navigate={this.props.navigation.navigate} refreshWatchlist={this.refreshWatchlist} refreshWatchedlist={this.refreshWatchedlist} shrinkSearchBar={this.shrinkSearchBar}/>
+          </ScrollView>
+        <ScrollView refreshControl={<RefreshControl progressViewOffset={-80} refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16'>
+
+
           <View style={{height:250, marginTop:20}}>
             <ScrollView
               horizontal={true}
