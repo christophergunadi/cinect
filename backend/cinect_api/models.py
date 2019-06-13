@@ -33,7 +33,7 @@ class UserRating(models.Model):
   ratingid = models.AutoField(primary_key=True)
   email = models.ForeignKey(User, on_delete=models.CASCADE)
   stars = models.IntegerField(default=0)
-  comment = models.CharField(max_length=25)
+  comment = models.CharField(max_length=60)
   movieid = models.ForeignKey(Movie, on_delete=models.CASCADE)
   class Meta:
     db_table = 'userRatings'

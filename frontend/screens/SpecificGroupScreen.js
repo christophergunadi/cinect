@@ -112,7 +112,7 @@ class SpecificGroupScreen extends Component {
   render() {
     return (
       <ScrollView refreshControl={<RefreshControl refreshing={false} onRefresh={this.selectMovieForGroup}/>}>
-      <View style={{flex: 1, paddingTop: 4,paddingLeft: 30, paddingRight: 30, paddingBottom: 30,
+      <View style={{flex: 1, paddingTop: 4 ,paddingLeft: 35, paddingRight: 35, paddingBottom: 30,
          backgroundColor: 'transparent',}}>
         <Text style={MainStylesheet.title}>{this.props.navigation.getParam('groupname')}</Text>
         <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D'}}>Members</Text>
