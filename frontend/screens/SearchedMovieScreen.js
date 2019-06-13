@@ -112,7 +112,7 @@ export default class SearchedMovieScreen extends React.Component {
         GetUserProperty('email').then(value => {
         formData.append('email', value)
         formData.append('movieid', id);
-        fetch("http://146.169.45.140:8000/cinect_api/presswatched", {
+        fetch("http://146.169.45.140:8000/cinect_api/addwatched", {
             method: 'POST',
             body: formData
         })
