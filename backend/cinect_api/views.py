@@ -65,7 +65,7 @@ def getUserProfile(request):
     ratedMovieInfo = []
     for i in range(0, len(ratedMovies)):
         ratedMovies.append({
-            'movieTitle': Movie.objects.get(movieid=ratedMovies[i].movieid).movietitle
+            'movieTitle': Movie.objects.get(movieid=ratedMovies[i].movieid).movietitle,
             'stars': ratedMovies[i].stars,
             'comment': ratedMovies[i].comment,
         })
