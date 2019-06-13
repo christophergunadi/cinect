@@ -24,7 +24,7 @@ class MoviesScreen extends React.Component {
       watchlist: [],
       watchedlist: [],
       refreshing: false,
-      search: '',
+      searching: false,
       searchresults: [],
       searchBarWidth: new Animated.Value(0)
     }
@@ -36,6 +36,7 @@ class MoviesScreen extends React.Component {
     this.updateSearch = this.updateSearch.bind(this);
     this.shrinkSearchBar = this.shrinkSearchBar.bind(this);
     this.expandSearchBar = this.expandSearchBar.bind(this);
+    this.renderSettingsIcon = this.renderSettingsIcon.bind(this);
     this.getWatchedMovies()
     this.getUserMovies()
   }
@@ -77,7 +78,6 @@ class MoviesScreen extends React.Component {
 
   refreshWatchedlist() {
     this.getWatchedMovies()
-        alert(this.state.searchBarWidth);
   }
 
   watchlistOnPress = (posterpath, title, id, synopsis, rating) => {
@@ -106,27 +106,52 @@ class MoviesScreen extends React.Component {
         this.refs.searchResultsModal.showResultsModal();
       } else {
         this.shrinkSearchBar();
+        this.refs.searchResultsModal.updateResultsModal([]);
         this.refs.searchResultsModal.hideResultsModal();
       }
     });
   }
 
+  onSearchBarFocus = () => {
+    this.expandSearchBar();
+    this.refs.searchResultsModal.showResultsModal();
+  }
+
   expandSearchBar = () => {
     Animated.timing(this.state.searchBarWidth, {
       toValue: 1,
-      duration: 1000
+      duration: 500
     }).start();
+    this.setState({
+      searching: true
+    });
   }
 
   shrinkSearchBar = () => {
     Animated.timing(this.state.searchBarWidth, {
       toValue: 0,
-      duration: 1000
+      duration: 500
     }).start();
+    this.setState({
+      searching: false
+    })
   }
 
   _onAddGroupButton() {
     this.refs.newGroupModal.showAddModal();
+  }
+
+  renderSettingsIcon = () => {
+    if (!this.state.searching) {
+      return (
+        <View style={{position: 'absolute', bottom: 0, right: 0, marginBottom: 20, marginRight: 23}}>
+          <TouchableOpacity style={{backgroundColor: '#ff044e', opacity: 50, padding: 10, borderRadius: 25, width: 50, height: 50, alignItems: 'center', elevation: 8}}
+            onPress={() => this.props.navigation.navigate('Settings')}>
+            <Icon name='md-settings' style={{color: 'white'}} size={30}></Icon>
+          </TouchableOpacity>
+        </View>
+      )
+    }
   }
 
   render() {
@@ -159,6 +184,7 @@ class MoviesScreen extends React.Component {
                inputContainerStyle={{backgroundColor:'#ededed', borderRadius: 20, height: 32, zIndex: 3}}
                onChangeText={this.updateSearch}
                value={this.state.search}
+               onFocus={this.onSearchBarFocus}
                onCancel={this.shrinkSearchBar}
                returnKeyType='search'/>
           </Animated.View>
@@ -185,7 +211,6 @@ class MoviesScreen extends React.Component {
             </ScrollView>
           </View>
 
-
           <View style={{flex: 1, paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
               Movies I've watched
@@ -200,7 +225,6 @@ class MoviesScreen extends React.Component {
 
               {this.state.watchedlist.map(movie => {
                 return (
-                  // alert('here'),
                   <TouchableOpacity onPress={() => this.watchedlistOnPress(movie.posterpath, movie.title, movie.key, movie.synopsis)}>
                     <WatchList imageUri={movie.posterpath}
                                name={movie.title} />
@@ -210,13 +234,7 @@ class MoviesScreen extends React.Component {
               })
               }
             </ScrollView>
-            <View style={{position: 'absolute', bottom: 0, right: 0, marginBottom: 20, marginRight: 23}}>
-              <TouchableOpacity style={{backgroundColor: '#ff044e', opacity: 50, padding: 10, borderRadius: 25
-              , width: 50, height: 50, alignItems: 'center', elevation: 8}}
-               onPress={() => this.props.navigation.navigate('Settings')}>
-              <Icon name='md-settings' style={{color: 'white'}} size={30}></Icon>
-              </TouchableOpacity>
-            </View>
+            {this.renderSettingsIcon()}
           </View>
 
         </ScrollView>

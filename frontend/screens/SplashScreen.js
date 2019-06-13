@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Text, Image, View, StyleSheet, Animated} from 'react-native';
+import {Text, Image, View, StyleSheet, Animated, Keyboard} from 'react-native';
 import LottieView from 'lottie-react-native';
 import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 
 import {GetUserProperty} from '../Helpers';
-
 
 export default class SplashScreen extends Component {
 
@@ -32,9 +31,8 @@ export default class SplashScreen extends Component {
           });
     }
 
-
-
     render() {
+        Keyboard.dismiss();
         return (
           <View style={{backgroundColor: 'white', alignItems:'center', justifyContent:'center',
           paddingTop: 150}}>
@@ -46,8 +44,6 @@ export default class SplashScreen extends Component {
               style={{width: 400, height: 400, justifyContent:'center', marginBottom: 100}}/>
           </View>
         )
-      
-
     }
 
 }

@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import {TouchableOpacity, Dimensions, Text, View, StyleSheet, FlatList, Image, Animated, TouchableWithoutFeedback} from 'react-native';
+import {TouchableOpacity, ScrollView, Dimensions, Text, View, StyleSheet, FlatList, Image, Animated, TouchableWithoutFeedback} from 'react-native';
 import Modal from 'react-native-modalbox';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -50,7 +50,7 @@ export default class SearchMovieModal extends Component {
 
   noResultComponent = () => {
     return (
-      <Text>No results found! Try another search.</Text>
+      <Text>No results!</Text>
     );
   }
 
@@ -68,11 +68,9 @@ export default class SearchMovieModal extends Component {
         <TouchableWithoutFeedback>
           <View style={styles.container}>
             <Text style={styles.title}>Search Results:</Text>
-            <FlatList data={this.state.results} extraData={this.state.results} renderItem={this.renderResult} ItemSeparatorComponent={this.resultSeparator} ListEmptyComponent={this.noResultComponent}/>
-            <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
-              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              </View>
-            </View>
+            <ScrollView keyboardShouldPersistTaps='never'>
+              <FlatList data={this.state.results} extraData={this.state.results} renderItem={this.renderResult} ItemSeparatorComponent={this.resultSeparator} ListEmptyComponent={this.noResultComponent}/>
+            </ScrollView>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
