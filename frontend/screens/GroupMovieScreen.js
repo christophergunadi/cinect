@@ -82,7 +82,13 @@ export default class GroupMovieScreen extends React.Component {
 
     render() {
         return (
-        <View style={MainStylesheet.container}>
+        <View style={{flex: 1,
+          paddingTop: 0,
+          paddingLeft: 30,
+          paddingRight: 30,
+          paddingBottom: 30,
+          backgroundColor: 'transparent',}}>
+            
           <ScrollView style={{height: '100%', width: '103%'}}>
             {/* <View> */}
             {/* TODO: Change width and height*/}

@@ -53,7 +53,7 @@ export default class LoginScreen extends Component {
           alert('Error fetching data: ' + error.toString());
         } else {
           this._onUserLogin(result.email, result.name, result.id)
-          .then(this.props.navigation.navigate('Main'));
+          .then(() => this.props.navigation.navigate('Main'));
         }
       }  
 
@@ -70,19 +70,21 @@ export default class LoginScreen extends Component {
             </View>
             <View style={{paddingBottom: 200}}>
             <LoginButton
-               readPermissions={["email", "user_friends"]}
-               onLoginFinished={
-               (error, result) => {
-              if (error) {
-                alert("Login failed with error: " + error.message);
-              } else if (result.isCancelled) {
-                alert("Login was cancelled");
-              } else {
-                const userInfoReq = new GraphRequest('/me?fields=name,email,id', null, this._userInfoCallback,);
-                new GraphRequestManager().addRequest(userInfoReq).start();
+              readPermissions={["email", "user_friends"]}
+              onLoginFinished={
+                (error, result) => {
+                  if (error) {
+                    alert("Login failed with error: " + error.message);
+                  } else if (result.isCancelled) {
+                    alert("Login was cancelled");
+                  } else {
+                    alert("HI");
+                    const userInfoReq = new GraphRequest('/me?fields=name,email,id', null, this._userInfoCallback,);
+                    new GraphRequestManager().addRequest(userInfoReq).start();
+                  }
+                }
               }
-            }
-           }/>
+              onLogoutFinished={this._onUserLogout}/>
             </View> 
             
          </View>

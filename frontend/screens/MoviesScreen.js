@@ -81,7 +81,8 @@ class MoviesScreen extends React.Component {
   }
 
   watchlistOnPress = (posterpath, title, id, synopsis, rating) => {
-    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis, rating: rating, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist});
+    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis, 
+      rating: rating, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist, padTop: 30});
   }
 
   watchedlistOnPress = (posterpath, title, id, synopsis) => {

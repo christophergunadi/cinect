@@ -132,7 +132,7 @@ export default class SettingsScreen extends React.Component {
           <TouchableOpacity style={styles.saveButton} onPress={this._onUpdatePreferences}>
             <Text style={{fontFamily: 'PT_Sans-Caption-Regular'}}>Save</Text>
           </TouchableOpacity>
-          <FBLoginButton onLogin = { this.onUserLogin } refresh = { this.onRefresh }/>
+          <FBLoginButton onLogin = { this.onUserLogin } refresh = {() => {this.props.navigation.navigate('Login')}}/>
         </View>
       </View>
     );

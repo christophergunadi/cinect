@@ -249,6 +249,8 @@ def groupSuggestion(request):
 
     for i in range(0, len(users)):
         movies = SwipedRight.objects.filter(email__email=users[i]['email']).values('movieid')
+        watched = UserWatched.objects.filter(email__email=users[i]['email']).values('movieid')
+        movies = movies.difference(watched)
         for j in range(0, len(movies)):
             if movies[j]['movieid'] in result:
                 result[movies[j]['movieid']] = result[movies[j]['movieid']] + 1
@@ -451,7 +453,7 @@ def addUserWatchedFromGroupScreen(request):
             email = user.email
             movieid = request.POST.get('movieid')
 
-            SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
+            # SwipedRight.objects.filter(email__email=email).get(movieid=movieid).delete()
 
             #add to user watched
             userWatched = UserWatched()

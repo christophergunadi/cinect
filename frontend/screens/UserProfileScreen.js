@@ -57,7 +57,7 @@ export default class UserProfileScreen extends React.Component {
   watchlistOnPress = (posterpath, title, id, synopsis, rating) => {
     this.props.navigation.navigate('WatchlistMovie', 
     {posterpath: posterpath, title: title, id: id, synopsis: synopsis, 
-      rating: rating, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist});
+      rating: rating, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist, padTop: 0});
   }
 
   render() {
@@ -73,7 +73,7 @@ export default class UserProfileScreen extends React.Component {
       )
     } else {
     return (
-      <ScrollView style={{paddingLeft: 30, paddingTop: 15, paddingRight: 30}}>
+      <ScrollView style={{paddingLeft: 30, paddingRight: 30}}>
           <View style={{flexDirection:'row', paddingBottom: 20}}>
             <Image source={{uri: this.props.navigation.getParam('picture')}} 
               style={{width: 45, height: 45, borderRadius: 23, paddingTop: 10}}/>

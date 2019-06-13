@@ -191,7 +191,12 @@ export default class WatchlistMovieScreen extends React.Component {
 
     render() {
         return (
-        <View style={MainStylesheet.container}>
+        <View style={{flex: 1,
+          paddingTop: this.props.navigation.getParam('padTop'),
+          paddingLeft: 30,
+          paddingRight: 30,
+          paddingBottom: 30,
+          backgroundColor: 'transparent',}}>
           <Modal ref={'friendsWhoLikeModal'}
         style={{borderRadius: 20, shadowRadius: 10, width: Dimensions.get('window').width - 70, height: Dimensions.get('window').height - 500}}
         position='center' swipeToClose={false} backButtonClose={true}>

@@ -45,6 +45,7 @@ export default class SearchMovieModal extends Component {
           </View>
         </View>
       </TouchableOpacity>
+
     )
   }
 
@@ -56,9 +57,28 @@ export default class SearchMovieModal extends Component {
 
   resultSeparator = () => {
     return (
-      <View style={{margin: 10, height: 0.5, width: '120%', backgroundColor: '#cccccc'}}/>
+      <View style={{margin: 10, height: 50, width: '120%', backgroundColor: '#cccccc'}}/>
     );
   }
+
+  // render() {
+//     return (
+//       <Modal ref={'searchResultsModal'} onClosed={this.props.shrinkSearchBar}
+//         style={{borderRadius: 20, width: windowSize.width - 30, height: windowSize.height - 190, marginTop: 40}}
+//         position='center' swipeToClose={false} backButtonClose={true}>
+//         {/* <TouchableWithoutFeedback> */}
+//           <View style={styles.container}>
+//             <Text style={styles.title}>Search Results:</Text>
+//             <ScrollView style={{zIndex: 10000}}>
+//               <FlatList data={this.state.results} extraData={this.state.results} renderItem={this.renderResult} 
+//               ItemSeparatorComponent={this.resultSeparator} ListEmptyComponent={this.noResultComponent}/>
+//             </ScrollView>
+//           </View>
+//         {/* </TouchableWithoutFeedback> */}
+//       </Modal>
+//     )
+//   }
+// }
 
   render() {
     return (
@@ -80,8 +100,8 @@ export default class SearchMovieModal extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     margin: 30,
+    flex: 1,
   },
   title: {
     fontFamily: 'PT_Sans-Caption-Bold',
