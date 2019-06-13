@@ -62,7 +62,7 @@ def getUserProfile(request):
     numMovies = 0
     for id in moviesWatched:
         numMovies = numMovies + 1
-    
+
     # Movies that they have rated
     ratedMovies = UserRating.objects.filter(email__email=user.email)
     ratedMovieInfo = []
@@ -72,7 +72,7 @@ def getUserProfile(request):
             'stars': ratedMovies[i].stars,
             'comment': ratedMovies[i].comment,
         })
-        
+
     return HttpResponse(json.dumps({'count': numMovies, 'ratedMovies': ratedMovieInfo}))
 
 def getMovieRatings(request):
@@ -145,7 +145,7 @@ def getCommonMoviesWith(request):
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
 
-  
+
 
 def getPreferences(request):
     email = request.GET.get('email')
@@ -264,8 +264,8 @@ def groupSuggestion(request):
         jsonResults.append({'movieTitle': response['title'],
                             'posterPath': response['poster_path'],
                             'synopsis': response['overview'],
-                            'count': filteredResults[i][1]},
-                            'movieid': response['id'])
+                            'count': filteredResults[i][1],
+                            'movieid': response['id']})
 
     jsonResponse = {'data': jsonResults}
     return HttpResponse(json.dumps(jsonResponse))
