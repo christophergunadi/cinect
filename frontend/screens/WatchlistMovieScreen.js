@@ -33,17 +33,26 @@ export default class WatchlistMovieScreen extends React.Component {
     }
 
     getMovieRatings() {
-      fetch("http://146.169.45.140:8000/cinect_api/getmovieratings?movieid="+ this.props.navigation.getParam('id'))
-      .then(response => response.json())
-      .then((responseJson) => {
-        this.setState ({
-          movieRatings: responseJson.movieRatings,
-          loading: false,
-        })
-      }).catch((error) => {
-        console.error(error);
-      });
+      GetUserProperty('email').then(email => {
+        fetch("http://146.169.45.140:8000/cinect_api/getmovieratings?movieid="+ this.props.navigation.getParam('id')
+          + "&email=" + email)
+        .then(response => response.json())
+        .then((responseJson) => {
+          this.setState ({
+            movieRatings: responseJson.movieRatings,
+            loading: false,
+          })
+        }).catch((error) => {
+          console.error(error);
+        });
+      })
     }
+
+    renderNoFriendsRating = () => {
+      if (this.state.movieRatings.length == 0) {
+          return(<Text>No friends rated this movie yet! :(</Text>);
+      }
+  }
 
     getFriendsWhoAlsoLikeThis = () => {
       new GraphRequestManager().addRequest(
@@ -228,7 +237,8 @@ export default class WatchlistMovieScreen extends React.Component {
                   <Text style={styles.movietitleStyle}>IMDb rating:</Text> {this.props.navigation.getParam('rating')}
                 </Text>
 
-                <Text style={styles.movietitleStyle}>Friends' Ratings</Text>
+                <Text style={styles.movietitleStyle}>Friends' Ratings:</Text>
+                {this.renderNoFriendsRating()}
 
                 {this.state.movieRatings.map((rating) => {
                   return (

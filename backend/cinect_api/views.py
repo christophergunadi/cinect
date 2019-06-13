@@ -77,10 +77,14 @@ def getUserProfile(request):
 
 def getMovieRatings(request):
     movieid = request.GET.get('movieid')
+    useremail = request.GET.get('email')
     movieratings = UserRating.objects.filter(movieid__movieid=movieid)
     movieratingsinfo = []
     for i in range(0, len(movieratings)):
-        user = User.objects.get(pk=movieratings[i].email.email)
+        rateemail = movieratings[i].email.email
+        if rateemail == useremail:
+            continue
+        user = User.objects.get(pk=rateemail)
         movieratingsinfo.append({
             'name': user.name,
             'stars': movieratings[i].stars,

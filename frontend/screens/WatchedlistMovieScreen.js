@@ -17,7 +17,13 @@ export default class WatchlistMovieScreen extends React.Component {
             height: '80%',
             stars: 3,
             comment: '',
+            movieRatings: [], // each rating is in the format {moviename: xx, stars: x, comment: xx}
+            loading: true,
         }
+    }
+
+    componentDidMount() {
+        this.getMovieRatings()
     }
 
     getUserEmail = async() => {
@@ -32,6 +38,22 @@ export default class WatchlistMovieScreen extends React.Component {
           alert("Please log in or sign up to start swiping!")
         }
         return userEmail;
+    }
+
+    getMovieRatings() {
+        GetUserProperty('email').then(email => {
+          fetch("http://146.169.45.140:8000/cinect_api/getmovieratings?movieid="+ this.props.navigation.getParam('id')
+            + "&email=" + email)
+          .then(response => response.json())
+          .then((responseJson) => {
+            this.setState ({
+              movieRatings: responseJson.movieRatings,
+              loading: false,
+            })
+          }).catch((error) => {
+            console.error(error);
+          });
+        })
     }
 
 
@@ -52,6 +74,12 @@ export default class WatchlistMovieScreen extends React.Component {
                 this.props.navigation.goBack();
             });
           });
+    }
+
+    renderNoFriendsRating = () => {
+        if (this.state.movieRatings.length == 0) {
+            return(<Text>No friends rated this movie yet! :(</Text>);
+        }
     }
 
     render() {
@@ -89,12 +117,29 @@ export default class WatchlistMovieScreen extends React.Component {
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
                 </Text>
+                <Text style={styles.movietitleStyle}>Synopsis:</Text>
                 <Text style={styles.infoText}>
                     {this.props.navigation.getParam('synopsis')}
                 </Text>
+
+                <Text style={styles.movietitleStyle}>Friends' Ratings:</Text>
+                {this.renderNoFriendsRating()}
+
+                {this.state.movieRatings.map((rating) => {
+                return (
+                    <View style={{paddingTop: 7}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>      
+                    <Rating imageSize={20} readonly startingValue={rating.stars}/>  
+                    </View>    
+                    <Text style={styles.commentStyle}> - {rating.name}</Text>  
+                    </View>
+                )
+                })}
+
             </ScrollView>
             
-            <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+            <View style={{flexDirection:'row', justifyContent: 'space-between', marginTop: 10}}>
                 <TouchableOpacity onPress={() => this.refs.rateModal.open()}
                                   style={styles.watchedButton}>
                     <Text style={styles.buttonText}>Rate movie</Text>
@@ -138,5 +183,10 @@ const styles = StyleSheet.create({
         borderColor: '#c2c4c6',
         marginBottom: 10,
         alignItems: 'center',
-      },
+    },
+    movietitleStyle: {
+        fontFamily: 'PT_Sans-Caption-Bold',
+        fontSize: 15,
+        color: 'black',
+    },
 });
