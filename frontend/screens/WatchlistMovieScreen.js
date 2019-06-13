@@ -9,8 +9,8 @@ import {Rating} from 'react-native-elements';
 import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
-// import { formatResultsErrors } from 'jest-message-util';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default class WatchlistMovieScreen extends React.Component {
     constructor(props) {
@@ -22,7 +22,6 @@ export default class WatchlistMovieScreen extends React.Component {
             friendsWhoAlsoLike: [],
             movieRatings: [], // each rating is in the format {moviename: xx, stars: x, comment: xx}
             loading: true,
-
         }
     }
 
@@ -227,12 +226,12 @@ export default class WatchlistMovieScreen extends React.Component {
                 </Text>
 
                   {this.renderFriendsWhoAlsoLike()}
-                
+
                 <Text style={styles.movietitleStyle}>Synopsis:</Text>
                 <Text style={styles.infoText}>
                     {this.props.navigation.getParam('synopsis')}
                 </Text>
-                
+
                 <Text style={styles.infoText}>
                   <Text style={styles.movietitleStyle}>IMDb rating:</Text> {this.props.navigation.getParam('rating')}
                 </Text>
@@ -244,10 +243,10 @@ export default class WatchlistMovieScreen extends React.Component {
                   return (
                     <View style={{paddingTop: 7}}>
                       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                      <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>      
-                      <Rating imageSize={20} readonly startingValue={rating.stars}/>  
-                      </View>    
-                      <Text style={styles.commentStyle}> - {rating.name}</Text>  
+                      <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>
+                      <Rating imageSize={20} readonly startingValue={rating.stars}/>
+                      </View>
+                      <Text style={styles.commentStyle}> - {rating.name}</Text>
                     </View>
                   )
                 })}
@@ -268,6 +267,7 @@ export default class WatchlistMovieScreen extends React.Component {
                 </View>
 
             </ScrollView>
+            <LinearGradient locations={[0.85, 0.898]} colors={['transparent', '#FFFFFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
 
             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity onPress={() => this.pressDeleteButton(this.props.navigation.getParam('id'))}

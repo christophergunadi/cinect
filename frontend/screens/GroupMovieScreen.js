@@ -1,5 +1,6 @@
 import React, {Component, memo} from 'react';
 import {Text, View, Image, Button, Dimensions, Linking, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import OriginalSizeImage from '../components/OriginalSizeImage';
 
@@ -68,7 +69,7 @@ export default class GroupMovieScreen extends React.Component {
     pressWatched() {
       for (i = 0; i < this.state.members.length; i++) {
         let formData = new FormData();
-      
+
         formData.append('facebookid', this.state.members[i].facebookid)
         formData.append('movieid', this.props.navigation.getParam('movieid'));
         fetch("http://146.169.45.140:8000/cinect_api/pressgroupwatched", {
@@ -122,13 +123,15 @@ export default class GroupMovieScreen extends React.Component {
             {/* </View> */}
 
           </ScrollView>
-              
+          <LinearGradient locations={[0.85, 0.898]} colors={['transparent', '#FFFFFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
+
+
           <View style={{flex:1, flexDirection:'row', justifyContent: 'space-evenly', marginBottom:30}}>
             <TouchableOpacity style={styles.watchedButton} onPress={this.pressWatched}>
               <Text style={styles.buttonTextStyle}>We've watched this</Text>
             </TouchableOpacity>
           </View>
-          
+
         </View>
         );
     }

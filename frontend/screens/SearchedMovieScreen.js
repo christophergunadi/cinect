@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {Text, View, Image, Button, Dimensions, TouchableOpacity, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import Modal from 'react-native-modalbox';
+import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {GetUserProperty} from '../Helpers';
 import OriginalSizeImage from '../components/OriginalSizeImage';
 
 import MainStylesheet from '../styles/MainStylesheet';
-import { ScrollView } from 'react-native-gesture-handler';
-import Modal from 'react-native-modalbox';
-import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 export default class SearchedMovieScreen extends React.Component {
     constructor(props) {
@@ -221,6 +222,8 @@ export default class SearchedMovieScreen extends React.Component {
                 </View>
 
             </ScrollView>
+            <LinearGradient locations={[0.85, 0.898]} colors={['transparent', '#FFFFFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
+
 
             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity onPress={() => this.pressWatchButton(this.props.navigation.getParam('id'))}

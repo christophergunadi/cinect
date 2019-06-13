@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Image, Dimensions, TouchableOpacity, StyleSheet, 
+import {Text, View, Image, Dimensions, TouchableOpacity, StyleSheet,
     TouchableWithoutFeedback, TextInput, Keyboard} from 'react-native';
 
 import {GetUserProperty} from '../Helpers';
@@ -8,6 +8,7 @@ import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
 import {Rating, AirbnbRating} from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default class WatchlistMovieScreen extends React.Component {
     constructor(props) {
@@ -94,11 +95,11 @@ export default class WatchlistMovieScreen extends React.Component {
             onFinishRating={(rating) => this.state.stars = rating}
             style={{ paddingBottom: 20}}/>
             <View style={{paddingBottom: 12}}>
-            <TextInput style={styles.textInput} placeholder="  Write a comment" maxLength={60} 
+            <TextInput style={styles.textInput} placeholder="  Write a comment" maxLength={60}
             value={this.state.comment} underlineColorAndroid='transparent' placeholderStyle={{paddingLeft: 10, marginLeft: 10}}
-            onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({comment: text})}/> 
+            onBlur={Keyboard.dismiss} onChangeText={(text) => this.setState({comment: text})}/>
             </View>
-              
+
               <View style={{paddingTop: 30, justifyContent: 'flex-end', flex: 1}}>
                 <TouchableOpacity style={styles.rateButton} onPress={this.submitRating}>
                   <Text style={{ fontFamily: 'PT_Sans-Caption-Regular', color: '#000000' }}>Rate</Text>
@@ -129,16 +130,18 @@ export default class WatchlistMovieScreen extends React.Component {
                 return (
                     <View style={{paddingTop: 7}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>      
-                    <Rating imageSize={20} readonly startingValue={rating.stars}/>  
-                    </View>    
-                    <Text style={styles.commentStyle}> - {rating.name}</Text>  
+                    <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>
+                    <Rating imageSize={20} readonly startingValue={rating.stars}/>
+                    </View>
+                    <Text style={styles.commentStyle}> - {rating.name}</Text>
                     </View>
                 )
                 })}
 
             </ScrollView>
-            
+            <LinearGradient locations={[0.85, 0.898]} colors={['transparent', '#FFFFFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
+
+
             <View style={{flexDirection:'row', justifyContent: 'space-between', marginTop: 10}}>
                 <TouchableOpacity onPress={() => this.refs.rateModal.open()}
                                   style={styles.watchedButton}>
