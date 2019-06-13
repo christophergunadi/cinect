@@ -93,7 +93,7 @@ class MoviesScreen extends React.Component {
     fetch("http://146.169.45.140:8000/cinect_api/search?query="+query)
       .then(response => response.json())
       .then((responseJson) => {
-        this.setState({searchresults: responseJson.data.reverse()}, () => {
+        this.setState({searchresults: responseJson.data}, () => {
           this.refs.searchResultsModal.updateResultsModal(this.state.searchresults);
         });
       });
