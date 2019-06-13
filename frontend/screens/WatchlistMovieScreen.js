@@ -3,6 +3,8 @@ import {Text, View, Image, Button, Dimensions, TouchableOpacity, StyleSheet, Tou
 
 import {GetUserProperty} from '../Helpers';
 import OriginalSizeImage from '../components/OriginalSizeImage';
+import {Rating} from 'react-native-elements';
+
 
 import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -18,14 +20,30 @@ export default class WatchlistMovieScreen extends React.Component {
             height: '80%',
             showingOn: [],
             friendsWhoAlsoLike: [],
+            movieRatings: [], // each rating is in the format {moviename: xx, stars: x, comment: xx}
+            loading: true,
+
         }
     }
 
     componentDidMount() {
         this.getStreamingAvailability()
         this.getFriendsWhoAlsoLikeThis()
+        this.getMovieRatings()
     }
 
+    getMovieRatings() {
+      fetch("http://146.169.45.140:8000/cinect_api/getmovieratings?movieid="+ this.props.navigation.getParam('id'))
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState ({
+          movieRatings: responseJson.movieRatings,
+          loading: false,
+        })
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
 
     getFriendsWhoAlsoLikeThis = () => {
       new GraphRequestManager().addRequest(
@@ -198,16 +216,33 @@ export default class WatchlistMovieScreen extends React.Component {
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
                 </Text>
+
                   {this.renderFriendsWhoAlsoLike()}
-                <Text style={{fontWeight: 'bold'}}>Synopsis:</Text>
+                
+                <Text style={styles.movietitleStyle}>Synopsis:</Text>
                 <Text style={styles.infoText}>
                     {this.props.navigation.getParam('synopsis')}
                 </Text>
+                
                 <Text style={styles.infoText}>
-                <Text style={{fontWeight: 'bold'}}>IMDb rating:</Text> {this.props.navigation.getParam('rating')}
+                  <Text style={styles.movietitleStyle}>IMDb rating:</Text> {this.props.navigation.getParam('rating')}
                 </Text>
 
-                <Text style={{fontWeight: 'bold'}}>Available on:</Text>
+                <Text style={styles.movietitleStyle}>Friends' Ratings</Text>
+
+                {this.state.movieRatings.map((rating) => {
+                  return (
+                    <View style={{paddingTop: 7}}>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>      
+                      <Rating imageSize={20} readonly startingValue={rating.stars}/>  
+                      </View>    
+                      <Text style={styles.commentStyle}> - {rating.name}</Text>  
+                    </View>
+                  )
+                })}
+
+                <Text style={styles.availableOnStyle}>Available on:</Text>
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
                   {this.state.showingOn.map(site => {
                     if (site.url !== null) {
@@ -282,5 +317,16 @@ const styles = StyleSheet.create({
       color: '#463D3D',
       marginVertical: 5,
       marginBottom: 10,
+    },
+    movietitleStyle: {
+      fontFamily: 'PT_Sans-Caption-Bold',
+      fontSize: 15,
+      color: 'black',
+    },
+    availableOnStyle: {
+      fontFamily: 'PT_Sans-Caption-Bold',
+      fontSize: 15,
+      color: 'black',
+      paddingTop: 7,
     },
 });

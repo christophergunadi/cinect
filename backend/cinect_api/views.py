@@ -75,6 +75,20 @@ def getUserProfile(request):
         
     return HttpResponse(json.dumps({'count': numMovies, 'ratedMovies': ratedMovieInfo}))
 
+def getMovieRatings(request):
+    movieid = request.GET.get('movieid')
+    movieratings = UserRating.objects.filter(movieid__movieid=movieid)
+    movieratingsinfo = []
+    for i in range(0, len(movieratings)):
+        user = User.objects.get(pk=movieratings[i].email.email)
+        movieratingsinfo.append({
+            'name': user.name,
+            'stars': movieratings[i].stars,
+            'comment': movieratings[i].comment,
+        })
+
+    return HttpResponse(json.dumps({'movieRatings': movieratingsinfo}))
+
 
 def updatePreferences(request):
     email = request.POST.get('email')
