@@ -8,10 +8,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// const Movies = [
-//   { uri : 'https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg', id: '299537'},
-// ]
-
 export default class HomeScreen extends React.Component {
 
   constructor() {
@@ -91,14 +87,14 @@ export default class HomeScreen extends React.Component {
         })
       })
 
-      
-      
+
+
     }
-    
+
   }
 
   //send swiped right movie id to cinect_api to add to populate database
-  addSwipedRightMovie = (id) => { 
+  addSwipedRightMovie = (id) => {
     let formData = new FormData();
     GetUserProperty('email').then(value => {
       if (!value) {
@@ -195,7 +191,7 @@ export default class HomeScreen extends React.Component {
       onPanResponderRelease:(evt, gestureState) => {
         if (gestureState.dx > 120) {
           this.swipeRightAnimation(gestureState.dy);
-        } 
+        }
         else if (gestureState.dx < -120) {
           this.swipeLeftAnimation(gestureState.dy);
         } else {
@@ -229,21 +225,21 @@ export default class HomeScreen extends React.Component {
               {...this.PanResponder.panHandlers}
               key={i}
               style={[this.rotateAndTranslate, styles.card]}>
-  
+
               <Animated.View style={[{ opacity: this.likeOpacity }, styles.likeSign]}>
                 <Text
                   style={styles.signText}>
                   LIKE
                 </Text>
               </Animated.View>
-  
+
               <Animated.View style={[{ opacity: this.hateOpacity }, styles.hateSign]}>
                 <Text
                   style={styles.signText}>
                   NOPE
                 </Text>
               </Animated.View>
-  
+
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover',
                 borderRadius: 20 }}
@@ -291,33 +287,33 @@ export default class HomeScreen extends React.Component {
           </View>
 
           <View style={{flex: 3, flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => this.swipeLeftAnimation(200)}
               style={styles.hateButton}>
-              <Icon 
+              <Icon
                 name='md-close'
-                color='orangered' 
-                size={50} 
+                color='orangered'
+                size={50}
                 fontWeight={20}
               />
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => this.watchedAnimation()}
               style={styles.watchedButton}>
-              <Icon 
+              <Icon
                 name='md-eye'
-                color='skyblue' 
-                size={40} 
+                color='skyblue'
+                size={40}
                 fontWeight={20}
               />
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => this.swipeRightAnimation(200)}
               style={styles.likeButton}>
-              <Icon 
+              <Icon
                 name='md-checkmark'
-                color='palegreen' 
-                size={50} 
+                color='palegreen'
+                size={50}
                 fontWeight={20}
               />
             </TouchableOpacity>
@@ -328,8 +324,8 @@ export default class HomeScreen extends React.Component {
           </View>
 
 
-          
-          
+
+
         </View>
       </View>
     );
@@ -366,7 +362,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   likeButton: {
-    marginTop:11, 
+    marginTop:11,
     paddingTop:2,
     borderWidth:3,
     borderColor:'rgba(0,0,0,0.1)',
@@ -389,7 +385,7 @@ const styles = StyleSheet.create({
     borderRadius:50,
   },
   watchedButton: {
-    marginTop:11, 
+    marginTop:11,
     // paddingTop:2,
     borderWidth:3,
     borderColor:'rgba(0,0,0,0.1)',
