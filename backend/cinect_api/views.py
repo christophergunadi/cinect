@@ -129,6 +129,9 @@ def getPreferences(request):
 def getMoviesForUser(request):
     global x
     email = request.GET.get('email')
+    page = request.GET.get('page')
+
+    print("PAGE: " + page)
 
     user = User.objects.get(pk=email)
     preferences = []
@@ -143,7 +146,7 @@ def getMoviesForUser(request):
 
     movies = []
 
-    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=1")
+    response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&page=" + page)
     responseMovies = response.json()['results']
 
     for i in range(0, len(responseMovies)):
@@ -153,7 +156,7 @@ def getMoviesForUser(request):
         }))
 
     for preference in preferences:
-        response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&with_genres=" + str(preference) + "&page=1")
+        response = requests.get("https://api.themoviedb.org/3/discover/movie?api_key=edf754f30aad617f73e80dc66b5337d0&sort_by=popularity.desc&with_genres=" + str(preference) + "&page=" + page)
         responseMovies = response.json()['results']
 
         for i in range(0, len(responseMovies)):
@@ -161,6 +164,8 @@ def getMoviesForUser(request):
                 'uri': ("https://image.tmdb.org/t/p/w500" + responseMovies[i]['poster_path']),
                 'id': responseMovies[i]['id']
             }))
+
+    movies = list(set(movies))
 
     movies = list(map(lambda m : m.movieObject, movies))
 

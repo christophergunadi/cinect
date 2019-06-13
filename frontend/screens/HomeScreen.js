@@ -23,6 +23,7 @@ export default class HomeScreen extends React.Component {
       currentIndex: 0,
       loading: false,
       movies: [],
+      page: 1,
     }
     this.rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2],
@@ -63,36 +64,24 @@ export default class HomeScreen extends React.Component {
     })
   }
 
-  fetchMovieFromApi = () => {
-    fetch("http://146.169.45.140:8000/cinect_api/user")
-    .then(response => response.json())
-    .then((responseJson) => {
-      Movies.push({ uri: ('https://image.tmdb.org/t/p/w500' + responseJson.poster_path), id: responseJson.id })
-    })
-  }
-
   fetchMoviesFromApi = () => {
-
     if (this.state.currentIndex >= this.state.movies.length - 1) {
       this.setState({ loading: true })
 
       GetUserProperty('email').then(email => {
-        fetch("http://146.169.45.140:8000/cinect_api/getmovies?email=" + email)
+        fetch("http://146.169.45.140:8000/cinect_api/getmovies?email=" + email + "&page=" + this.state.page)
         .then(response => response.json())
         .then((responseJson) => {
          this.setState({
            movies: responseJson.data,
            loading: false,
            currentIndex: 0,
+           page: this.state.page + 1
          })
          console.log("LENGTH:" + this.state.movies.length)
         })
       })
-
-
-
     }
-
   }
 
   //send swiped right movie id to cinect_api to add to populate database
