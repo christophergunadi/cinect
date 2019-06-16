@@ -78,7 +78,6 @@ export default class LoginScreen extends Component {
                   } else if (result.isCancelled) {
                     alert("Login was cancelled");
                   } else {
-                    alert("HI");
                     const userInfoReq = new GraphRequest('/me?fields=name,email,id', null, this._userInfoCallback,);
                     new GraphRequestManager().addRequest(userInfoReq).start();
                   }
