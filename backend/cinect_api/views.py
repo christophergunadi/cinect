@@ -118,7 +118,11 @@ def getCommonMoviesWith(request):
     me = User.objects.get(pk=request.GET.get('email'))
     result = {}
     moviesFriendLikes = SwipedRight.objects.filter(email__email=friend.email).values('movieid')
+    moviesFriendWatched = UserWatched.objects.filter(email__email=friend.email).values('movieid')
+    moviesFriendLikes = moviesFriendLikes.difference(moviesFriendWatched)
     moviesILike = SwipedRight.objects.filter(email__email=me.email).values('movieid')
+    moviesIWatched = UserWatched.objects.filter(email__email=me.email).values('movieid')
+    moviesILike = moviesILike.difference(moviesIWatched)
 
     for j in range(0, len(moviesFriendLikes)):
         if moviesFriendLikes[j]['movieid'] in result:
@@ -231,6 +235,8 @@ def friendsWhoLike(request):
     for i in range(len(friendids)):
         email = User.objects.get(facebookid=friendids[i])
         like = SwipedRight.objects.filter(email__email=email.email).filter(movieid__movieid=movieid)
+        watched = like = UserWatched.objects.filter(email__email=email.email).filter(movieid__movieid=movieid)
+        like = like.difference(watched)
         if like.exists():
             friendsWhoAlsoLike.append(friendnames[i])
 
