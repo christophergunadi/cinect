@@ -131,6 +131,7 @@ export default class WatchlistMovieScreen extends React.Component {
             body: formData
         })
         .then(this.props.navigation.getParam('refreshWatchlist'))
+        .then(this.props.navigation.getParam('refresh'))
         .then(this.props.navigation.goBack())
         })
     }
