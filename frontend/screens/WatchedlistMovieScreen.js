@@ -122,21 +122,22 @@ export default class WatchlistMovieScreen extends React.Component {
                 <Text style={styles.infoText}>
                     {this.props.navigation.getParam('synopsis')}
                 </Text>
+                <View style={{paddingBottom: 13}}>
+                  <Text style={styles.movietitleStyle}>Friends' Ratings:</Text>
+                  {this.renderNoFriendsRating()}
 
-                <Text style={styles.movietitleStyle}>Friends' Ratings:</Text>
-                {this.renderNoFriendsRating()}
-
-                {this.state.movieRatings.map((rating) => {
-                return (
-                    <View style={{paddingTop: 7}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>
-                    <Rating imageSize={20} readonly startingValue={rating.stars}/>
-                    </View>
-                    <Text style={styles.commentStyle}> - {rating.name}</Text>
-                    </View>
-                )
-                })}
+                  {this.state.movieRatings.map((rating) => {
+                  return (
+                      <View style={{paddingTop: 7}}>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <Text style={{fontWeight: 'bold',fontFamily: 'PT_Sans-Caption-Bold'}}>"{rating.comment}"</Text>
+                      <Rating imageSize={20} readonly startingValue={rating.stars}/>
+                      </View>
+                      <Text style={styles.commentStyle}> - {rating.name}</Text>
+                      </View>
+                  )
+                  })}
+                </View>
 
             </ScrollView>
             <LinearGradient locations={[0.85, 0.898]} colors={['transparent', '#FFFFFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>

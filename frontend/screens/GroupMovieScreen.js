@@ -1,6 +1,5 @@
 import React, {Component, memo} from 'react';
 import {Text, View, Image, Button, Dimensions, Linking, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
 import OriginalSizeImage from '../components/OriginalSizeImage';
 
@@ -45,8 +44,6 @@ export default class GroupMovieScreen extends React.Component {
             })
           }
         }
-        // DEBUG
-        console.log(responseJson.results);
       });
       // this.setState({
       //   showingOn: [...this.state.showingOn, {
@@ -133,7 +130,6 @@ export default class GroupMovieScreen extends React.Component {
                 {this.renderStreamingAvailability()}
 
           </ScrollView>
-          <LinearGradient locations={[0.85, 0.898]} colors={['transparent', '#FFFFFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
 
 
           <View style={{flex:1, flexDirection:'row', justifyContent: 'space-evenly', marginBottom:30}}>

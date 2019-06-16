@@ -10,7 +10,6 @@ import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
-import LinearGradient from 'react-native-linear-gradient';
 
 export default class WatchlistMovieScreen extends React.Component {
     constructor(props) {
@@ -172,8 +171,6 @@ export default class WatchlistMovieScreen extends React.Component {
               })
             }
           }
-          // DEBUG
-          console.log(responseJson.results);
         });
         // this.setState({
         //   showingOn: [...this.state.showingOn, {
@@ -287,7 +284,6 @@ export default class WatchlistMovieScreen extends React.Component {
                 {this.renderStreamingAvailability()}
 
             </ScrollView>
-            <LinearGradient locations={[0.85, 0.898]} colors={['transparent', '#FFFFFF']} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}/>
 
             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                 <TouchableOpacity onPress={() => this.pressDeleteButton(this.props.navigation.getParam('id'))}
