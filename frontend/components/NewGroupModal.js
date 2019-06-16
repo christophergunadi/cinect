@@ -158,7 +158,7 @@ export default class NewGroupModal extends Component {
           <TouchableOpacity onPress={() => this._onAddSpecificFriend(f, index)}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}}>
               <View style={{flexDirection:'row'}}>
-              <Image source={{uri: this.state.myFriendsPic[f.id]}} 
+              <Image source={{uri: this.state.myFriendsPic[f.id]}}
                    style={{width: 35, height: 35, borderRadius: 18, paddingTop: 10}}/>
             <Text style={{fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 10, paddingLeft: 12}}>{f.name}</Text>
               </View>
@@ -178,7 +178,7 @@ export default class NewGroupModal extends Component {
     return (this.state.groupMembers.map((f) => {
       return (
         <View style={{ flexDirection: 'row', paddingTop: 7}}>
-          <Image source={{uri: this.state.myFriendsPic[f.id]}} 
+          <Image source={{uri: this.state.myFriendsPic[f.id]}}
           style={{width: 45, height: 45, borderRadius: 25}}/>
           <Text style={{fontFamily: 'PT_Sans-Caption-Regular', color: '#000000', paddingTop: 10, paddingLeft: 12}}>{f.name}</Text>
         </View>
@@ -219,7 +219,7 @@ export default class NewGroupModal extends Component {
               <Text style={styles.title}>Create a new group</Text>
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity onPress={() => alert("I want to set a DP")}>
+                <TouchableOpacity>
                   <Image source={require('../assets/img/tempprofileicon.png')} style={styles.profileicon}/>
                 </TouchableOpacity>
                 <TextInput style={styles.textInput} placeholder="Enter group name" maxLength={15} value={this.state.groupName}

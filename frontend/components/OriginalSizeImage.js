@@ -25,7 +25,6 @@ export default class OriginalSizeImage extends Component {
   }
 
   render() {
-    // alert(this.state.width + "//" + this.state.height);
     return (
       <View>
         <Image source={{uri: this.props.source}} style={{width: this.state.width, height: this.state.height, margin: 10}}/>

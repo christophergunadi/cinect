@@ -194,7 +194,6 @@ export default class WatchlistMovieScreen extends React.Component {
           </View>
         )
       } else {
-        alert(JSON.stringify(this.state.showingOn));
         return (
           <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center', paddingBottom: 13}}>
             {this.state.showingOn.map(site => {
