@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import {Text, View, Image, Dimensions, TouchableOpacity, StyleSheet,
     TouchableWithoutFeedback, TextInput, Keyboard} from 'react-native';
-
-import {GetUserProperty} from '../Helpers';
-
-import MainStylesheet from '../styles/MainStylesheet';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
 import {Rating, AirbnbRating} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
+
+import {GetUserProperty} from '../Helpers';
+import MovieScreenPoster from '../components/MovieScreenPoster';
+
+import MainStylesheet from '../styles/MainStylesheet';
 
 export default class WatchlistMovieScreen extends React.Component {
     constructor(props) {
@@ -113,8 +114,7 @@ export default class WatchlistMovieScreen extends React.Component {
 
 
             <ScrollView style={{width: '103%', height: '100%'}}>
-                <Image source={{uri: this.props.navigation.getParam('posterpath')}}
-                    style={{width: 330, height: 500, borderRadius: 10}}/>
+                <MovieScreenPoster source={this.props.navigation.getParam('posterpath')}/>
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
                 </Text>

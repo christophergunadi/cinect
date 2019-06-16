@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {View, Image} from 'react-native';
 
-export default class OriginalSizeImage extends Component {
+export default class OriginalAspectImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +27,7 @@ export default class OriginalSizeImage extends Component {
   render() {
     return (
       <View>
-        <Image source={{uri: this.props.source}} style={{width: this.state.width, height: this.state.height, margin: 10}}/>
+        <Image source={{uri: this.props.source}} style={{width: this.state.width * this.props.scale, height: this.state.height * this.props.scale, margin: 10}}/>
       </View>
     );
   }

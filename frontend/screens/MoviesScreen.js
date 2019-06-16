@@ -16,6 +16,7 @@ import {GetUserProperty} from '../Helpers';
 import SearchMovieModal from '../components/SearchMovieModal';
 
 var windowWidth = Dimensions.get('window').width;
+var windowHeight = Dimensions.get('window').height;
 
 class MoviesScreen extends React.Component {
   constructor(props) {
@@ -159,20 +160,20 @@ class MoviesScreen extends React.Component {
     const barWidth = this.state.searchBarWidth.interpolate(
       {
         inputRange: [0, 1],
-        outputRange: [windowWidth/2, windowWidth - 40]
+        outputRange: [windowWidth/2, windowWidth - 150]
       }
     );
     const textWidth = this.state.searchBarWidth.interpolate(
       {
         inputRange: [0, 1],
-        outputRange: [windowWidth/2 - 15, 0]
+        outputRange: [windowWidth/2 - 13, 0]
       }
     )
     return (
       <View style={{flex:1}}>
         <SearchMovieModal ref={'searchResultsModal'} navigate={this.props.navigation.navigate} refreshWatchlist={this.refreshWatchlist} refreshWatchedlist={this.refreshWatchedlist} shrinkSearchBar={this.shrinkSearchBar}/>
         <ScrollView style={{zIndex: 2}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16'>
-         <View style={{flex: 1, paddingTop: 30, flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'nowrap'}}>
+         <View style={{flex: 1, paddingTop: 15, paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'nowrap'}}>
            <Animated.View style={{width: textWidth, height: 40, overflow: 'hidden'}}>
              <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20, paddingTop: 8}}>
                My Watchlist
@@ -193,11 +194,9 @@ class MoviesScreen extends React.Component {
 
           </View>
 
-          </ScrollView>
-        <ScrollView refreshControl={<RefreshControl progressViewOffset={-80} refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16'>
-
-
-          <View style={{height:250, marginTop:20}}>
+        </ScrollView>
+        <ScrollView refreshControl={<RefreshControl progressViewOffset={-80} refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>} scrollEventThrottle='16' style={{height: windowHeight - 100}}>
+          <View style={{height:240, marginTop:15, flex: 1}}>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
@@ -216,13 +215,13 @@ class MoviesScreen extends React.Component {
             </ScrollView>
           </View>
 
-          <View style={{flex: 1, paddingTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flex: 1, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={{fontSize: 24, fontWeight: '700', fontFamily: 'PT Sans Caption', color: '#463D3D', paddingHorizontal: 20}}>
               Movies I've watched
             </Text>
           </View>
 
-          <View style={{height:250, marginTop:20}}>
+          <View style={{height:240, marginTop:20, flex: 1}}>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
@@ -239,10 +238,10 @@ class MoviesScreen extends React.Component {
               })
               }
             </ScrollView>
-            {this.renderSettingsIcon()}
           </View>
 
         </ScrollView>
+        {this.renderSettingsIcon()}
       </View>
     );
   }

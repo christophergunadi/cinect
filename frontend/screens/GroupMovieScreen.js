@@ -1,7 +1,8 @@
 import React, {Component, memo} from 'react';
 import {Text, View, Image, Button, Dimensions, Linking, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 
-import OriginalSizeImage from '../components/OriginalSizeImage';
+import OriginalAspectImage from '../components/OriginalAspectImage';
+import MovieScreenPoster from '../components/MovieScreenPoster';
 
 import MainStylesheet from '../styles/MainStylesheet';
 
@@ -77,11 +78,11 @@ export default class GroupMovieScreen extends React.Component {
               if (site.url !== null) {
                 return (
                   <TouchableOpacity onPress={() => Linking.openURL(site.url).catch(error => alert(error))}>
-                    <OriginalSizeImage source={site.logo}/>
+                    <OriginalAspectImage scale={1} source={site.logo}/>
                   </TouchableOpacity>
                 )
               } else {
-                return (<OriginalSizeImage source={site.logo}/>)
+                return (<OriginalAspectImage scale={1} source={site.logo}/>)
               }
           })}
           </View>
@@ -113,9 +114,7 @@ export default class GroupMovieScreen extends React.Component {
           backgroundColor: 'transparent',}}>
 
           <ScrollView style={{height: '100%', width: '103%'}}>
-            {/* TODO: Change width and height*/}
-                <Image source={{uri: "http://image.tmdb.org/t/p/w500/" + this.props.navigation.getParam('posterpath')}}
-                    style={{width: 330, height: 500, borderRadius: 10}}/>
+                <MovieScreenPoster source={"http://image.tmdb.org/t/p/w500/" + this.props.navigation.getParam('posterpath')}/>
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
                 </Text>

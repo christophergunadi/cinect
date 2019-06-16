@@ -5,7 +5,8 @@ import Modal from 'react-native-modalbox';
 import {GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 import {GetUserProperty} from '../Helpers';
-import OriginalSizeImage from '../components/OriginalSizeImage';
+import OriginalAspectImage from '../components/OriginalAspectImage';
+import MovieScreenPoster from '../components/MovieScreenPoster';
 
 import MainStylesheet from '../styles/MainStylesheet';
 
@@ -172,11 +173,11 @@ export default class SearchedMovieScreen extends React.Component {
               if (site.url !== null) {
                 return (
                   <TouchableOpacity onPress={() => Linking.openURL(site.url).catch(error => alert(error))}>
-                    <OriginalSizeImage source={site.logo}/>
+                    <OriginalAspectImage scale={1} source={site.logo}/>
                   </TouchableOpacity>
                 )
               } else {
-                return (<OriginalSizeImage source={site.logo}/>)
+                return (<OriginalAspectImage scale={1} source={site.logo}/>)
               }
             })}
           </View>
@@ -214,8 +215,7 @@ export default class SearchedMovieScreen extends React.Component {
           </TouchableWithoutFeedback>
          </Modal>
             <ScrollView style={{width: '103%', height: '100%'}}>
-                <Image source={{uri: this.props.navigation.getParam('posterpath')}}
-                    style={{width: 330, height: 500, borderRadius: 10}}/>
+                <MovieScreenPoster source={this.props.navigation.getParam('posterpath')}/>
                 <Text style={MainStylesheet.title}>
                     {this.props.navigation.getParam('title')}
                 </Text>
