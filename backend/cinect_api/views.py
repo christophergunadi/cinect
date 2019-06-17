@@ -235,7 +235,7 @@ def friendsWhoLike(request):
     for i in range(len(friendids)):
         email = User.objects.get(facebookid=friendids[i])
         like = SwipedRight.objects.filter(email__email=email.email).filter(movieid__movieid=movieid)
-        watched = like = UserWatched.objects.filter(email__email=email.email).filter(movieid__movieid=movieid)
+        watched = UserWatched.objects.filter(email__email=email.email).filter(movieid__movieid=movieid)
         like = like.difference(watched)
         if like.exists():
             friendsWhoAlsoLike.append(friendnames[i])
