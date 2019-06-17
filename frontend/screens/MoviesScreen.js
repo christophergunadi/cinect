@@ -82,7 +82,7 @@ class MoviesScreen extends React.Component {
   }
 
   watchlistOnPress = (posterpath, title, id, synopsis, rating) => {
-    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis, 
+    this.props.navigation.navigate('WatchlistMovieScreen', {posterpath: posterpath, title: title, id: id, synopsis: synopsis,
       rating: rating, refresh: this.refreshWatchlist, refreshWatched: this.refreshWatchedlist, padTop: 30});
   }
 
@@ -160,7 +160,7 @@ class MoviesScreen extends React.Component {
     const barWidth = this.state.searchBarWidth.interpolate(
       {
         inputRange: [0, 1],
-        outputRange: [windowWidth/2, windowWidth - 150]
+        outputRange: [windowWidth/2, windowWidth - 40]
       }
     );
     const textWidth = this.state.searchBarWidth.interpolate(
