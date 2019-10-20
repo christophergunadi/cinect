@@ -31,6 +31,11 @@ Each movie information card will tell you whether the movie is available on stre
 
 <img src="./frontend/assets/docs/moviereview.png" alt="moviereview" width="200">
 
+### Who to watch with?
+Each movie page tells you which friends would like to watch it too. It's now easier than ever to find a movie buddy.
+
+<img src="./frontend/assets/docs/movielikes.jpg" alt="movielikes" width="200">
+
 ### Search for specific movies
 You are not limited to what the app suggests for you, you can find any movie that you want to watch!
 
